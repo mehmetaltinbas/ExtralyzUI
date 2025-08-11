@@ -1,17 +1,15 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { SignIn } from './pages/SignIn';
+import { SignUp } from './pages/SignUp';
 
 function App() {
-    const [count, setCount] = useState(0);
-
-    const object = (parent: unknown) : string => {
-        console.log(parent);
-        return 'hello';
-    };
-
     return (
-        <div className='w-full h-full flex justify-center items-center'>
-            <p className='text-sky-600'>what is up</p>
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/sign-in" element={<SignIn />} />
+                <Route path='/sign-up' element={<SignUp />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 
