@@ -7,6 +7,6 @@ const env = loadEnv('', process.cwd(), '');
 export default defineConfig({
     plugins: [react()],
     server: {
-        port: Number(env.VITE_PORT)
-    }
+        port: Number(env.VITE_PORT),
+    },
 });
