@@ -17,7 +17,7 @@ export function WorkspaceBody() {
     const ActiveComponent = componentsMap.get(tabs.tabs[tabs.activeTabIndex]) || (() => <div>No Component</div>);
 
     return (
-        <div className='w-full h-[95%] flex justify-center items-center'>
+        <div className='w-full flex-1 flex justify-center items-center'>
             <div className='w-[90%] h-[90%] border overflow-auto'>
                 <ActiveComponent />
             </div>

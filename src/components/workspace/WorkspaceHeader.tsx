@@ -7,18 +7,68 @@ export function WorkspaceHeader() {
     const tabs = useAppSelector(state => state.tabs);
     const dispatch = useAppDispatch();
 
-    function displayPane(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    function displayTab(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         const index = Number(event.currentTarget.dataset.tabIndex);
         dispatch(tabsActions.setActiveTabIndex(index));
     }
 
+    function deleteTab(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        const index = Number(event.currentTarget.dataset.tabIndex);
+        dispatch(tabsActions.subtract(index));
+    }
+
+    function onDragStart(event: React.DragEvent<HTMLDivElement>) {
+        const section = event.currentTarget.dataset.section;
+        if (section !== undefined) {
+            event.dataTransfer.setData('text/plain', section);
+        }
+    }
+
+    function onDragOver(event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+        const index = event.currentTarget.dataset.tabIndex;
+        // const position = event.currentTarget.getBoundingClientRect();
+        // console.log(position);
+    }
+
+    function onDrop(event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+        const index = Number(event.currentTarget.dataset.tabIndex);
+        const section = event.dataTransfer.getData('text/plain');
+        console.log(`index: ${index}, section: ${section}`);
+
+        const rect = event.currentTarget.getBoundingClientRect();
+        const middleX = rect.left + rect.width / 2;
+
+        if (event.clientX < middleX) {
+            dispatch(tabsActions.addByIndex({ element: section, index }));
+        } else if (event.clientX > middleX) {
+            dispatch(tabsActions.addByIndex({ element: section, index: index + 1 }));
+        }
+
+    }
+
     return (
         <div
-            className="w-full h-[5%] p-2 bg-black flex justify-start items-center gap-8
-            border-1 border-white text-white"
+            onDragOver={event => onDragOver(event)}
+            onDrop={event => onDrop(event)}
+            className="w-full h-[40px] bg-gray-300 flex justify-start items-center
+            border-1 border-white"
         >
             {tabs.tabs.map((tab, index) => (
-                <button data-tab-index={index} onClick={(event) => displayPane(event)} className={`${(index === tabs.activeTabIndex) ? 'border border-blue-500 px-2' : ''}`}>{tab}</button>
+                <div 
+                    draggable='true'
+                    onDragStart={event => onDragStart(event)}
+                    onDragOver={event => onDragOver(event)}
+                    onDrop={event => onDrop(event)}
+                    data-section={tab} data-tab-index={index} onClick={(event) => displayTab(event)}
+                    className={`w-[200px] h-full ${(index === tabs.activeTabIndex) ? 'bg-white' : ''} cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
+                >
+                    <p>{tab}</p>
+                    <button data-tab-index={index} onClick={(event) => deleteTab(event)}
+                        className='w-[20px] h-[20px] cursor-pointer border p-[1px] rounded-full text-xs text-red-500 hover:bg-gray-200'
+                    >x</button>
+                </div>
             ))}
         </div>
     );

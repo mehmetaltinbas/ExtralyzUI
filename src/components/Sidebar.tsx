@@ -12,16 +12,23 @@ export function Sidebar() {
         setIsSidebarOpen(!isSidebarOpen);
     }
 
-    function displayPane(event: React.MouseEvent<HTMLButtonElement>) {
-        const pane = event.currentTarget.dataset.pane;
-        if (typeof pane === 'string') {
-            dispatch(tabsActions.add(pane));
+    function openTab(event: React.MouseEvent<HTMLButtonElement>) {
+        const section = event.currentTarget.dataset.section;
+        if (typeof section === 'string') {
+            dispatch(tabsActions.addByIndex({ element: section }));
+        }
+    }
+
+    function onDragStart(event: React.DragEvent<HTMLButtonElement>) {
+        const section = event.currentTarget.dataset.section;
+        if (section !== undefined) {
+            event.dataTransfer.setData('text/plain', section);
         }
     }
 
     return (
         <div
-            className={`h-[100%] ${isSidebarOpen ? 'w-[300px]' : 'w-[50px]'} sticky bg-black p-4 text-white
+            className={`h-[100%] ${isSidebarOpen ? 'w-[300px]' : 'w-[50px]'} sticky bg-gray-300 p-4
             flex flex-col justify-start items-center`}
         >
             <div className="w-full flex justify-end">
@@ -60,23 +67,26 @@ export function Sidebar() {
             {isSidebarOpen && (
                 <>
                     <button
-                        data-pane={Sections.SOURCES}
-                        onClick={(event) => displayPane(event)}
-                        className=""
+                        draggable='true' onDragStart={event => onDragStart(event)}
+                        data-section={Sections.SOURCES}
+                        onClick={(event) => openTab(event)}
+                        className="cursor-pointer"
                     >
                         Sources
                     </button>
                     <button
-                        data-pane={Sections.PROCESSED_SOURCES}
-                        onClick={(event) => displayPane(event)}
-                        className=""
+                        draggable='true' onDragStart={event => onDragStart(event)}
+                        data-section={Sections.PROCESSED_SOURCES}
+                        onClick={(event) => openTab(event)}
+                        className="cursor-pointer"
                     >
                         Processed Sources
                     </button>
                     <button
-                        data-pane={Sections.EXERCISES}
-                        onClick={(event) => displayPane(event)}
-                        className=""
+                        draggable='true' onDragStart={event => onDragStart(event)}
+                        data-section={Sections.EXERCISES}
+                        onClick={(event) => openTab(event)}
+                        className="cursor-pointer"
                     >
                         Exercises
                     </button>

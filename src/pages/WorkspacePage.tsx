@@ -11,7 +11,7 @@ export function WorkspacePage() {
             flex"
         >
             <Sidebar/>
-            <div className="w-full h-full">
+            <div className="w-full h-full flex flex-col">
                 <WorkspaceHeader />
                 <WorkspaceBody />
             </div>
