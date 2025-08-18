@@ -8,17 +8,18 @@ import { useAppSelector } from '../../store/hooks';
 import { Sections } from '../sections/sections.enum';
 
 export function WorkspaceBody() {
-    const tabs = useAppSelector(state => state.tabs);
+    const tabs = useAppSelector((state) => state.tabs);
     const componentsMap: Map<string, () => JSX.Element> = new Map([
         [Sections.SOURCES, Sources],
         [Sections.PROCESSED_SOURCES, ProcessedSources],
-        [Sections.EXERCISES, Exercises]
+        [Sections.EXERCISES, Exercises],
     ]);
-    const ActiveComponent = componentsMap.get(tabs.tabs[tabs.activeTabIndex]) || (() => <div>No Component</div>);
+    const ActiveComponent =
+        componentsMap.get(tabs.tabs[tabs.activeTabIndex]) || (() => <div>No Component</div>);
 
     return (
-        <div className='w-full flex-1 flex justify-center items-center'>
-            <div className='w-[90%] h-[90%] border overflow-auto'>
+        <div className="w-full flex-1 flex justify-center items-center">
+            <div className="w-[90%] h-[90%] border overflow-auto">
                 <ActiveComponent />
             </div>
         </div>

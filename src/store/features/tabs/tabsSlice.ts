@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../store';
 
 export interface TabsState {
@@ -8,7 +8,7 @@ export interface TabsState {
 
 const initialState: TabsState = {
     tabs: [],
-    activeTabIndex: 0
+    activeTabIndex: 0,
 };
 
 export const tabsSlice = createSlice({
@@ -26,18 +26,22 @@ export const tabsSlice = createSlice({
                 }
             } else {
                 if (action.payload.index || action.payload.index === 0) {
-                    const prevIndex = state.tabs.findIndex(tab => tab === action.payload.element);
+                    const prevIndex = state.tabs.findIndex(
+                        (tab) => tab === action.payload.element
+                    );
                     if (prevIndex !== action.payload.index) {
-                        console.log("if block");
+                        console.log('if block');
                         const temporaryElement = state.tabs[prevIndex];
                         state.tabs.splice(prevIndex, 1);
                         state.tabs.splice(action.payload.index, 0, temporaryElement);
                     }
                     state.activeTabIndex = action.payload.index;
                 } else {
-                    console.log("else block");
+                    console.log('else block');
                     console.log(action.payload.element);
-                    const currentIndex = state.tabs.findIndex(tab => tab === action.payload.element);
+                    const currentIndex = state.tabs.findIndex(
+                        (tab) => tab === action.payload.element
+                    );
                     console.log(`currentIndex: ${currentIndex}`);
                     state.activeTabIndex = currentIndex;
                 }
@@ -46,13 +50,11 @@ export const tabsSlice = createSlice({
         subtract: (state, action: PayloadAction<number>) => {
             state.tabs = state.tabs.filter((tab, index) => index !== action.payload);
         },
-        changePosition: (state, action: PayloadAction<number>) => {
-            
-        },
+        changePosition: (state, action: PayloadAction<number>) => {},
         setActiveTabIndex: (state, action: PayloadAction<number>) => {
             state.activeTabIndex = action.payload;
         },
-    }
+    },
 });
 
 export const tabsActions = tabsSlice.actions;

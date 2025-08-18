@@ -4,7 +4,7 @@ import { tabsActions } from '../../store/features/tabs/tabsSlice';
 import { useEffect } from 'react';
 
 export function WorkspaceHeader() {
-    const tabs = useAppSelector(state => state.tabs);
+    const tabs = useAppSelector((state) => state.tabs);
     const dispatch = useAppDispatch();
 
     function displayTab(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -45,29 +45,34 @@ export function WorkspaceHeader() {
         } else if (event.clientX > middleX) {
             dispatch(tabsActions.addByIndex({ element: section, index: index + 1 }));
         }
-
     }
 
     return (
         <div
-            onDragOver={event => onDragOver(event)}
-            onDrop={event => onDrop(event)}
+            onDragOver={(event) => onDragOver(event)}
+            onDrop={(event) => onDrop(event)}
             className="w-full h-[40px] bg-gray-300 flex justify-start items-center
             border-1 border-white"
         >
             {tabs.tabs.map((tab, index) => (
-                <div 
-                    draggable='true'
-                    onDragStart={event => onDragStart(event)}
-                    onDragOver={event => onDragOver(event)}
-                    onDrop={event => onDrop(event)}
-                    data-section={tab} data-tab-index={index} onClick={(event) => displayTab(event)}
-                    className={`w-[200px] h-full ${(index === tabs.activeTabIndex) ? 'bg-white' : ''} cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
+                <div
+                    draggable="true"
+                    onDragStart={(event) => onDragStart(event)}
+                    onDragOver={(event) => onDragOver(event)}
+                    onDrop={(event) => onDrop(event)}
+                    data-section={tab}
+                    data-tab-index={index}
+                    onClick={(event) => displayTab(event)}
+                    className={`w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
                 >
                     <p>{tab}</p>
-                    <button data-tab-index={index} onClick={(event) => deleteTab(event)}
-                        className='w-[20px] h-[20px] cursor-pointer border p-[1px] rounded-full text-xs text-red-500 hover:bg-gray-200'
-                    >x</button>
+                    <button
+                        data-tab-index={index}
+                        onClick={(event) => deleteTab(event)}
+                        className="w-[20px] h-[20px] cursor-pointer border p-[1px] rounded-full text-xs text-red-500 hover:bg-gray-200"
+                    >
+                        x
+                    </button>
                 </div>
             ))}
         </div>

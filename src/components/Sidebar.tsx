@@ -67,7 +67,8 @@ export function Sidebar() {
             {isSidebarOpen && (
                 <>
                     <button
-                        draggable='true' onDragStart={event => onDragStart(event)}
+                        draggable="true"
+                        onDragStart={(event) => onDragStart(event)}
                         data-section={Sections.SOURCES}
                         onClick={(event) => openTab(event)}
                         className="cursor-pointer"
@@ -75,7 +76,8 @@ export function Sidebar() {
                         Sources
                     </button>
                     <button
-                        draggable='true' onDragStart={event => onDragStart(event)}
+                        draggable="true"
+                        onDragStart={(event) => onDragStart(event)}
                         data-section={Sections.PROCESSED_SOURCES}
                         onClick={(event) => openTab(event)}
                         className="cursor-pointer"
@@ -83,7 +85,8 @@ export function Sidebar() {
                         Processed Sources
                     </button>
                     <button
-                        draggable='true' onDragStart={event => onDragStart(event)}
+                        draggable="true"
+                        onDragStart={(event) => onDragStart(event)}
                         data-section={Sections.EXERCISES}
                         onClick={(event) => openTab(event)}
                         className="cursor-pointer"

@@ -1,8 +1,7 @@
 export function Exercises() {
     return (
-    <div>
-        <p>Exercises</p>
-    </div>
-    
-);
+        <div>
+            <p>Exercises</p>
+        </div>
+    );
 }
