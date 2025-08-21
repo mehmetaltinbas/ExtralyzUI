@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { tabsActions } from '../store/features/tabs/tabsSlice';
-import { Sections } from './sections/sections.enum';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { tabsActions } from '../../../store/features/tabs/tabsSlice';
+import { Sections } from '../../../shared/enums/sections.enum';
 
 export function Sidebar() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);

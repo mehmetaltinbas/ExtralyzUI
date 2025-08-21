@@ -2,7 +2,7 @@ import type React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { tabsActions } from '../../store/features/tabs/tabsSlice';
 import { useEffect } from 'react';
-import { ClaretButton } from '../buttons/ClaretButton';
+import { ClaretButton } from '../../shared/components/buttons/ClaretButton';
 
 export function WorkspaceHeader() {
     const tabs = useAppSelector((state) => state.tabs);

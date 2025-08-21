@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { authService } from '../services/auth/auth.service';
-import type { SignInDto } from '../services/auth/types/auth-dtos';
+import type { SignInDto } from '../types/auth-dtos';
 import { Navigate } from 'react-router-dom';
-import { NavyBlueButton } from '../components/buttons/NavyBlueButton';
+import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 
 export function SignInPage() {
     const [signInDto, setSignInDto] = useState<SignInDto>({

@@ -1,8 +1,8 @@
 import type { HTMLAttributes, HtmlHTMLAttributes } from "react";
-import type { SourceDocument } from "../services/source/types/SourceDocument";
-import { ClaretButton } from "./buttons/ClaretButton";
+import type { SourceDocument } from "../features/source/types/SourceDocument";
+import { ClaretButton } from "../shared/components/buttons/ClaretButton";
 import type React from "react";
-import { sourceService } from "../services/source/source.service";
+import { sourceService } from "../features/source/source.service";
 
 export function SourceCard({ source, fetchSources }: {
         source: SourceDocument;

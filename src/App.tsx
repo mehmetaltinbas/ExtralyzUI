@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { SignInPage } from './pages/SignInPage';
-import { SignUpPage } from './pages/SignUpPage';
+import { SignInPage } from './features/auth/pages/SignInPage';
+import { SignUpPage } from './features/auth/pages/SignUpPage';
 import { WorkspacePage } from './pages/WorkspacePage';
 import { ProtectedRoute } from './ProtectedRoute';
 

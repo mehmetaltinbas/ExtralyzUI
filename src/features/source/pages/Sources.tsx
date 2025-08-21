@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { sourceService } from '../../services/source/source.service';
-import type { SourceDocument } from '../../services/source/types/SourceDocument';
-import { NavyBlueButton } from '../buttons/NavyBlueButton';
+import { sourceService } from '../source.service';
+import type { SourceDocument } from '../types/SourceDocument';
+import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 import { SourceCard } from '../SourceCard';
 
 export function Sources() {
