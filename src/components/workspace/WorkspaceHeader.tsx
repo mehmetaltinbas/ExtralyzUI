@@ -2,6 +2,7 @@ import type React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { tabsActions } from '../../store/features/tabs/tabsSlice';
 import { useEffect } from 'react';
+import { ClaretButton } from '../buttons/ClaretButton';
 
 export function WorkspaceHeader() {
     const tabs = useAppSelector((state) => state.tabs);
@@ -35,7 +36,6 @@ export function WorkspaceHeader() {
         event.preventDefault();
         const index = Number(event.currentTarget.dataset.tabIndex);
         const section = event.dataTransfer.getData('text/plain');
-        console.log(`index: ${index}, section: ${section}`);
 
         const rect = event.currentTarget.getBoundingClientRect();
         const middleX = rect.left + rect.width / 2;
@@ -66,13 +66,12 @@ export function WorkspaceHeader() {
                     className={`w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
                 >
                     <p>{tab}</p>
-                    <button
+                    <ClaretButton
                         data-tab-index={index}
-                        onClick={(event) => deleteTab(event)}
-                        className="w-[20px] h-[20px] cursor-pointer border p-[1px] rounded-full text-xs text-red-500 hover:bg-gray-200"
+                        handleOnClick={deleteTab}
                     >
                         x
-                    </button>
+                    </ClaretButton>
                 </div>
             ))}
         </div>

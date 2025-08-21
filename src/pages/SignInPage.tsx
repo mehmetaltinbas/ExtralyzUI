@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { authService } from '../services/auth/auth.service';
 import type { SignInDto } from '../services/auth/types/auth-dtos';
 import { Navigate } from 'react-router-dom';
+import { NavyBlueButton } from '../components/buttons/NavyBlueButton';
 
 export function SignInPage() {
     const [signInDto, setSignInDto] = useState<SignInDto>({
@@ -32,8 +33,8 @@ export function SignInPage() {
             <input
                 data-key='userName'
                 onChange={event => handleOnChange(event)}
-                value={signInDto.userName}
                 type="text"
+                value={signInDto.userName}
                 placeholder="username..."
                 className="p-2 border rounded-full"
             />
@@ -45,9 +46,9 @@ export function SignInPage() {
                 placeholder="password..."
                 className="p-2 border rounded-full"
             />
-            <button onClick={event => handleSignInSubmit(event)} className="px-2 py-[2px] border rounded-[10px] bg-[#0d408c] text-white text-sm">
+            <NavyBlueButton handleOnClick={handleSignInSubmit}>
                 sign in
-            </button>
+            </NavyBlueButton>
         </div>)
     ;
 }
