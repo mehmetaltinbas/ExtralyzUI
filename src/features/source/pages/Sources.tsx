@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { sourceService } from '../source.service';
+import { sourceService } from '../services/source.service';
 import type { SourceDocument } from '../types/SourceDocument';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
-import { SourceCard } from '../SourceCard';
+import { SourceCard } from '../components/SourceCard';
 
 export function Sources() {
     const [sources, setSources] = useState<SourceDocument[]>([]);

@@ -1,6 +1,6 @@
 import axios from "axios";
-import type { SignInDto } from "./types/auth-dtos";
-import type { ResponseBase } from "../shared/types/response-base";
+import type { SignInDto } from "../types/auth-dtos";
+import type { ResponseBase } from "../../../shared/types/response-base";
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/auth`;
 

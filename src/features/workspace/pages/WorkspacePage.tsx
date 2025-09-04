@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
-import { WorkspaceBody } from '../components/workspace/WorkspaceBody';
-import { WorkspaceHeader } from '../components/workspace/WorkspaceHeader';
+import { WorkspaceBody } from '../components/WorkspaceBody';
+import { WorkspaceHeader } from '../components/WorkspaceHeader';
 
 export function WorkspacePage() {
     return (

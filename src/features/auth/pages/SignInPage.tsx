@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { authService } from '../services/auth/auth.service';
+import { authService } from '../../auth/services/auth.service';
 import type { SignInDto } from '../types/auth-dtos';
 import { Navigate } from 'react-router-dom';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';

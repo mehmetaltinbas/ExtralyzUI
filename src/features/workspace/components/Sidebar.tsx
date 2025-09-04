@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { tabsActions } from '../../../store/features/tabs/tabsSlice';
+import { tabsActions } from '../store/tabsSlice';
 import { Sections } from '../../../shared/enums/sections.enum';
 
 export function Sidebar() {

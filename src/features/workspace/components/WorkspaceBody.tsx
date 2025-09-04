@@ -1,11 +1,11 @@
 import { useEffect, type JSX } from 'react';
 import { Pane } from './Pane';
 import { SplitView } from './SplitView';
-import { Exercises } from '../sections/Exercises';
-import { Sources } from '../sections/Sources';
-import { ProcessedSources } from '../sections/ProcessedSources';
-import { useAppSelector } from '../../store/hooks';
-import { Sections } from '../sections/sections.enum';
+import { Exercises } from '../../exercise/pages/Exercises';
+import { Sources } from '../../source/pages/Sources';
+import { ProcessedSources } from '../../processed-source/pages/ProcessedSources';
+import { useAppSelector } from '../../../store/hooks';
+import { Sections } from '../../../shared/enums/sections.enum';
 
 export function WorkspaceBody() {
     const tabs = useAppSelector((state) => state.tabs);
