@@ -1,14 +1,15 @@
 import React from "react";
 
-export function ClaretButton({ children, handleOnClick, ...rest }: {
+export function ClaretButton({ children, onClick, className, ...rest }: {
     children: React.ReactNode;
-    handleOnClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    className?: string;
     [key: string]: unknown;
 }) {
     return (
         <button
-            onClick={event => handleOnClick(event)}
-            className="cursor-pointer border py-[2px] px-[4px] rounded-full text-xs text-white bg-[#a62637] hover:bg-gray-200"
+            onClick={onClick}
+            className={`cursor-pointer border py-[2px] px-[4px] rounded-full text-xs text-white bg-[#a62637] hover:bg-gray-200 ${className ?? ''}`}
             {...rest}
         >
             {children}

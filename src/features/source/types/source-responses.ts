@@ -1,6 +1,6 @@
 import type { ResponseBase } from "../../../shared/types/response-base";
-import type { SourceDocument } from "./SourceDocument";
+import type { Source } from "./Source";
 
 export interface ReadAllSourcesResponse extends ResponseBase {
-    sources?: SourceDocument[];
+    sources?: Source[];
 }

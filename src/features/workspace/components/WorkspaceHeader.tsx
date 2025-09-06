@@ -68,7 +68,7 @@ export function WorkspaceHeader() {
                     <p>{tab}</p>
                     <ClaretButton
                         data-tab-index={index}
-                        handleOnClick={deleteTab}
+                        onClick={deleteTab}
                     >
                         x
                     </ClaretButton>

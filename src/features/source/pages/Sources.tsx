@@ -1,12 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { sourceService } from '../services/source.service';
-import type { SourceDocument } from '../types/SourceDocument';
+import type { Source } from '../types/Source';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 import { SourceCard } from '../components/SourceCard';
+import { GenerateExercisesForm } from '../../exercise/components/GenerateExercisesForm';
+import type { CreateMultipleExerciseDto } from '../../exercise/types/exercise-dtos';
 
 export function Sources() {
-    const [sources, setSources] = useState<SourceDocument[]>([]);
+    const [sources, setSources] = useState<Source[]>([]);
     const [file, setFile] = useState<File>();
+    const [isGenerateExercisesFormHidden, setIsGenerateExercisesFormHidden] = useState<boolean>(true);
+    const [generateExercisesSourceId, setGenerateExercisesSourceId] = useState<string>('');
+    const [createMultipleExerciseDto, setCreateMultipleExerciseDto] = useState<CreateMultipleExerciseDto>({
+        intendedExerciseCount: 5,
+        type: "",
+        difficulty: ""
+    });
+
+    function toggleGenerateExercisesForm(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        const generateExercisesForm = document.getElementById('generate-exercises-form');
+        if (generateExercisesForm !== null) {
+            const position = event.currentTarget.getBoundingClientRect();
+            generateExercisesForm.style.top = `${position.bottom}px`;
+            generateExercisesForm.style.left = `${position.right}px`;
+            if (isGenerateExercisesFormHidden) {
+                setCreateMultipleExerciseDto({
+                    intendedExerciseCount: 5,
+                    type: '',
+                    difficulty: ''
+                });
+            }
+            if (event.currentTarget.dataset.sourceId) setGenerateExercisesSourceId(event.currentTarget.dataset.sourceId);
+            setIsGenerateExercisesFormHidden(prev => !prev);
+        }
+    }
 
     async function fetchSources() {
         const response = await sourceService.readAll();
@@ -39,22 +66,33 @@ export function Sources() {
     }
 
     return (
-        <div className='w-full h-full flex flex-col justify-start items-center'>
-            <div className='w-[95%] h-auto border grid grid-cols-3 gap-8'>
-                <div className='h-[100px] col-span-3 border flex justify-center items-center'>
-                    <div className='w-[400px] h-[80px] border'>
-                        <input 
-                            onChange={event => handleOnChange(event)}
-                            type='file'
-                            className='border rounded-full p-1 w-[200px] text-xs'
-                        />
-                        <NavyBlueButton handleOnClick={uploadSource}>Upload</NavyBlueButton>
+        <>
+
+            <div className='w-full h-full flex flex-col justify-start items-center'>
+                <div className='w-[95%] h-auto border grid grid-cols-3 gap-8'>
+                    <div className='h-[100px] col-span-3 border flex justify-center items-center'>
+                        <div className='w-[400px] h-[80px] border'>
+                            <input 
+                                onChange={event => handleOnChange(event)}
+                                type='file'
+                                className='border rounded-full p-1 w-[200px] text-xs'
+                            />
+                            <NavyBlueButton onClick={uploadSource}>Upload</NavyBlueButton>
+                        </div>
                     </div>
+                    {sources.length === 0 ? <p>Loading...</p> :  sources.map(source => (
+                        <SourceCard source={source} fetchSources={fetchSources} toggleGenerateExercisesForm={toggleGenerateExercisesForm}/>
+                    ))}
                 </div>
-                {sources.length === 0 ? <p>Loading...</p> :  sources.map(source => (
-                    <SourceCard source={source} fetchSources={fetchSources}/>
-                ))}
             </div>
-        </div>
+
+            <GenerateExercisesForm 
+                isHidden={isGenerateExercisesFormHidden}
+                sourceId={generateExercisesSourceId}
+                createMultipleExerciseDto={createMultipleExerciseDto}
+                setCreateMultipleExerciseDto={setCreateMultipleExerciseDto}
+            />
+
+        </>
     );
 }

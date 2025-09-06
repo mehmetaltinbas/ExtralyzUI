@@ -1,4 +1,4 @@
-export interface SourceDocument {
+export interface Source {
     _id: string;
     type: string;
     rawText: string;

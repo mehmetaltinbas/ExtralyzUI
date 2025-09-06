@@ -46,7 +46,7 @@ export function SignInPage() {
                 placeholder="password..."
                 className="p-2 border rounded-full"
             />
-            <NavyBlueButton handleOnClick={handleSignInSubmit}>
+            <NavyBlueButton onClick={handleSignInSubmit}>
                 sign in
             </NavyBlueButton>
         </div>)
