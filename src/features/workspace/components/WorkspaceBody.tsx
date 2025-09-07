@@ -1,7 +1,7 @@
 import { useEffect, type JSX } from 'react';
 import { Pane } from './Pane';
 import { SplitView } from './SplitView';
-import { Exercises } from '../../exercise/pages/Exercises';
+import { ExercisesPage } from '../../exercise-set/pages/ExercisesPage';
 import { Sources } from '../../source/pages/Sources';
 import { ProcessedSources } from '../../processed-source/pages/ProcessedSources';
 import { useAppSelector } from '../../../store/hooks';
@@ -12,7 +12,7 @@ export function WorkspaceBody() {
     const componentsMap: Map<string, () => JSX.Element> = new Map([
         [Sections.SOURCES, Sources],
         [Sections.PROCESSED_SOURCES, ProcessedSources],
-        [Sections.EXERCISES, Exercises],
+        [Sections.EXERCISES, ExercisesPage],
     ]);
     const ActiveComponent =
         componentsMap.get(tabs.tabs[tabs.activeTabIndex]) || (() => <div>No Component</div>);

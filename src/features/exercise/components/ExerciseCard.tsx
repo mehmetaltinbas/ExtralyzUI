@@ -1,4 +1,4 @@
-import type { Exercise } from "../types/Exercise";
+import type { Exercise } from "../types/exercise.interface";
 
 export function ExerciseCard({ exercise, fetchExercises }: 
     {

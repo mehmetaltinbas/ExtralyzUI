@@ -3,16 +3,16 @@ import { sourceService } from '../services/source.service';
 import type { Source } from '../types/Source';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 import { SourceCard } from '../components/SourceCard';
-import { GenerateExercisesForm } from '../../exercise/components/GenerateExercisesForm';
-import type { CreateMultipleExerciseDto } from '../../exercise/types/exercise-dtos';
+import { CreateExerciseSetForm } from '../../exercise-set/components/CreateExerciseSetForm';
+import type { CreateExerciseSetDto } from '../../exercise-set/types/dto/create-exercise-set.dto';
 
 export function Sources() {
     const [sources, setSources] = useState<Source[]>([]);
     const [file, setFile] = useState<File>();
     const [isGenerateExercisesFormHidden, setIsGenerateExercisesFormHidden] = useState<boolean>(true);
     const [generateExercisesSourceId, setGenerateExercisesSourceId] = useState<string>('');
-    const [createMultipleExerciseDto, setCreateMultipleExerciseDto] = useState<CreateMultipleExerciseDto>({
-        intendedExerciseCount: 5,
+    const [createExerciseSetDto, setCreateExerciseSetDto] = useState<CreateExerciseSetDto>({
+        count: 5,
         type: "",
         difficulty: ""
     });
@@ -24,8 +24,8 @@ export function Sources() {
             generateExercisesForm.style.top = `${position.bottom}px`;
             generateExercisesForm.style.left = `${position.right}px`;
             if (isGenerateExercisesFormHidden) {
-                setCreateMultipleExerciseDto({
-                    intendedExerciseCount: 5,
+                setCreateExerciseSetDto({
+                    count: 5,
                     type: '',
                     difficulty: ''
                 });
@@ -86,11 +86,11 @@ export function Sources() {
                 </div>
             </div>
 
-            <GenerateExercisesForm 
+            <CreateExerciseSetForm 
                 isHidden={isGenerateExercisesFormHidden}
                 sourceId={generateExercisesSourceId}
-                createMultipleExerciseDto={createMultipleExerciseDto}
-                setCreateMultipleExerciseDto={setCreateMultipleExerciseDto}
+                createExerciseSetDto={createExerciseSetDto}
+                setCreateExerciseSetDto={setCreateExerciseSetDto}
             />
 
         </>

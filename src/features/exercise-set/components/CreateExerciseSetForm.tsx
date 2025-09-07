@@ -1,17 +1,17 @@
 import type React from "react";
-import type { CreateMultipleExerciseDto } from "../types/exercise-dtos";
 import { NavyBlueButton } from "../../../shared/components/buttons/NavyBlueButton";
-import { exerciseService } from "../services/exercise.service";
+import type { CreateExerciseSetDto } from "../types/dto/create-exercise-set.dto";
+import { exerciseSetService } from "../services/exercise-set.service";
 
-export function GenerateExercisesForm({ isHidden, sourceId, createMultipleExerciseDto, setCreateMultipleExerciseDto }: {
+export function CreateExerciseSetForm({ isHidden, sourceId, createExerciseSetDto, setCreateExerciseSetDto }: {
     isHidden: boolean;
     sourceId: string;
-    createMultipleExerciseDto: CreateMultipleExerciseDto;
-    setCreateMultipleExerciseDto: React.Dispatch<React.SetStateAction<CreateMultipleExerciseDto>>;
+    createExerciseSetDto: CreateExerciseSetDto;
+    setCreateExerciseSetDto: React.Dispatch<React.SetStateAction<CreateExerciseSetDto>>;
 }) {
 
-    async function generateMultipleExercises() {
-        const response = await exerciseService.createMultiple(sourceId, createMultipleExerciseDto);
+    async function createExerciseSet() {
+        const response = await exerciseSetService.create(sourceId, createExerciseSetDto);
         alert(response.message);
     }
 
@@ -24,16 +24,16 @@ export function GenerateExercisesForm({ isHidden, sourceId, createMultipleExerci
                 <p>intended exercise count: </p>
                 <input 
                     type="number" 
-                    value={createMultipleExerciseDto.intendedExerciseCount} 
-                    onChange={(e) => setCreateMultipleExerciseDto({ ...createMultipleExerciseDto, intendedExerciseCount: Number(e.target.value) })}
+                    value={createExerciseSetDto.count} 
+                    onChange={(e) => setCreateExerciseSetDto({ ...createExerciseSetDto, count: Number(e.target.value) })}
                     className="w-[50px] py-[2px] px-2 border rounded-[10px]"
                 />
             </div>
             <div className="flex justify-start items-center gap-2">
                 <p>type: </p>
                 <select
-                    value={createMultipleExerciseDto.type}
-                    onChange={(e) => setCreateMultipleExerciseDto({ ...createMultipleExerciseDto, type: e.target.value })}
+                    value={createExerciseSetDto.type}
+                    onChange={(e) => setCreateExerciseSetDto({ ...createExerciseSetDto, type: e.target.value })}
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
                     <option value="">Select type</option>
@@ -46,8 +46,8 @@ export function GenerateExercisesForm({ isHidden, sourceId, createMultipleExerci
             <div className="flex justify-start items-center gap-2">
                 <p>difficulty: </p>
                 <select
-                    value={createMultipleExerciseDto.difficulty}
-                    onChange={(e) => setCreateMultipleExerciseDto({ ...createMultipleExerciseDto, difficulty: e.target.value })}
+                    value={createExerciseSetDto.difficulty}
+                    onChange={(e) => setCreateExerciseSetDto({ ...createExerciseSetDto, difficulty: e.target.value })}
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
                     <option value="">Select difficulty</option>
@@ -56,7 +56,7 @@ export function GenerateExercisesForm({ isHidden, sourceId, createMultipleExerci
                     <option value="hard">Hard</option>
                 </select>
             </div>
-            <NavyBlueButton onClick={generateMultipleExercises}>Generate</NavyBlueButton>
+            <NavyBlueButton onClick={createExerciseSet}>Generate</NavyBlueButton>
         </div>
     );
 }
