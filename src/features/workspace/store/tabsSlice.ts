@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../../store';
+import type { RootState } from '../../../store/store';
 
 export interface TabsState {
     tabs: string[];
@@ -11,7 +11,7 @@ const initialState: TabsState = {
     activeTabIndex: 0,
 };
 
-export const tabsSlice = createSlice({
+const tabsSlice = createSlice({
     name: 'tabs',
     initialState,
     reducers: {
@@ -59,4 +59,4 @@ export const tabsSlice = createSlice({
 
 export const tabsActions = tabsSlice.actions;
 
-export default tabsSlice.reducer;
+export const tabsReducer = tabsSlice.reducer;

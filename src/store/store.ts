@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import tabsReducer from '../features/workspace/store/tabsSlice';
+import { tabsReducer } from '../features/workspace/store/tabsSlice';
+import { sidebarReducer } from '../features/workspace/store/sidebarWidthSlice';
 
 const store = configureStore({
     reducer: {
         tabs: tabsReducer,
+        sidebar: sidebarReducer
     },
 });
 

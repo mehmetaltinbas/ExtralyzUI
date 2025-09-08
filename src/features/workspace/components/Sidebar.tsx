@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { tabsActions } from '../store/tabsSlice';
 import { Sections } from '../../../shared/enums/sections.enum';
+import { sidebarActions } from '../store/sidebarWidthSlice';
 
 export function Sidebar() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const tabs = useAppSelector((state) => state.tabs);
     const dispatch = useAppDispatch();
+    const tabs = useAppSelector(state => state.tabs);
+    const sidebar = useAppSelector(state => state.sidebar);
 
     function toggleSidebar() {
-        setIsSidebarOpen(!isSidebarOpen);
+        if (sidebar.isOpen) {
+            dispatch(sidebarActions.close());
+        } else if (!sidebar.isOpen) {
+            dispatch(sidebarActions.open());
+        }
     }
 
     function openTab(event: React.MouseEvent<HTMLButtonElement>) {
@@ -28,11 +33,11 @@ export function Sidebar() {
 
     return (
         <div
-            className={`h-[100%] ${isSidebarOpen ? 'w-[300px]' : 'w-[50px]'} sticky bg-gray-300 p-4
-            flex flex-col justify-start items-center`}
+            className={`w-[${sidebar.width}px] h-[100%] box-border sticky bg-gray-300 p-4
+            flex-shrink-0 flex flex-col justify-start items-center`}
         >
             <div className="w-full flex justify-end">
-                {isSidebarOpen ? (
+                {sidebar.isOpen ? (
                     <button className="cursor-pointer" onClick={toggleSidebar}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +69,7 @@ export function Sidebar() {
                     </button>
                 )}
             </div>
-            {isSidebarOpen && (
+            {sidebar.isOpen && (
                 <>
                     <button
                         draggable="true"

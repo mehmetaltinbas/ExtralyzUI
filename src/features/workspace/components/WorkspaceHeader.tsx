@@ -1,12 +1,25 @@
 import type React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { tabsActions } from '../store/tabsSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ClaretButton } from '../../../shared/components/buttons/ClaretButton';
 
 export function WorkspaceHeader() {
-    const tabs = useAppSelector((state) => state.tabs);
     const dispatch = useAppDispatch();
+    const tabs = useAppSelector((state) => state.tabs);
+    const sidebar = useAppSelector(state => state.sidebar);
+    const [componentWidth, setComponentWidth] = useState<number>();
+
+    useEffect(() => {
+        function handleResize() {
+            setComponentWidth(window.innerWidth - sidebar.width);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [sidebar.width]);
 
     function displayTab(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         const index = Number(event.currentTarget.dataset.tabIndex);
@@ -51,8 +64,8 @@ export function WorkspaceHeader() {
         <div
             onDragOver={(event) => onDragOver(event)}
             onDrop={(event) => onDrop(event)}
-            className="w-full h-[40px] bg-gray-300 flex justify-start items-center
-            border-1 border-white"
+            className={`w-[${componentWidth}px] h-[40px] bg-gray-300 flex justify-start items-center
+            border-1 border-white overflow-x-auto`}
         >
             {tabs.tabs.map((tab, index) => (
                 <div
@@ -63,7 +76,7 @@ export function WorkspaceHeader() {
                     data-section={tab}
                     data-tab-index={index}
                     onClick={(event) => displayTab(event)}
-                    className={`w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
+                    className={`w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} flex-shrink-0 cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
                 >
                     <p>{tab}</p>
                     <ClaretButton
