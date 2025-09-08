@@ -1,6 +1,11 @@
-import type React from "react";
+import type React from 'react';
 
-export function NavyBlueButton({ children, onClick, className, ...rest }: {
+export function NavyBlueButton({
+    children,
+    onClick,
+    className,
+    ...rest
+}: {
     children: React.ReactNode;
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     className?: string;

@@ -8,7 +8,7 @@ interface SidebarState {
 
 const initialState: SidebarState = {
     isOpen: false,
-    width: 50
+    width: 50,
 };
 
 const sidebarSlice = createSlice({
@@ -26,7 +26,7 @@ const sidebarSlice = createSlice({
         close: (state) => {
             state.isOpen = false;
             state.width = 50;
-        }
+        },
     },
 });
 

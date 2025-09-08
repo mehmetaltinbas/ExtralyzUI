@@ -5,7 +5,7 @@ import { sidebarReducer } from '../features/workspace/store/sidebarWidthSlice';
 const store = configureStore({
     reducer: {
         tabs: tabsReducer,
-        sidebar: sidebarReducer
+        sidebar: sidebarReducer,
     },
 });
 

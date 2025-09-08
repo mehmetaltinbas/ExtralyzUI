@@ -1,31 +1,41 @@
-import type React from "react";
-import { NavyBlueButton } from "../../../shared/components/buttons/NavyBlueButton";
-import type { CreateExerciseSetDto } from "../types/dto/create-exercise-set.dto";
-import { exerciseSetService } from "../services/exercise-set.service";
+import type React from 'react';
+import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
+import type { CreateExerciseSetDto } from '../types/dto/create-exercise-set.dto';
+import { exerciseSetService } from '../services/exercise-set.service';
 
-export function CreateExerciseSetForm({ isHidden, sourceId, createExerciseSetDto, setCreateExerciseSetDto }: {
+export function CreateExerciseSetForm({
+    isHidden,
+    sourceId,
+    createExerciseSetDto,
+    setCreateExerciseSetDto,
+}: {
     isHidden: boolean;
     sourceId: string;
     createExerciseSetDto: CreateExerciseSetDto;
     setCreateExerciseSetDto: React.Dispatch<React.SetStateAction<CreateExerciseSetDto>>;
 }) {
-
     async function createExerciseSet() {
         const response = await exerciseSetService.create(sourceId, createExerciseSetDto);
         alert(response.message);
     }
 
     return (
-        <div id="generate-exercises-form"
+        <div
+            id="create-exercise-set-form"
             className={`${isHidden ? 'invisible' : ''} absolute p-2 border bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
             <div className="flex justify-start items-center gap-2">
-                <p>intended exercise count: </p>
-                <input 
-                    type="number" 
-                    value={createExerciseSetDto.count} 
-                    onChange={(e) => setCreateExerciseSetDto({ ...createExerciseSetDto, count: Number(e.target.value) })}
+                <p>count: </p>
+                <input
+                    type="number"
+                    value={createExerciseSetDto.count}
+                    onChange={(e) =>
+                        setCreateExerciseSetDto({
+                            ...createExerciseSetDto,
+                            count: Number(e.target.value),
+                        })
+                    }
                     className="w-[50px] py-[2px] px-2 border rounded-[10px]"
                 />
             </div>
@@ -33,7 +43,12 @@ export function CreateExerciseSetForm({ isHidden, sourceId, createExerciseSetDto
                 <p>type: </p>
                 <select
                     value={createExerciseSetDto.type}
-                    onChange={(e) => setCreateExerciseSetDto({ ...createExerciseSetDto, type: e.target.value })}
+                    onChange={(e) =>
+                        setCreateExerciseSetDto({
+                            ...createExerciseSetDto,
+                            type: e.target.value,
+                        })
+                    }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
                     <option value="">Select type</option>
@@ -47,7 +62,12 @@ export function CreateExerciseSetForm({ isHidden, sourceId, createExerciseSetDto
                 <p>difficulty: </p>
                 <select
                     value={createExerciseSetDto.difficulty}
-                    onChange={(e) => setCreateExerciseSetDto({ ...createExerciseSetDto, difficulty: e.target.value })}
+                    onChange={(e) =>
+                        setCreateExerciseSetDto({
+                            ...createExerciseSetDto,
+                            difficulty: e.target.value,
+                        })
+                    }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
                     <option value="">Select difficulty</option>

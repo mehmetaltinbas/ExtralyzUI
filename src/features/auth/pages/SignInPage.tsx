@@ -15,9 +15,9 @@ export function SignInPage() {
         const key = event.target.dataset.key as keyof SignInDto | undefined;
         const value = event.target.value;
         if (key) {
-            setSignInDto(prev => ({
+            setSignInDto((prev) => ({
                 ...prev,
-                [key]: value
+                [key]: value,
             }));
         }
     }
@@ -28,27 +28,28 @@ export function SignInPage() {
         setIsSignedIn(response.isSuccess);
     }
 
-    return isSignedIn ? <Navigate to='/workspace' /> : (<div className="h-[75%] flex flex-col justify-center items-center gap-2">
+    return isSignedIn ? (
+        <Navigate to="/workspace" />
+    ) : (
+        <div className="h-[75%] flex flex-col justify-center items-center gap-2">
             <p className="font-bold text-lg">Sign In</p>
             <input
-                data-key='userName'
-                onChange={event => handleOnChange(event)}
+                data-key="userName"
+                onChange={(event) => handleOnChange(event)}
                 type="text"
                 value={signInDto.userName}
                 placeholder="username..."
                 className="p-2 border rounded-full"
             />
             <input
-                data-key='password'
-                onChange={event => handleOnChange(event)}
+                data-key="password"
+                onChange={(event) => handleOnChange(event)}
                 value={signInDto.password}
                 type="password"
                 placeholder="password..."
                 className="p-2 border rounded-full"
             />
-            <NavyBlueButton onClick={handleSignInSubmit}>
-                sign in
-            </NavyBlueButton>
-        </div>)
-    ;
+            <NavyBlueButton onClick={handleSignInSubmit}>sign in</NavyBlueButton>
+        </div>
+    );
 }

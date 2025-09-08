@@ -6,8 +6,8 @@ import { sidebarActions } from '../store/sidebarWidthSlice';
 
 export function Sidebar() {
     const dispatch = useAppDispatch();
-    const tabs = useAppSelector(state => state.tabs);
-    const sidebar = useAppSelector(state => state.sidebar);
+    const tabs = useAppSelector((state) => state.tabs);
+    const sidebar = useAppSelector((state) => state.sidebar);
 
     function toggleSidebar() {
         if (sidebar.isOpen) {

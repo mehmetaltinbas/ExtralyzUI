@@ -7,13 +7,13 @@ import { ClaretButton } from '../../../shared/components/buttons/ClaretButton';
 export function WorkspaceHeader() {
     const dispatch = useAppDispatch();
     const tabs = useAppSelector((state) => state.tabs);
-    const sidebar = useAppSelector(state => state.sidebar);
+    const sidebar = useAppSelector((state) => state.sidebar);
     const [componentWidth, setComponentWidth] = useState<number>();
 
     useEffect(() => {
         function handleResize() {
             setComponentWidth(window.innerWidth - sidebar.width);
-        };
+        }
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => {
@@ -79,10 +79,7 @@ export function WorkspaceHeader() {
                     className={`w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} flex-shrink-0 cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
                 >
                     <p>{tab}</p>
-                    <ClaretButton
-                        data-tab-index={index}
-                        onClick={deleteTab}
-                    >
+                    <ClaretButton data-tab-index={index} onClick={deleteTab}>
                         x
                     </ClaretButton>
                 </div>

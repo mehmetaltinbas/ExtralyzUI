@@ -1,6 +1,11 @@
-import React from "react";
+import React from 'react';
 
-export function ClaretButton({ children, onClick, className, ...rest }: {
+export function ClaretButton({
+    children,
+    onClick,
+    className,
+    ...rest
+}: {
     children: React.ReactNode;
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     className?: string;
