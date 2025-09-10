@@ -3,6 +3,7 @@ import type { ResponseBase } from '../../../shared/types/response-base';
 import type { CreateExerciseSetDto } from '../types/dto/create-exercise-set.dto';
 import type { ReadAllExerciseSetsResponse } from '../types/response/read-all-exercise-sets.response';
 import type { ReadAllExerciseSetsGroupedBySources } from '../types/response/read-all-exerise-sets-grouped-by-sources.response';
+import type { ReadSingleExerciseSetResponse } from '../types/response/read-single-exercise-set.response';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/exercise-set`;
 
@@ -15,6 +16,11 @@ async function create(
             withCredentials: true,
         })
     ).data;
+    return response;
+}
+
+async function readById(id: string): Promise<ReadSingleExerciseSetResponse> {
+    const response = (await axios.get(`${baseUrl}/read-by-id/${id}`)).data;
     return response;
 }
 
@@ -36,6 +42,7 @@ async function readAllByUserIdGroupedBySources(): Promise<ReadAllExerciseSetsGro
 
 export const exerciseSetService = {
     create,
+    readById,
     readAllByUserId,
     readAllByUserIdGroupedBySources,
 };

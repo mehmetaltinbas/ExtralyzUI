@@ -16,10 +16,6 @@ const sidebarSlice = createSlice({
     initialState,
     reducers: {
         open: (state) => {
-            // state = {
-            //     isOpen: true,
-            //     width: 300
-            // };
             state.isOpen = true;
             state.width = 300;
         },

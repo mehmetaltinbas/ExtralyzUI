@@ -5,11 +5,10 @@ export function ExerciseCard({
     fetchExercises,
 }: {
     exercise: Exercise;
-    fetchExercises: () => void;
+    fetchExercises?: () => void;
 }) {
     return (
-        <div>
-            <p>{exercise.type}</p>
+        <div className={`w-[200px] h-[200px]`}>
             <p>{exercise.prompt}</p>
         </div>
     );

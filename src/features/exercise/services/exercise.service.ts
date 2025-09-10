@@ -11,7 +11,10 @@ async function readAll(): Promise<ReadAllExercisesResponse> {
 
 async function readById() {}
 
-async function readAllBySourceId() {}
+async function readAllByExerciseSetId(exerciseSetId: string): Promise<ReadAllExercisesResponse> {
+    const response = (await axios.get(`${baseUrl}/read-all-by-exercise-set-id/${exerciseSetId}`, { withCredentials: true })).data;
+    return response;
+}
 
 async function deleteById(id: string): Promise<ResponseBase> {
     const response = (
@@ -22,5 +25,6 @@ async function deleteById(id: string): Promise<ResponseBase> {
 
 export const exerciseService = {
     readAll,
+    readAllByExerciseSetId,
     deleteById,
 };

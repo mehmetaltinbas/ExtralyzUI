@@ -1,13 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { tabsActions } from '../store/tabsSlice';
-import { Sections } from '../../../shared/enums/sections.enum';
-import { sidebarActions } from '../store/sidebarWidthSlice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { Sections } from '../../enums/sections.enum';
+import { sidebarActions } from '../../store/sidebarSlice';
+import { SidebarNavSection } from './SidebarNavSection';
+import type { Source } from '../../../source/types/source.iterface';
+import type { ProcessedSource } from '../../../processed-source/types/processed-source.interface';
+import type { ExerciseSet } from '../../../exercise-set/types/exercise-set.interface';
+import { sourceService } from '../../../source/services/source.service';
+import { processedSourceService } from '../../../processed-source/services/processed-source.service';
+import { exerciseSetService } from '../../../exercise-set/services/exercise-set.service';
 
 export function Sidebar() {
     const dispatch = useAppDispatch();
-    const tabs = useAppSelector((state) => state.tabs);
     const sidebar = useAppSelector((state) => state.sidebar);
+    const [sources, setSources] = useState<Source[]>([]);
+    const [processedSources, setProcessedSources] = useState<ProcessedSource[]>([]);
+    const [exerciseSets, setExerciseSets] = useState<ExerciseSet[]>([]);
+
+    useEffect(() => {
+        async function fetchItems() {
+            setSources((await sourceService.readAllByUserId()).sources!);
+            setProcessedSources((await processedSourceService.readAllByUserId()).processedSources!);
+            setExerciseSets((await exerciseSetService.readAllByUserId()).exerciseSets!);
+        }
+        fetchItems();
+    }, []);
 
     function toggleSidebar() {
         if (sidebar.isOpen) {
@@ -17,24 +34,9 @@ export function Sidebar() {
         }
     }
 
-    function openTab(event: React.MouseEvent<HTMLButtonElement>) {
-        const section = event.currentTarget.dataset.section;
-        if (typeof section === 'string') {
-            dispatch(tabsActions.addByIndex({ element: section }));
-        }
-    }
-
-    function onDragStart(event: React.DragEvent<HTMLButtonElement>) {
-        const section = event.currentTarget.dataset.section;
-        if (section !== undefined) {
-            event.dataTransfer.setData('text/plain', section);
-        }
-    }
-
     return (
-        <div
-            className={`w-[${sidebar.width}px] h-[100%] box-border sticky bg-gray-300 p-4
-            flex-shrink-0 flex flex-col justify-start items-center`}
+        <div className={`w-[${sidebar.width}px] h-full sticky p-4 bg-gray-300
+            flex-shrink-0 flex flex-col justify-start items-center gap-4`}
         >
             <div className="w-full flex justify-end">
                 {sidebar.isOpen ? (
@@ -71,33 +73,9 @@ export function Sidebar() {
             </div>
             {sidebar.isOpen && (
                 <>
-                    <button
-                        draggable="true"
-                        onDragStart={(event) => onDragStart(event)}
-                        data-section={Sections.SOURCES}
-                        onClick={(event) => openTab(event)}
-                        className="cursor-pointer"
-                    >
-                        Sources
-                    </button>
-                    <button
-                        draggable="true"
-                        onDragStart={(event) => onDragStart(event)}
-                        data-section={Sections.PROCESSED_SOURCES}
-                        onClick={(event) => openTab(event)}
-                        className="cursor-pointer"
-                    >
-                        Processed Sources
-                    </button>
-                    <button
-                        draggable="true"
-                        onDragStart={(event) => onDragStart(event)}
-                        data-section={Sections.EXERCISES}
-                        onClick={(event) => openTab(event)}
-                        className="cursor-pointer"
-                    >
-                        Exercises
-                    </button>
+                    <SidebarNavSection section={Sections.SOURCES} items={sources}/>
+                    <SidebarNavSection section={Sections.PROCESSED_SOURCES} items={processedSources}/>
+                    <SidebarNavSection section={Sections.EXERCISE_SETS} items={exerciseSets}/>
                 </>
             )}
         </div>

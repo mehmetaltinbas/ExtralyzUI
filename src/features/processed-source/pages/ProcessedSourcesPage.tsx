@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import type { ProcessedSource } from '../types/ProcessedSource';
+import type { ProcessedSource } from '../types/processed-source.interface';
 import { processedSourceService } from '../services/processed-source.service';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 import { ProcessedSourceCard } from '../components/ProcessedSourceCard';
 
-export function ProcessedSources() {
+export function ProcessedSourcesPage() {
     const [processedSources, setProcessedSources] = useState<ProcessedSource[]>([]);
 
     async function fetchProcessedSources() {

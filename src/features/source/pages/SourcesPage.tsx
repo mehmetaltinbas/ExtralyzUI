@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { sourceService } from '../services/source.service';
-import type { Source } from '../types/Source';
+import type { Source } from '../types/source.iterface';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 import { SourceCard } from '../components/SourceCard';
 import { CreateExerciseSetForm } from '../../exercise-set/components/CreateExerciseSetForm';
 import type { CreateExerciseSetDto } from '../../exercise-set/types/dto/create-exercise-set.dto';
 
-export function Sources() {
+export function SourcesPage() {
     const [sources, setSources] = useState<Source[]>([]);
     const [file, setFile] = useState<File>();
     const [isCreateExerciseSetFormHidden, setIsCreateExerciseSetFormHidden] =

@@ -5,4 +5,5 @@ export interface ExerciseSet {
     type: string;
     difficulty: string;
     count: number;
+    title: string;
 }

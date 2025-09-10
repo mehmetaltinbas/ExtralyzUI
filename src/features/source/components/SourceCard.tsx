@@ -1,5 +1,5 @@
 import { useState, type HTMLAttributes, type HtmlHTMLAttributes } from 'react';
-import type { Source } from '../types/Source';
+import type { Source } from '../types/source.iterface';
 import { ClaretButton } from '../../../shared/components/buttons/ClaretButton';
 import type React from 'react';
 import { sourceService } from '../services/source.service';

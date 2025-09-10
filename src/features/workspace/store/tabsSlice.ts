@@ -1,54 +1,55 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../../../store/store';
+
+export interface TabsStateElement {
+    section: string;
+    id?: string;
+    title?: string;
+}
 
 export interface TabsState {
-    tabs: string[];
+    elements: TabsStateElement[];
     activeTabIndex: number;
 }
 
 const initialState: TabsState = {
-    tabs: [],
-    activeTabIndex: 0,
+    elements: [],
+    activeTabIndex: -1,
 };
 
 const tabsSlice = createSlice({
     name: 'tabs',
     initialState,
     reducers: {
-        addByIndex: (state, action: PayloadAction<{ element: string; index?: number }>) => {
-            if (!state.tabs.includes(action.payload.element)) {
+        addByIndex: (state, action: PayloadAction<{ element: TabsStateElement; index?: number }>) => {
+            if (!state.elements.includes(action.payload.element)) {
                 if (action.payload.index) {
-                    state.tabs.splice(action.payload.index, 0, action.payload.element);
+                    state.elements.splice(action.payload.index, 0, action.payload.element);
                     state.activeTabIndex = action.payload.index;
                 } else {
-                    state.tabs.push(action.payload.element);
-                    state.activeTabIndex = state.tabs.length - 1;
+                    state.elements.push(action.payload.element);
+                    state.activeTabIndex = state.elements.length - 1;
                 }
             } else {
                 if (action.payload.index || action.payload.index === 0) {
-                    const prevIndex = state.tabs.findIndex(
+                    const prevIndex = state.elements.findIndex(
                         (tab) => tab === action.payload.element
                     );
                     if (prevIndex !== action.payload.index) {
-                        console.log('if block');
-                        const temporaryElement = state.tabs[prevIndex];
-                        state.tabs.splice(prevIndex, 1);
-                        state.tabs.splice(action.payload.index, 0, temporaryElement);
+                        const temporaryElement = state.elements[prevIndex];
+                        state.elements.splice(prevIndex, 1);
+                        state.elements.splice(action.payload.index, 0, temporaryElement);
                     }
                     state.activeTabIndex = action.payload.index;
                 } else {
-                    console.log('else block');
-                    console.log(action.payload.element);
-                    const currentIndex = state.tabs.findIndex(
+                    const currentIndex = state.elements.findIndex(
                         (tab) => tab === action.payload.element
                     );
-                    console.log(`currentIndex: ${currentIndex}`);
                     state.activeTabIndex = currentIndex;
                 }
             }
         },
         subtract: (state, action: PayloadAction<number>) => {
-            state.tabs = state.tabs.filter((tab, index) => index !== action.payload);
+            state.elements = state.elements.filter((tab, index) => index !== action.payload);
         },
         changePosition: (state, action: PayloadAction<number>) => {},
         setActiveTabIndex: (state, action: PayloadAction<number>) => {

@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react';
 import { exerciseSetService } from '../services/exercise-set.service';
 import { ExerciseSetCard } from '../components/ExerciseSetCard';
 import type { ExtendedSource } from '../../source/types/extended-source-document.interface';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 export function ExerciseSetsPage() {
+    const dispatch = useAppDispatch();
+    const sidebar = useAppSelector(state => state.sidebar);
+    const widths = useAppSelector(state => state.widths);
     const [sources, setSources] = useState<ExtendedSource[]>([]);
 
     async function fetchExerciseSets() {
@@ -20,18 +24,24 @@ export function ExerciseSetsPage() {
     }, []);
 
     return (
-        <div className="w-full h-full flex flex-col justify-start items-center">
-            <div className="w-[95%] h-auto border flex flex-col justify-start items-start gap-6">
+        <div className="w-full h-full 
+            flex flex-col justify-start items-center"
+        >
+            <div className="w-full h-auto p-4 
+                flex flex-col justify-start items-start gap-10"
+            >
                 {sources.length === 0 ? (
                     <p>Loading...</p>
                 ) : (
                     sources.map((source) => (
-                        <div className="w-full flex flex-col justify-start items-start gap-2 p-4">
+                        <div className="w-full h-auto p-4
+                            flex flex-col justify-start items-start gap-2"
+                        >
                             <div className="flex justify-start items-center gap-4">
                                 <p>{source.title}</p>
                                 <p>{source.type}</p>
                             </div>
-                            <div className="w-[200px] flex justify-start items-center gap-4 overflow-x-auto">
+                            <div className={`w-[${widths.exerciseSetsContainerWidth}px] flex justify-start items-center gap-4 overflow-x-auto`}>
                                 {source.exerciseSets &&
                                     source.exerciseSets.map((exerciseSet) => (
                                         <ExerciseSetCard

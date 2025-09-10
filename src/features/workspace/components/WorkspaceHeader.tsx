@@ -6,20 +6,9 @@ import { ClaretButton } from '../../../shared/components/buttons/ClaretButton';
 
 export function WorkspaceHeader() {
     const dispatch = useAppDispatch();
-    const tabs = useAppSelector((state) => state.tabs);
-    const sidebar = useAppSelector((state) => state.sidebar);
-    const [componentWidth, setComponentWidth] = useState<number>();
-
-    useEffect(() => {
-        function handleResize() {
-            setComponentWidth(window.innerWidth - sidebar.width);
-        }
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [sidebar.width]);
+    const tabs = useAppSelector(state => state.tabs);
+    const sidebar = useAppSelector(state => state.sidebar);
+    const widths = useAppSelector(state => state.widths);
 
     function displayTab(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         const index = Number(event.currentTarget.dataset.tabIndex);
@@ -54,9 +43,9 @@ export function WorkspaceHeader() {
         const middleX = rect.left + rect.width / 2;
 
         if (event.clientX < middleX) {
-            dispatch(tabsActions.addByIndex({ element: section, index }));
+            dispatch(tabsActions.addByIndex({ element: { section }, index }));
         } else if (event.clientX > middleX) {
-            dispatch(tabsActions.addByIndex({ element: section, index: index + 1 }));
+            dispatch(tabsActions.addByIndex({ element: { section }, index: index + 1 }));
         }
     }
 
@@ -64,21 +53,22 @@ export function WorkspaceHeader() {
         <div
             onDragOver={(event) => onDragOver(event)}
             onDrop={(event) => onDrop(event)}
-            className={`w-[${componentWidth}px] h-[40px] bg-gray-300 flex justify-start items-center
+            className={`w-[${widths.mainColumnWidth}px] h-[40px] bg-gray-300 
+            flex flex-shrink-0 justify-start items-center
             border-1 border-white overflow-x-auto`}
         >
-            {tabs.tabs.map((tab, index) => (
+            {tabs.elements.map((tab, index) => (
                 <div
                     draggable="true"
                     onDragStart={(event) => onDragStart(event)}
                     onDragOver={(event) => onDragOver(event)}
                     onDrop={(event) => onDrop(event)}
-                    data-section={tab}
+                    data-section={tab.section}
                     data-tab-index={index}
                     onClick={(event) => displayTab(event)}
                     className={`w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} flex-shrink-0 cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-100`}
                 >
-                    <p>{tab}</p>
+                    <p>{tab.id === undefined && tab.title === undefined ? tab.section : (tab.title === undefined || tab.title.length === 0 ? tab.id : tab.title)}</p>
                     <ClaretButton data-tab-index={index} onClick={deleteTab}>
                         x
                     </ClaretButton>

@@ -1,4 +1,4 @@
-import type { ProcessedSource } from '../types/ProcessedSource';
+import type { ProcessedSource } from '../types/processed-source.interface';
 import { ClaretButton } from '../../../shared/components/buttons/ClaretButton';
 import { processedSourceService } from '../services/processed-source.service';
 import type React from 'react';
