@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Sidebar } from '../components/sidebar/Sidebar';
 import { WorkspaceBody } from '../components/WorkspaceBody';
-import { WorkspaceHeader } from '../components/WorkspaceHeader';
+import { WorkspaceTabsBar } from '../components/tabs-bar/WorkspaceTabsBar';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { widthsActions } from '../store/widthsSlice';
 
@@ -27,7 +27,7 @@ export function WorkspacePage() {
         >
             <Sidebar />
             <div className="w-full h-full flex flex-col">
-                <WorkspaceHeader />
+                <WorkspaceTabsBar />
                 <WorkspaceBody />
             </div>
         </div>
