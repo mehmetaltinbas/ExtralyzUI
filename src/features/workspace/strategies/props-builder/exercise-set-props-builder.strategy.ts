@@ -4,10 +4,10 @@ import type { PropsBuilderStrategy } from "./props-builder-strategy.interface";
 
 export const ExerciseSetPropsBuilderStrategy: PropsBuilderStrategy = {
     build: async (exerciseSetId, setProps) => {
-        const exerciseSetResponse = await exerciseSetService.readAllByUserId();
+        const exerciseSetResponse = await exerciseSetService.readById(exerciseSetId);
         const exercisesResponse = await exerciseService.readAllByExerciseSetId(exerciseSetId);
         setProps({
-            exerciseSet: exerciseSetResponse.exerciseSets,
+            exerciseSet: exerciseSetResponse.exerciseSet,
             exercises: exercisesResponse.exercises!,
         });
     }

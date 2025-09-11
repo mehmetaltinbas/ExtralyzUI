@@ -42,6 +42,7 @@ export function WorkspaceTabsBar() {
         >
             {tabs.elements.map((tab, index) => (
                 <Tab 
+                    key={index}
                     tab={tab}
                     index={index}
                     onDragOver={onDragOver}

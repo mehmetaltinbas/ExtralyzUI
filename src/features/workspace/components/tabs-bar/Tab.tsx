@@ -31,7 +31,6 @@ export function Tab({ tab, index, onDragOver, onDrop, }: {
 
     return (
         <div
-            key={index}
             draggable="true"
             onDragStart={event => onDragStart(event)}
             onDragOver={event => onDragOver(event)}

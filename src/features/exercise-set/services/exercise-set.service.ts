@@ -20,7 +20,7 @@ async function create(
 }
 
 async function readById(id: string): Promise<ReadSingleExerciseSetResponse> {
-    const response = (await axios.get(`${baseUrl}/read-by-id/${id}`)).data;
+    const response = (await axios.get(`${baseUrl}/read-by-id/${id}`, { withCredentials: true })).data;
     return response;
 }
 

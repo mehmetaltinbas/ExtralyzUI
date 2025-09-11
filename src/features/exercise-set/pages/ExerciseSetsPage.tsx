@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 export function ExerciseSetsPage() {
     const dispatch = useAppDispatch();
-    const sidebar = useAppSelector(state => state.sidebar);
     const widths = useAppSelector(state => state.widths);
     const [sources, setSources] = useState<ExtendedSource[]>([]);
 
