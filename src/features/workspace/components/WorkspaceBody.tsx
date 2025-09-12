@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type JSX } from 'react';
+import React, { useEffect, useRef, useState, type JSX } from 'react';
 import { Pane } from './Pane';
 import { SplitView } from './SplitView';
 import { ExerciseSetsPage } from '../../exercise-set/pages/ExerciseSetsPage';
@@ -10,12 +10,14 @@ import { ExerciseSetPage } from '../../exercise-set/pages/ExerciseSetPage';
 import { selectPropsBuilderStrategy } from '../strategies/props-builder/select-props-builder-strategy';
 import { SourcePage } from '../../source/pages/SourcePage';
 import { ProcessedSourcePage } from '../../processed-source/pages/ProcessedSourcePage';
-import { NoComponent } from './NoComponent';
+import { layoutDimensionsActions } from '../store/layoutDimensionsSlice';
 
 export function WorkspaceBody() {
+    const dispatch = useAppDispatch();
     const tabs = useAppSelector(state => state.tabs);
-    const widths = useAppSelector(state => state.widths);
+    const layoutDimensions = useAppSelector(state => state.layoutDimensions);
     const [props, setProps] = useState<object | undefined>(undefined);
+    const containerDiv = useRef<HTMLDivElement | null>(null);
     const componentsMap: Map<string, React.ComponentType<any>> = new Map([
         [Sections.SOURCES, SourcesPage],
         [Sections.SOURCE, SourcePage],
@@ -41,9 +43,28 @@ export function WorkspaceBody() {
 
     }, [tabs.activeTabIndex]);
 
+    useEffect(() => {
+        if (!containerDiv.current) return;
+
+        const observer = new ResizeObserver(entries => {
+            for (const entry of entries) {
+                const newHeight = entry.contentRect.height;
+                dispatch(layoutDimensionsActions.updateDimension({ layout: 'mainColumn', dimension: 'height', value: newHeight}));
+            }
+        });
+
+        observer.observe(containerDiv.current);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
     return (
-        <div className={`w-[${widths.mainColumnWidth}px] h-full flex-1 flex justify-center items-center`}>
-            <div className="w-[90%] h-[90%] border overflow-auto">
+        <div
+            ref={containerDiv}
+            className={`w-[${layoutDimensions.mainColumn.width}px] h-full flex-1 flex justify-center items-center`}>
+            <div className={`w-[90%] h-[${layoutDimensions.mainColumn.height ?  `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] border overflow-y-auto`}>
                 {props ? <ActiveComponent {...props} /> : <p>No Component</p>}
             </div>
         </div>

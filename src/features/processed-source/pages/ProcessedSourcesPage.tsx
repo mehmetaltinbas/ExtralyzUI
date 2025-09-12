@@ -22,7 +22,9 @@ export function ProcessedSourcesPage() {
 
     return (
         <div className="w-full h-full flex flex-col justify-start items-center">
-            <div className="w-[95%] h-auto border grid grid-cols-3 gap-8">
+            <div className="w-full h-auto p-4
+                grid grid-cols-3 gap-8"
+            >
                 {processedSources.length === 0 ? (
                     <p>Loading...</p>
                 ) : (

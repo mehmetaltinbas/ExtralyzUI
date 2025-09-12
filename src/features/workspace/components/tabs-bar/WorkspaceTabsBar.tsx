@@ -8,7 +8,7 @@ export function WorkspaceTabsBar() {
     const dispatch = useAppDispatch();
     const tabs = useAppSelector(state => state.tabs);
     const sidebar = useAppSelector(state => state.sidebar);
-    const widths = useAppSelector(state => state.widths);
+    const widths = useAppSelector(state => state.layoutDimensions);
 
     function onDragOver(event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault();
@@ -36,7 +36,7 @@ export function WorkspaceTabsBar() {
         <div
             onDragOver={event => onDragOver(event)}
             onDrop={event => onDrop(event)}
-            className={`w-[${widths.mainColumnWidth}px] h-[40px] bg-gray-300 
+            className={`w-[${widths.mainColumn}px] h-[40px] bg-gray-300 
             flex flex-shrink-0 justify-start items-center
             border-1 border-white overflow-x-auto`}
         >

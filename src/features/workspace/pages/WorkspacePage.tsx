@@ -3,7 +3,7 @@ import { Sidebar } from '../components/sidebar/Sidebar';
 import { WorkspaceBody } from '../components/WorkspaceBody';
 import { WorkspaceTabsBar } from '../components/tabs-bar/WorkspaceTabsBar';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { widthsActions } from '../store/widthsSlice';
+import { layoutDimensionsActions } from '../store/layoutDimensionsSlice';
 
 export function WorkspacePage() {
     const dispatch = useAppDispatch();
@@ -11,7 +11,7 @@ export function WorkspacePage() {
 
     useEffect(() => {
         function handleResize() {
-            dispatch(widthsActions.update(sidebar.width));
+            dispatch(layoutDimensionsActions.updateWidthsBySidebarWidth(sidebar.width));
         }
         handleResize();
         window.addEventListener('resize', handleResize);

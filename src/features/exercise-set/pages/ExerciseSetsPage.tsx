@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 export function ExerciseSetsPage() {
     const dispatch = useAppDispatch();
-    const widths = useAppSelector(state => state.widths);
+    const widths = useAppSelector(state => state.layoutDimensions);
     const [sources, setSources] = useState<ExtendedSource[]>([]);
 
     async function fetchExerciseSets() {
@@ -40,7 +40,7 @@ export function ExerciseSetsPage() {
                                 <p>{source.title}</p>
                                 <p>{source.type}</p>
                             </div>
-                            <div className={`w-[${widths.exerciseSetsContainerWidth}px] flex justify-start items-center gap-4 overflow-x-auto`}>
+                            <div className={`w-[${widths.exerciseSetsContainer}px] flex justify-start items-center gap-4 overflow-x-auto`}>
                                 {source.exerciseSets &&
                                     source.exerciseSets.map((exerciseSet) => (
                                         <ExerciseSetCard
