@@ -1,16 +1,18 @@
 import type { ExerciseSet } from "../types/exercise-set.interface";
 import { ExerciseCard } from "../../exercise/components/ExerciseCard";
 import type { Exercise } from "../../exercise/types/exercise.interface";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { NavyBlueButton } from "../../../shared/components/buttons/NavyBlueButton";
 
 export function ExerciseSetPage({ exerciseSet, exercises }: {
     exerciseSet?: ExerciseSet;
     exercises?: Exercise[];
 }) {
+    const [isAnswersHidden, setIsAnswersHidden] = useState<boolean>(true);
 
-    useEffect(() => {
-        console.log(exerciseSet);
-    });
+    function toggleAnswerVisibility() {
+        setIsAnswersHidden(prev => !prev);
+    }
 
     return (
         <div className="w-full h-full
@@ -23,12 +25,15 @@ export function ExerciseSetPage({ exerciseSet, exercises }: {
                 <p>Type: {exerciseSet?.type}</p>
                 <p>Count: {exerciseSet?.count}</p>
                 <p>Difficulty: {exerciseSet?.difficulty}</p>
+                <NavyBlueButton onClick={toggleAnswerVisibility}>
+                    {isAnswersHidden ? 'Show Answers' : 'Hide Answers'}
+                </NavyBlueButton>
             </div>
             <div className="w-full h-full
                 grid grid-cols-3 gap-4"
             >
                 {exercises?.map(exercise => (
-                    <ExerciseCard exercise={exercise}/>
+                    <ExerciseCard exercise={exercise} isAnswersHidden={isAnswersHidden}/>
                 ))}
             </div>
         </div>
