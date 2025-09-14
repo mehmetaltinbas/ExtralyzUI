@@ -4,6 +4,7 @@ export interface TabsStateElement {
     section: string;
     id?: string;
     title?: string;
+    tabTitle?: string;
 }
 
 export interface TabsState {
@@ -21,39 +22,48 @@ const tabsSlice = createSlice({
     initialState,
     reducers: {
         addByIndex: (state, action: PayloadAction<{ element: TabsStateElement; index?: number }>) => {
-            if (!state.elements.includes(action.payload.element)) {
-                if (action.payload.index) {
-                    state.elements.splice(action.payload.index, 0, action.payload.element);
-                    state.activeTabIndex = action.payload.index;
-                } else {
-                    state.elements.push(action.payload.element);
+            const payload = action.payload;
+            payload.element.tabTitle = (payload.element.title && payload.element.title.length > 0) || (payload.element.id && payload.element.id.length > 0) ? 
+                (   (payload.element.title && payload.element.title.length > 0) ? 
+                        payload.element.title : payload.element.id
+                ) : (
+                    payload.element.section
+                );
+            if (!state.elements.some(element => element.tabTitle === payload.element.tabTitle)) { // if tabTitle exists
+                if (payload.index) { // if index is given
+                    state.elements.splice(payload.index, 0, payload.element);
+                    state.activeTabIndex = payload.index;
+                } else { // if index isn't given
+                    state.elements.push(payload.element);
                     state.activeTabIndex = state.elements.length - 1;
                 }
-            } else {
-                if (action.payload.index || action.payload.index === 0) {
+            } else { // if tabTitle doesn't exist
+                if (payload.index || payload.index === 0) { // if index is given
                     const prevIndex = state.elements.findIndex(
-                        (tab) => tab === action.payload.element
+                        element => element.tabTitle === payload.element.tabTitle
                     );
-                    if (prevIndex !== action.payload.index) {
+                    if (prevIndex !== payload.index) {
                         const temporaryElement = state.elements[prevIndex];
                         state.elements.splice(prevIndex, 1);
-                        state.elements.splice(action.payload.index, 0, temporaryElement);
+                        state.elements.splice(payload.index, 0, temporaryElement);
                     }
-                    state.activeTabIndex = action.payload.index;
-                } else {
+                    state.activeTabIndex = payload.index;
+                } else { // if index isn't given
                     const currentIndex = state.elements.findIndex(
-                        (tab) => tab === action.payload.element
+                        (element) => element.tabTitle === payload.element.tabTitle
                     );
                     state.activeTabIndex = currentIndex;
                 }
             }
         },
         subtract: (state, action: PayloadAction<number>) => {
-            state.elements = state.elements.filter((tab, index) => index !== action.payload);
+            const payload = action.payload;
+            state.elements = state.elements.filter((element, index) => index !== payload);
         },
         changePosition: (state, action: PayloadAction<number>) => {},
         setActiveTabIndex: (state, action: PayloadAction<number>) => {
-            state.activeTabIndex = action.payload;
+            const payload = action.payload;
+            state.activeTabIndex = payload;
         },
     },
 });

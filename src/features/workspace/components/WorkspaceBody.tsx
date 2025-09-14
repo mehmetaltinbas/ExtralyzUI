@@ -67,6 +67,7 @@ export function WorkspaceBody() {
 
     return (
         <div
+            data-body='this is workspace body'
             ref={containerDiv}
             className={`w-[${layoutDimensions.mainColumn.width}px] h-full flex-1 flex justify-center items-center`}>
             <div className={`w-[90%] h-[${layoutDimensions.mainColumn.height ?  `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] overflow-y-auto`}>
@@ -80,7 +81,7 @@ export function WorkspaceBody() {
                         builtProps = builtPropsMap[element.id];
                     }
                     builtProps = { ...builtProps, className: `${isActiveComponent ? 'block' : 'hidden'}`};
-                    return Component ? <Component {...builtProps} /> : null;
+                    return Component ? <Component key={index} {...builtProps} /> : null;
                 })}
             </div>
         </div>

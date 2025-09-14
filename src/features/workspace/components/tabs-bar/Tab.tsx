@@ -13,9 +13,10 @@ export function Tab({ tab, index, onDragOver, onDrop, }: {
     const tabs = useAppSelector(state => state.tabs);
 
     function onDragStart(event: React.DragEvent<HTMLDivElement>) {
-        const section = event.currentTarget.dataset.section;
-        if (section !== undefined) {
-            event.dataTransfer.setData('text/plain', section);
+        const datasetElement = event.currentTarget.dataset.element;
+        const element = datasetElement ? JSON.parse(datasetElement) : undefined;
+        if (element) {
+            event.dataTransfer.setData('text/plain', JSON.stringify(element));
         }
     }
 
@@ -36,6 +37,7 @@ export function Tab({ tab, index, onDragOver, onDrop, }: {
             onDragOver={event => onDragOver(event)}
             onDrop={event => onDrop(event)}
             data-section={tab.section}
+            data-element={JSON.stringify(tab)}
             data-tab-index={index}
             onClick={(event) => displayTab(event)}
             className={`max-w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} cursor-pointer p-2
@@ -44,7 +46,7 @@ export function Tab({ tab, index, onDragOver, onDrop, }: {
         >
             <div className="max-w-[150px] flex justify-center items-center">
                 <p className="truncate">
-                    {tab.id === undefined && tab.title === undefined ? tab.section : (tab.title === undefined || tab.title.length === 0 ? tab.id : tab.title)}
+                    {tab.tabTitle}
                 </p>
             </div>
             <div className="w-[24px] flex justify-center items-center">

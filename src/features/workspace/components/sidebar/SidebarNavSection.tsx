@@ -14,15 +14,16 @@ export function SidebarNavSection({ section, items }: {
     const dispatch = useAppDispatch();
 
     function onDragStart(event: React.DragEvent<HTMLButtonElement>) {
-        const section = event.currentTarget.dataset.section;
-        if (section !== undefined) {
-            event.dataTransfer.setData('text/plain', section);
+        const datasetElement = event.currentTarget.dataset.element;
+        const element = datasetElement ? JSON.parse(datasetElement) : undefined;
+        if (element) {
+            event.dataTransfer.setData('text/plain', JSON.stringify(element));
         }
     }
 
     function openTab(event: React.MouseEvent<HTMLButtonElement>) {
         const section = event.currentTarget.dataset.section;
-        if (typeof section === 'string') {
+        if (section && section.length > 0) {
             const datasetElement = event.currentTarget.dataset.element;
             let element;
             if (datasetElement) {
