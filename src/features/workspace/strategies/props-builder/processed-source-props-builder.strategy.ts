@@ -2,8 +2,8 @@ import { processedSourceService } from "../../../processed-source/services/proce
 import type { PropsBuilderStrategy } from "./props-builder-strategy.interface";
 
 export const ProcessedSourcePropsBuilderStrategy: PropsBuilderStrategy = {
-    build: async (id) => {
-        const response = await processedSourceService.readById(id);
+    build: async (tab) => {
+        const response = await processedSourceService.readById(tab.id!);
         if (response.processedSource) {
             return {
                 processedSource: response.processedSource

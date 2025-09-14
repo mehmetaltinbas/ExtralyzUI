@@ -77,45 +77,43 @@ export function SourcesPage({ className }: {
     }
 
     return (
-        <>
-            <div className={`w-full h-auto p-5
-                grid grid-cols-3 gap-8 ${className ?? ''}`}
+        <div className={`w-full h-auto p-5
+            grid grid-cols-3 gap-8 ${className ?? ''}`}
+        >
+            <div className="h-[100px] col-span-3
+                flex justify-center items-center"
             >
-                <div className="h-[100px] col-span-3
-                    flex justify-center items-center"
+                <div className="w-[400px] h-[80px]
+                    flex justify-center items-center gap-2"
                 >
-                    <div className="w-[400px] h-[80px]
-                        flex justify-center items-center gap-2"
-                    >
-                        <input
-                            onChange={(event) => handleOnChange(event)}
-                            type="file"
-                            className="w-[200px] border rounded-full p-1 cursor-pointer
-                            text-xs
-                            hover:bg-gray-100"
-                        />
-                        <NavyBlueButton onClick={uploadSource}>Upload</NavyBlueButton>
-                    </div>
+                    <input
+                        onChange={(event) => handleOnChange(event)}
+                        type="file"
+                        className="w-[200px] border rounded-full p-1 cursor-pointer
+                        text-xs
+                        hover:bg-gray-100"
+                    />
+                    <NavyBlueButton onClick={uploadSource}>Upload</NavyBlueButton>
                 </div>
-                {sources.length === 0 ? (
-                    <p>Loading...</p>
-                ) : (
-                    sources.map((source) => (
-                        <SourceCard
-                            source={source}
-                            fetchSources={fetchSources}
-                            toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
-                        />
-                    ))
-                )}
-                </div>
-
+            </div>
+            {sources.length === 0 ? (
+                <p>Loading...</p>
+            ) : (
+                sources.map((source) => (
+                    <SourceCard
+                        source={source}
+                        fetchSources={fetchSources}
+                        toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
+                    />
+                ))
+            )}
             <CreateExerciseSetForm
                 isHidden={isCreateExerciseSetFormHidden}
                 sourceId={createExerciseSetSourceId}
                 createExerciseSetDto={createExerciseSetDto}
                 setCreateExerciseSetDto={setCreateExerciseSetDto}
             />
-        </>
+        </div>
+
     );
 }

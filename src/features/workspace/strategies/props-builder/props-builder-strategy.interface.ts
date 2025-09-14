@@ -1,5 +1,5 @@
-import type React from "react";
+import type { TabsStateElement } from "../../store/tabsSlice";
 
 export interface PropsBuilderStrategy {
-    build: (id: string) => Promise<object>
+    build: (tab: TabsStateElement) => Promise<object>
 }

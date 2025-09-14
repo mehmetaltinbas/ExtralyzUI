@@ -11,13 +11,14 @@ import { selectPropsBuilderStrategy } from '../strategies/props-builder/select-p
 import { SourcePage } from '../../source/pages/SourcePage';
 import { ProcessedSourcePage } from '../../processed-source/pages/ProcessedSourcePage';
 import { layoutDimensionsActions } from '../store/layoutDimensionsSlice';
+import type { TabsStateElement } from '../store/tabsSlice';
 
 export function WorkspaceBody() {
     const dispatch = useAppDispatch();
     const tabs = useAppSelector(state => state.tabs);
     const layoutDimensions = useAppSelector(state => state.layoutDimensions);
     const [props, setProps] = useState<object | undefined>(undefined);
-    const [builtPropsMap, setBuildPropsMap] = useState<Record<string, object | undefined>>({});
+    const [builtPropsMap, setBuiltPropsMap] = useState<Record<string, object | undefined>>({});
     const containerDiv = useRef<HTMLDivElement | null>(null);
     const componentsMap: Map<string, React.ComponentType<any>> = new Map([
         [Sections.SOURCES, SourcesPage],
@@ -46,28 +47,25 @@ export function WorkspaceBody() {
     }, []);
 
     useEffect(() => {
-        async function buildProps(section: string,) {
-            const strategy = selectPropsBuilderStrategy(section);
+        async function buildProps(tab: TabsStateElement) {
+            const strategy = selectPropsBuilderStrategy(tab.section);
             let builtProps;
             if (strategy) {
-                builtProps = await strategy.build(tabs.elements[tabs.activeTabIndex].id!);
+                builtProps = await strategy.build(tab);
             }
             return builtProps;
         }
         tabs.elements.forEach(async (tab, index) => {
-            const builtProps = await buildProps(tab.section);
-            if (tab.id !== undefined) {
-                setBuildPropsMap(prev => ({
-                    ...prev,
-                    [String(tab.id)]: builtProps
-                }));
-            }
+            const builtProps = await buildProps(tab);
+            setBuiltPropsMap(prev => ({
+                ...prev,
+                [String(tab.tabTitle)]: builtProps
+            }));
         });
     }, [tabs.elements]);
 
     return (
         <div
-            data-body='this is workspace body'
             ref={containerDiv}
             className={`w-[${layoutDimensions.mainColumn.width}px] h-full flex-1 flex justify-center items-center`}>
             <div className={`w-[90%] h-[${layoutDimensions.mainColumn.height ?  `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] overflow-y-auto`}>
@@ -77,8 +75,8 @@ export function WorkspaceBody() {
                     let isActiveComponent: boolean;
                     if (index === tabs.activeTabIndex) isActiveComponent = true;
                     else isActiveComponent = false;
-                    if (element.id) {
-                        builtProps = builtPropsMap[element.id];
+                    if (element.tabTitle) {
+                        builtProps = builtPropsMap[element.tabTitle];
                     }
                     builtProps = { ...builtProps, className: `${isActiveComponent ? 'block' : 'hidden'}`};
                     return Component ? <Component key={index} {...builtProps} /> : null;
