@@ -57,7 +57,7 @@ export function SidebarNavSection({ section, items }: {
             <div className="w-full h-auto pl-8
                 flex flex-col justify-start items-start gap-[2px]"
             >
-                {items.map(item => (
+                {items?.map(item => (
                     <button
                         key={item._id}
                         draggable="true"

@@ -2,12 +2,13 @@ import { processedSourceService } from "../../../processed-source/services/proce
 import type { PropsBuilderStrategy } from "./props-builder-strategy.interface";
 
 export const ProcessedSourcePropsBuilderStrategy: PropsBuilderStrategy = {
-    build: async (id, setProps) => {
+    build: async (id) => {
         const response = await processedSourceService.readById(id);
         if (response.processedSource) {
-            setProps({
+            return {
                 processedSource: response.processedSource
-            });
+            };
         }
+        return {};
     }
 };

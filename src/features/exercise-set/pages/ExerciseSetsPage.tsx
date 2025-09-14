@@ -4,9 +4,11 @@ import { ExerciseSetCard } from '../components/ExerciseSetCard';
 import type { ExtendedSource } from '../../source/types/extended-source-document.interface';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
-export function ExerciseSetsPage() {
+export function ExerciseSetsPage({ className }: {
+    className?: string;
+}) {
     const dispatch = useAppDispatch();
-    const widths = useAppSelector(state => state.layoutDimensions);
+    const layoutDimensions = useAppSelector(state => state.layoutDimensions);
     const [sources, setSources] = useState<ExtendedSource[]>([]);
 
     async function fetchExerciseSets() {
@@ -23,8 +25,8 @@ export function ExerciseSetsPage() {
     }, []);
 
     return (
-        <div className="w-full h-full 
-            flex flex-col justify-start items-center"
+        <div className={`w-full h-full 
+            flex flex-col justify-start items-center ${className ?? ''}`}
         >
             <div className="w-full h-auto p-4 
                 flex flex-col justify-start items-start gap-10"
@@ -32,15 +34,15 @@ export function ExerciseSetsPage() {
                 {sources.length === 0 ? (
                     <p>Loading...</p>
                 ) : (
-                    sources.map((source) => (
+                    sources.map((source) => ((source.exerciseSets?.length ?? 0) > 0 ?
                         <div className="w-full h-auto p-4
                             flex flex-col justify-start items-start gap-2"
                         >
                             <div className="flex justify-start items-center gap-4">
-                                <p>{source.title}</p>
+                                <p>{source.title || source.title.length > 0 ? source.title : source._id}</p>
                                 <p>{source.type}</p>
                             </div>
-                            <div className={`w-[${widths.exerciseSetsContainer}px] flex justify-start items-center gap-4 overflow-x-auto`}>
+                            <div className={`w-[${layoutDimensions.exerciseSetsContainer.width}px] flex justify-start items-center gap-4 overflow-x-auto`}>
                                 {source.exerciseSets &&
                                     source.exerciseSets.map((exerciseSet) => (
                                         <ExerciseSetCard
@@ -50,7 +52,7 @@ export function ExerciseSetsPage() {
                                     ))}
                             </div>
                         </div>
-                    ))
+                    : <></>))
                 )}
             </div>
         </div>

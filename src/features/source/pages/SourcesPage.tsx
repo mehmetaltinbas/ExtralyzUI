@@ -6,7 +6,9 @@ import { SourceCard } from '../components/SourceCard';
 import { CreateExerciseSetForm } from '../../exercise-set/components/CreateExerciseSetForm';
 import type { CreateExerciseSetDto } from '../../exercise-set/types/dto/create-exercise-set.dto';
 
-export function SourcesPage() {
+export function SourcesPage({ className }: {
+    className?: string;
+}) {
     const [sources, setSources] = useState<Source[]>([]);
     const [file, setFile] = useState<File>();
     const [isCreateExerciseSetFormHidden, setIsCreateExerciseSetFormHidden] =
@@ -23,6 +25,7 @@ export function SourcesPage() {
     ) {
         const createExerciseSetForm = document.getElementById('create-exercise-set-form');
         if (createExerciseSetForm !== null) {
+
             if (isCreateExerciseSetFormHidden) {
                 setCreateExerciseSetDto({
                     count: 5,
@@ -30,12 +33,16 @@ export function SourcesPage() {
                     difficulty: '',
                 });
             }
-            if (event.currentTarget.dataset.sourceId)
+
+            if (event.currentTarget.dataset.sourceId) {
                 setCreateExerciseSetSourceId(event.currentTarget.dataset.sourceId);
+            }
+
             const position = event.currentTarget.getBoundingClientRect();
             createExerciseSetForm.style.top = `${position.bottom}px`;
             createExerciseSetForm.style.left = `${position.right}px`;
-            setIsCreateExerciseSetFormHidden((prev) => !prev);
+
+            setIsCreateExerciseSetFormHidden(prev => !prev);
         }
     }
 
@@ -71,31 +78,37 @@ export function SourcesPage() {
 
     return (
         <>
-            <div className="w-full h-full flex flex-col justify-start items-center">
-                <div className="w-[95%] h-auto border grid grid-cols-3 gap-8">
-                    <div className="h-[100px] col-span-3 border flex justify-center items-center">
-                        <div className="w-[400px] h-[80px] border">
-                            <input
-                                onChange={(event) => handleOnChange(event)}
-                                type="file"
-                                className="border rounded-full p-1 w-[200px] text-xs"
-                            />
-                            <NavyBlueButton onClick={uploadSource}>Upload</NavyBlueButton>
-                        </div>
+            <div className={`w-full h-auto p-5
+                grid grid-cols-3 gap-8 ${className ?? ''}`}
+            >
+                <div className="h-[100px] col-span-3
+                    flex justify-center items-center"
+                >
+                    <div className="w-[400px] h-[80px]
+                        flex justify-center items-center gap-2"
+                    >
+                        <input
+                            onChange={(event) => handleOnChange(event)}
+                            type="file"
+                            className="w-[200px] border rounded-full p-1 cursor-pointer
+                            text-xs
+                            hover:bg-gray-100"
+                        />
+                        <NavyBlueButton onClick={uploadSource}>Upload</NavyBlueButton>
                     </div>
-                    {sources.length === 0 ? (
-                        <p>Loading...</p>
-                    ) : (
-                        sources.map((source) => (
-                            <SourceCard
-                                source={source}
-                                fetchSources={fetchSources}
-                                toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
-                            />
-                        ))
-                    )}
                 </div>
-            </div>
+                {sources.length === 0 ? (
+                    <p>Loading...</p>
+                ) : (
+                    sources.map((source) => (
+                        <SourceCard
+                            source={source}
+                            fetchSources={fetchSources}
+                            toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
+                        />
+                    ))
+                )}
+                </div>
 
             <CreateExerciseSetForm
                 isHidden={isCreateExerciseSetFormHidden}

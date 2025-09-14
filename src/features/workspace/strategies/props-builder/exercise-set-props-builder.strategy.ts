@@ -3,12 +3,12 @@ import { exerciseService } from "../../../exercise/services/exercise.service";
 import type { PropsBuilderStrategy } from "./props-builder-strategy.interface";
 
 export const ExerciseSetPropsBuilderStrategy: PropsBuilderStrategy = {
-    build: async (exerciseSetId, setProps) => {
-        const exerciseSetResponse = await exerciseSetService.readById(exerciseSetId);
-        const exercisesResponse = await exerciseService.readAllByExerciseSetId(exerciseSetId);
-        setProps({
+    build: async (id) => {
+        const exerciseSetResponse = await exerciseSetService.readById(id);
+        const exercisesResponse = await exerciseService.readAllByExerciseSetId(id);
+        return {
             exerciseSet: exerciseSetResponse.exerciseSet,
             exercises: exercisesResponse.exercises!,
-        });
+        };
     }
 };

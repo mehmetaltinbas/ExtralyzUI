@@ -17,6 +17,7 @@ export function WorkspaceBody() {
     const tabs = useAppSelector(state => state.tabs);
     const layoutDimensions = useAppSelector(state => state.layoutDimensions);
     const [props, setProps] = useState<object | undefined>(undefined);
+    const [builtPropsMap, setBuildPropsMap] = useState<Record<string, object | undefined>>({});
     const containerDiv = useRef<HTMLDivElement | null>(null);
     const componentsMap: Map<string, React.ComponentType<any>> = new Map([
         [Sections.SOURCES, SourcesPage],
@@ -26,22 +27,6 @@ export function WorkspaceBody() {
         [Sections.EXERCISE_SETS, ExerciseSetsPage],
         [Sections.EXERCISE_SET, ExerciseSetPage]
     ] as [string, React.ComponentType<any>][]);
-    const ActiveComponent = componentsMap.get(tabs.elements[tabs.activeTabIndex]?.section) || (() => <div>No Component</div>);
-
-    useEffect(() => {
-        async function buildProps() {
-            const section = tabs.elements[tabs.activeTabIndex]?.section;
-            let strategy;
-            if (section) {
-                strategy = selectPropsBuilderStrategy(tabs.elements[tabs.activeTabIndex].section);
-            }
-            if (strategy) {
-                await strategy.build(tabs.elements[tabs.activeTabIndex].id!, setProps);
-            }
-        }
-        buildProps();
-
-    }, [tabs.activeTabIndex]);
 
     useEffect(() => {
         if (!containerDiv.current) return;
@@ -60,12 +45,43 @@ export function WorkspaceBody() {
         };
     }, []);
 
+    useEffect(() => {
+        async function buildProps(section: string,) {
+            const strategy = selectPropsBuilderStrategy(section);
+            let builtProps;
+            if (strategy) {
+                builtProps = await strategy.build(tabs.elements[tabs.activeTabIndex].id!);
+            }
+            return builtProps;
+        }
+        tabs.elements.forEach(async (tab, index) => {
+            const builtProps = await buildProps(tab.section);
+            if (tab.id !== undefined) {
+                setBuildPropsMap(prev => ({
+                    ...prev,
+                    [String(tab.id)]: builtProps
+                }));
+            }
+        });
+    }, [tabs.elements]);
+
     return (
         <div
             ref={containerDiv}
             className={`w-[${layoutDimensions.mainColumn.width}px] h-full flex-1 flex justify-center items-center`}>
-            <div className={`w-[90%] h-[${layoutDimensions.mainColumn.height ?  `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] border overflow-y-auto`}>
-                {props ? <ActiveComponent {...props} /> : <p>No Component</p>}
+            <div className={`w-[90%] h-[${layoutDimensions.mainColumn.height ?  `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] overflow-y-auto`}>
+                {tabs.elements?.map((element, index) => {
+                    const Component = componentsMap.get(element.section);
+                    let builtProps;
+                    let isActiveComponent: boolean;
+                    if (index === tabs.activeTabIndex) isActiveComponent = true;
+                    else isActiveComponent = false;
+                    if (element.id) {
+                        builtProps = builtPropsMap[element.id];
+                    }
+                    builtProps = { ...builtProps, className: `${isActiveComponent ? 'block' : 'hidden'}`};
+                    return Component ? <Component {...builtProps} /> : null;
+                })}
             </div>
         </div>
     );

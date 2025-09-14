@@ -4,9 +4,10 @@ import type { Exercise } from "../../exercise/types/exercise.interface";
 import { useEffect, useState } from "react";
 import { NavyBlueButton } from "../../../shared/components/buttons/NavyBlueButton";
 
-export function ExerciseSetPage({ exerciseSet, exercises }: {
+export function ExerciseSetPage({ exerciseSet, exercises, className }: {
     exerciseSet?: ExerciseSet;
     exercises?: Exercise[];
+    className?: string;
 }) {
     const [isAnswersHidden, setIsAnswersHidden] = useState<boolean>(true);
 
@@ -15,10 +16,11 @@ export function ExerciseSetPage({ exerciseSet, exercises }: {
     }
 
     return (
-        <div className="w-full h-full
+        <div className={`w-full h-full
             flex flex-col justify-start items-start gap-4
             p-4
-        ">
+            ${className ?? ''}
+        `}>
             <div className="w-full h-auto
                 flex flex-col justif-center items-start gap-2"
             >
