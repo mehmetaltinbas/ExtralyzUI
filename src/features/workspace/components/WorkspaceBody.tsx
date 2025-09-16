@@ -1,41 +1,46 @@
 import React, { useEffect, useRef, useState, type JSX } from 'react';
-import { Pane } from './Pane';
-import { SplitView } from './SplitView';
-import { ExerciseSetsPage } from '../../exercise-set/pages/ExerciseSetsPage';
-import { SourcesPage } from '../../source/pages/SourcesPage';
-import { ProcessedSourcesPage } from '../../processed-source/pages/ProcessedSourcesPage';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { Sections } from '../enums/sections.enum';
-import { ExerciseSetPage } from '../../exercise-set/pages/ExerciseSetPage';
 import { selectPropsBuilderStrategy } from '../strategies/props-builder/select-props-builder-strategy';
-import { SourcePage } from '../../source/pages/SourcePage';
-import { ProcessedSourcePage } from '../../processed-source/pages/ProcessedSourcePage';
-import { layoutDimensionsActions } from '../store/layoutDimensionsSlice';
-import type { TabsStateElement } from '../store/tabsSlice';
+import { ExerciseSetPracticePage } from 'src/features/exercise-set/pages/ExerciseSetPracticePage';
+import { SourcePage } from 'src/features/source/pages/SourcePage';
+import { ProcessedSourcePage } from 'src/features/processed-source/pages/ProcessedSourcePage';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import { SourcesPage } from 'src/features/source/pages/SourcesPage';
+import { ProcessedSourcesPage } from 'src/features/processed-source/pages/ProcessedSourcesPage';
+import { ExerciseSetsPage } from 'src/features/exercise-set/pages/ExerciseSetsPage';
+import { ExerciseSetPage } from 'src/features/exercise-set/pages/ExerciseSetPage';
+import { Section } from 'src/features/workspace/enums/sections.enum';
+import { layoutDimensionsActions } from 'src/features/workspace/store/layoutDimensionsSlice';
+import type { TabsStateElement } from 'src/features/workspace/features/tabs/store/tabsSlice';
 
 export function WorkspaceBody() {
     const dispatch = useAppDispatch();
-    const tabs = useAppSelector(state => state.tabs);
-    const layoutDimensions = useAppSelector(state => state.layoutDimensions);
-    const [props, setProps] = useState<object | undefined>(undefined);
+    const tabs = useAppSelector((state) => state.tabs);
+    const layoutDimensions = useAppSelector((state) => state.layoutDimensions);
     const [builtPropsMap, setBuiltPropsMap] = useState<Record<string, object | undefined>>({});
     const containerDiv = useRef<HTMLDivElement | null>(null);
     const componentsMap: Map<string, React.ComponentType<any>> = new Map([
-        [Sections.SOURCES, SourcesPage],
-        [Sections.SOURCE, SourcePage],
-        [Sections.PROCESSED_SOURCES, ProcessedSourcesPage],
-        [Sections.PROCESSED_SOURCE, ProcessedSourcePage],
-        [Sections.EXERCISE_SETS, ExerciseSetsPage],
-        [Sections.EXERCISE_SET, ExerciseSetPage]
+        [Section.SOURCES, SourcesPage],
+        [Section.SOURCE, SourcePage],
+        [Section.PROCESSED_SOURCES, ProcessedSourcesPage],
+        [Section.PROCESSED_SOURCE, ProcessedSourcePage],
+        [Section.EXERCISE_SETS, ExerciseSetsPage],
+        [Section.EXERCISE_SET, ExerciseSetPage],
+        [Section.EXERCISE_SET_PRACTICE, ExerciseSetPracticePage],
     ] as [string, React.ComponentType<any>][]);
 
     useEffect(() => {
         if (!containerDiv.current) return;
 
-        const observer = new ResizeObserver(entries => {
+        const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const newHeight = entry.contentRect.height;
-                dispatch(layoutDimensionsActions.updateDimension({ layout: 'mainColumn', dimension: 'height', value: newHeight}));
+                dispatch(
+                    layoutDimensionsActions.updateDimension({
+                        layout: 'mainColumn',
+                        dimension: 'height',
+                        value: newHeight,
+                    })
+                );
             }
         });
 
@@ -57,9 +62,9 @@ export function WorkspaceBody() {
         }
         tabs.elements.forEach(async (tab, index) => {
             const builtProps = await buildProps(tab);
-            setBuiltPropsMap(prev => ({
+            setBuiltPropsMap((prev) => ({
                 ...prev,
-                [String(tab.tabTitle)]: builtProps
+                [String(tab.tabTitle)]: builtProps,
             }));
         });
     }, [tabs.elements]);
@@ -67,8 +72,11 @@ export function WorkspaceBody() {
     return (
         <div
             ref={containerDiv}
-            className={`w-[${layoutDimensions.mainColumn.width}px] h-full flex-1 flex justify-center items-center`}>
-            <div className={`w-[90%] h-[${layoutDimensions.mainColumn.height ?  `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] overflow-y-auto`}>
+            className={`w-[${layoutDimensions.mainColumn.width}px] h-full flex-1 flex justify-center items-center`}
+        >
+            <div
+                className={`w-[90%] h-[${layoutDimensions.mainColumn.height ? `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] overflow-y-auto`}
+            >
                 {tabs.elements?.map((element, index) => {
                     const Component = componentsMap.get(element.section);
                     let builtProps;
@@ -78,7 +86,10 @@ export function WorkspaceBody() {
                     if (element.tabTitle) {
                         builtProps = builtPropsMap[element.tabTitle];
                     }
-                    builtProps = { ...builtProps, className: `${isActiveComponent ? 'block' : 'hidden'}`};
+                    builtProps = {
+                        ...builtProps,
+                        className: `${isActiveComponent ? 'block' : 'hidden'}`,
+                    };
                     return Component ? <Component key={index} {...builtProps} /> : null;
                 })}
             </div>

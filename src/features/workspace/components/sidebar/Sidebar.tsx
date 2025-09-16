@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { Sections } from '../../enums/sections.enum';
+import { Section } from '../../enums/sections.enum';
 import { sidebarActions } from '../../store/sidebarSlice';
 import { SidebarNavSection } from './SidebarNavSection';
 import type { Source } from '../../../source/types/source.iterface';
@@ -20,7 +20,9 @@ export function Sidebar() {
     useEffect(() => {
         async function fetchItems() {
             setSources((await sourceService.readAllByUserId()).sources!);
-            setProcessedSources((await processedSourceService.readAllByUserId()).processedSources!);
+            setProcessedSources(
+                (await processedSourceService.readAllByUserId()).processedSources!
+            );
             setExerciseSets((await exerciseSetService.readAllByUserId()).exerciseSets!);
         }
         fetchItems();
@@ -35,7 +37,8 @@ export function Sidebar() {
     }
 
     return (
-        <div className={`w-[${sidebar.width}px] h-full sticky p-4 bg-gray-300
+        <div
+            className={`w-[${sidebar.width}px] h-full sticky p-4 bg-gray-300
             flex-shrink-0 flex flex-col justify-start items-center gap-4`}
         >
             <div className="w-full flex justify-end">
@@ -73,9 +76,12 @@ export function Sidebar() {
             </div>
             {sidebar.isOpen && (
                 <>
-                    <SidebarNavSection section={Sections.SOURCES} items={sources}/>
-                    <SidebarNavSection section={Sections.PROCESSED_SOURCES} items={processedSources}/>
-                    <SidebarNavSection section={Sections.EXERCISE_SETS} items={exerciseSets}/>
+                    <SidebarNavSection section={Section.SOURCES} items={sources} />
+                    <SidebarNavSection
+                        section={Section.PROCESSED_SOURCES}
+                        items={processedSources}
+                    />
+                    <SidebarNavSection section={Section.EXERCISE_SETS} items={exerciseSets} />
                 </>
             )}
         </div>

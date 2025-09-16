@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Sidebar } from '../components/sidebar/Sidebar';
 import { WorkspaceBody } from '../components/WorkspaceBody';
-import { WorkspaceTabsBar } from '../components/tabs-bar/WorkspaceTabsBar';
+import { WorkspaceTabsBar } from '../features/tabs/components/WorkspaceTabsBar';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { layoutDimensionsActions } from '../store/layoutDimensionsSlice';
 
 export function WorkspacePage() {
     const dispatch = useAppDispatch();
-    const sidebar = useAppSelector(state => state.sidebar);
+    const sidebar = useAppSelector((state) => state.sidebar);
 
     useEffect(() => {
         function handleResize() {

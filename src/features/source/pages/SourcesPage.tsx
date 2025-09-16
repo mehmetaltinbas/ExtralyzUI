@@ -6,9 +6,7 @@ import { SourceCard } from '../components/SourceCard';
 import { CreateExerciseSetForm } from '../../exercise-set/components/CreateExerciseSetForm';
 import type { CreateExerciseSetDto } from '../../exercise-set/types/dto/create-exercise-set.dto';
 
-export function SourcesPage({ className }: {
-    className?: string;
-}) {
+export function SourcesPage({ className }: { className?: string }) {
     const [sources, setSources] = useState<Source[]>([]);
     const [file, setFile] = useState<File>();
     const [isCreateExerciseSetFormHidden, setIsCreateExerciseSetFormHidden] =
@@ -25,7 +23,6 @@ export function SourcesPage({ className }: {
     ) {
         const createExerciseSetForm = document.getElementById('create-exercise-set-form');
         if (createExerciseSetForm !== null) {
-
             if (isCreateExerciseSetFormHidden) {
                 setCreateExerciseSetDto({
                     count: 5,
@@ -42,7 +39,7 @@ export function SourcesPage({ className }: {
             createExerciseSetForm.style.top = `${position.bottom}px`;
             createExerciseSetForm.style.left = `${position.right}px`;
 
-            setIsCreateExerciseSetFormHidden(prev => !prev);
+            setIsCreateExerciseSetFormHidden((prev) => !prev);
         }
     }
 
@@ -77,13 +74,16 @@ export function SourcesPage({ className }: {
     }
 
     return (
-        <div className={`w-full h-auto p-5
+        <div
+            className={`w-full h-auto p-5
             grid grid-cols-3 gap-8 ${className ?? ''}`}
         >
-            <div className="h-[100px] col-span-3
+            <div
+                className="h-[100px] col-span-3
                 flex justify-center items-center"
             >
-                <div className="w-[400px] h-[80px]
+                <div
+                    className="w-[400px] h-[80px]
                     flex justify-center items-center gap-2"
                 >
                     <input
@@ -114,6 +114,5 @@ export function SourcesPage({ className }: {
                 setCreateExerciseSetDto={setCreateExerciseSetDto}
             />
         </div>
-
     );
 }

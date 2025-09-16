@@ -1,6 +1,6 @@
-import { exerciseSetService } from "../../../exercise-set/services/exercise-set.service";
-import { exerciseService } from "../../../exercise/services/exercise.service";
-import type { PropsBuilderStrategy } from "./props-builder-strategy.interface";
+import { exerciseSetService } from 'src/features/exercise-set/services/exercise-set.service';
+import { exerciseService } from 'src/features/exercise/services/exercise.service';
+import type { PropsBuilderStrategy } from '../props-builder-strategy.interface';
 
 export const ExerciseSetPropsBuilderStrategy: PropsBuilderStrategy = {
     build: async (tab) => {
@@ -10,5 +10,5 @@ export const ExerciseSetPropsBuilderStrategy: PropsBuilderStrategy = {
             exerciseSet: exerciseSetResponse.exerciseSet,
             exercises: exercisesResponse.exercises!,
         };
-    }
+    },
 };

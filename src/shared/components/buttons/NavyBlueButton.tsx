@@ -14,7 +14,11 @@ export function NavyBlueButton({
     return (
         <button
             onClick={onClick}
-            className={`cursor-pointer px-2 py-[2px] border rounded-[10px] bg-[#0d408c] text-white text-sm ${className ?? ''}`}
+            className={`cursor-pointer px-2 py-[2px] border rounded-[10px] bg-[#0d408c] 
+                text-white text-sm 
+                hover:bg-[#0b3574]
+                ${className ?? ''}
+            `}
             {...rest}
         >
             {children}

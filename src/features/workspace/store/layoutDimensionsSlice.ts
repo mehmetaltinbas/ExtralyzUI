@@ -24,12 +24,19 @@ const layoutDimensions = createSlice({
         updateWidthsBySidebarWidth: (state, action: PayloadAction<number>) => {
             const sidebarWidth = action.payload;
             state.mainColumn.width = window.innerWidth - sidebarWidth;
-            state.exerciseSetsContainer.width = ((window.innerWidth - sidebarWidth) * 0.9) - 64;
+            state.exerciseSetsContainer.width = (window.innerWidth - sidebarWidth) * 0.9 - 64;
         },
-        updateDimension: (state, action: PayloadAction<{ layout: keyof LayoutDimensionsState, dimension: keyof Dimensions, value: number }>) => {
+        updateDimension: (
+            state,
+            action: PayloadAction<{
+                layout: keyof LayoutDimensionsState;
+                dimension: keyof Dimensions;
+                value: number;
+            }>
+        ) => {
             const { layout, dimension, value } = action.payload;
             state[layout][dimension] = value;
-        }
+        },
     },
 });
 

@@ -1,13 +1,12 @@
 import { useState, type HTMLAttributes, type HtmlHTMLAttributes } from 'react';
-import type { Source } from '../types/source.iterface';
-import { ClaretButton } from '../../../shared/components/buttons/ClaretButton';
 import type React from 'react';
-import { sourceService } from '../services/source.service';
-import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
-import { exerciseService } from '../../exercise/services/exercise.service';
-import { useAppDispatch } from '../../../store/hooks';
-import { tabsActions, type TabsStateElement } from '../../workspace/store/tabsSlice';
-import { Sections } from '../../workspace/enums/sections.enum';
+import { openTab } from 'src/features/workspace/features/tabs/utilities/openTab.utility';
+import { Section } from 'src/features/workspace/enums/sections.enum';
+import { sourceService } from 'src/features/source/services/source.service';
+import { useAppDispatch } from 'src/store/hooks';
+import type { Source } from 'src/features/source/types/source.iterface';
+import { NavyBlueButton } from 'src/shared/components/buttons/NavyBlueButton';
+import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 
 export function SourceCard({
     source,
@@ -28,28 +27,23 @@ export function SourceCard({
         fetchSources();
     }
 
-    function openTab(event: React.MouseEvent<HTMLDivElement>) {
-        const section = Sections.SOURCE;
-        const datasetElement = event.currentTarget.dataset.element;
-        if (datasetElement) {
-            const element = JSON.parse(datasetElement) as TabsStateElement;
-            dispatch(tabsActions.addByIndex({ element: { section, id: element.id, title: element.title } }));
-        } else if (!datasetElement) {
-            dispatch(tabsActions.addByIndex({ element: { section } }));
-        }
-    }
-
     return (
-        <div 
-            onClick={openTab}
-            data-element={JSON.stringify({ id: source._id, title: source.title })}
+        <div
+            onClick={(event) => openTab(dispatch, { section: Section.SOURCE, id: source._id, title: source.title })}
             className="w-[250px] h-[200px] border cursor-pointer rounded-[10px]
             flex flex-col justify-center items-center
             hover:bg-gray-100"
         >
             <div className="w-full h-[50px] flex justify-center items-center gap-1">
                 <p>{source.title}</p>
-                <ClaretButton onClick={event => { event.stopPropagation(); deleteSource(event); }}>Delete</ClaretButton>
+                <ClaretButton
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        deleteSource(event);
+                    }}
+                >
+                    Delete
+                </ClaretButton>
             </div>
             <div className="flex-1 border overflow-auto">
                 <p>{source.rawText}</p>
@@ -57,7 +51,10 @@ export function SourceCard({
             <div className="w-full h-[50px] flex justify-center items-center">
                 <NavyBlueButton
                     data-source-id={source._id}
-                    onClick={event => { event.stopPropagation(); toggleCreateExerciseSetForm(event); }}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        toggleCreateExerciseSetForm(event);
+                    }}
                     className="text-xs"
                 >
                     Generate Exercises

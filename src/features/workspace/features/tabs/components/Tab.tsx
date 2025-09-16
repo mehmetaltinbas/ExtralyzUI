@@ -1,16 +1,21 @@
-import type React from "react";
-import { ClaretButton } from "../../../../shared/components/buttons/ClaretButton";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { tabsActions, type TabsStateElement } from "../../store/tabsSlice";
+import type React from 'react';
+import { ClaretButton } from '../../../../../shared/components/buttons/ClaretButton';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import { tabsActions, type TabsStateElement } from '../store/tabsSlice';
 
-export function Tab({ tab, index, onDragOver, onDrop, }: {
+export function Tab({
+    tab,
+    index,
+    onDragOver,
+    onDrop,
+}: {
     tab: TabsStateElement;
     index: number;
     onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
     onDrop: (event: React.DragEvent<HTMLDivElement>) => void;
 }) {
     const dispatch = useAppDispatch();
-    const tabs = useAppSelector(state => state.tabs);
+    const tabs = useAppSelector((state) => state.tabs);
 
     function onDragStart(event: React.DragEvent<HTMLDivElement>) {
         const datasetElement = event.currentTarget.dataset.element;
@@ -33,9 +38,9 @@ export function Tab({ tab, index, onDragOver, onDrop, }: {
     return (
         <div
             draggable="true"
-            onDragStart={event => onDragStart(event)}
-            onDragOver={event => onDragOver(event)}
-            onDrop={event => onDrop(event)}
+            onDragStart={(event) => onDragStart(event)}
+            onDragOver={(event) => onDragOver(event)}
+            onDrop={(event) => onDrop(event)}
             data-section={tab.section}
             data-element={JSON.stringify(tab)}
             data-tab-index={index}
@@ -45,9 +50,7 @@ export function Tab({ tab, index, onDragOver, onDrop, }: {
             hover:bg-gray-100`}
         >
             <div className="max-w-[150px] flex justify-center items-center">
-                <p className="truncate">
-                    {tab.tabTitle}
-                </p>
+                <p className="truncate" title={tab.tabTitle}>{tab.tabTitle}</p>
             </div>
             <div className="w-[24px] flex justify-center items-center">
                 <ClaretButton data-tab-index={index} onClick={deleteTab}>

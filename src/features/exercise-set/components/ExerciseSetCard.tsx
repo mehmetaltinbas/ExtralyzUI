@@ -1,8 +1,10 @@
-import type React from 'react';
-import type { ExerciseSet } from '../types/exercise-set.interface';
-import { tabsActions, type TabsStateElement } from '../../workspace/store/tabsSlice';
-import { useAppDispatch } from '../../../store/hooks';
-import { Sections } from '../../workspace/enums/sections.enum';
+import { openTab } from 'src/features/workspace/features/tabs/utilities/openTab.utility';
+import { NavyBlueButton } from 'src/shared/components/buttons/NavyBlueButton';
+import { Section } from 'src/features/workspace/enums/sections.enum';
+import { useAppDispatch } from 'src/store/hooks';
+import type { ExerciseSet } from 'src/features/exercise-set/types/exercise-set.interface';
+import { ExerciseSetMode } from 'src/features/exercise-set/enums/ExerciseSetMode.enum';
+
 
 export function ExerciseSetCard({
     exerciseSet,
@@ -13,25 +15,15 @@ export function ExerciseSetCard({
 }) {
     const dispatch = useAppDispatch();
 
-
-    function openTab(event: React.MouseEvent<HTMLDivElement>) {
-        const section = Sections.EXERCISE_SET;
-        const datasetElement = event.currentTarget.dataset.element;
-        let element;
-        if (datasetElement) {
-            element = JSON.parse(datasetElement) as TabsStateElement;
-        }
-        if (element) {
-            dispatch(tabsActions.addByIndex({ element: { section, id: element.id, title: element.title } }));
-        } else if (!element) {
-            dispatch(tabsActions.addByIndex({ element: { section } }));
-        }
-    }
-
     return (
         <div
-            onClick={event => openTab(event)}
-            data-element={JSON.stringify({ id: exerciseSet._id, title: exerciseSet.title })}
+            onClick={(event) =>
+                openTab(dispatch, {
+                    section: Section.EXERCISE_SET,
+                    id: exerciseSet._id,
+                    title: exerciseSet.title,
+                })
+            }
             className="w-[200px] cursor-pointer
             flex-shrink-0 flex flex-col justify-start items-center gap-1
             border p-1
@@ -40,6 +32,20 @@ export function ExerciseSetCard({
             <p>{exerciseSet.type}</p>
             <p>{exerciseSet.count}</p>
             <p>{exerciseSet.difficulty}</p>
+            <NavyBlueButton
+                onClick={(event) => {
+                    event.stopPropagation();
+                    openTab(dispatch, {
+                        section: Section.EXERCISE_SET_PRACTICE,
+                        id: exerciseSet._id,
+                        title: exerciseSet.title,
+                        mode: ExerciseSetMode.PRACTICE
+                    });
+                }
+                }
+            >
+                Start Practice
+            </NavyBlueButton>
         </div>
     );
 }

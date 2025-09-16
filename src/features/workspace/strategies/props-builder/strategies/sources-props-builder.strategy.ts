@@ -1,7 +1,7 @@
-import type { PropsBuilderStrategy } from "./props-builder-strategy.interface";
+import type { PropsBuilderStrategy } from '../props-builder-strategy.interface';
 
 export const SourcesPropsBuilderStrategy: PropsBuilderStrategy = {
     build: async (tab) => {
         return {};
-    }
+    },
 };

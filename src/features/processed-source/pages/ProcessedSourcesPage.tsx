@@ -4,9 +4,7 @@ import { processedSourceService } from '../services/processed-source.service';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 import { ProcessedSourceCard } from '../components/ProcessedSourceCard';
 
-export function ProcessedSourcesPage({ className }: {
-    className?: string;
-}) {
+export function ProcessedSourcesPage({ className }: { className?: string }) {
     const [processedSources, setProcessedSources] = useState<ProcessedSource[]>([]);
 
     async function fetchProcessedSources() {
@@ -23,8 +21,11 @@ export function ProcessedSourcesPage({ className }: {
     }, []);
 
     return (
-        <div className={`w-full h-full flex flex-col justify-start items-center ${className ?? ''}`}>
-            <div className="w-full h-auto p-4
+        <div
+            className={`w-full h-full flex flex-col justify-start items-center ${className ?? ''}`}
+        >
+            <div
+                className="w-full h-auto p-4
                 grid grid-cols-3 gap-8"
             >
                 {processedSources.length === 0 ? (

@@ -2,6 +2,7 @@ import type React from 'react';
 import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
 import type { CreateExerciseSetDto } from '../types/dto/create-exercise-set.dto';
 import { exerciseSetService } from '../services/exercise-set.service';
+import { ExerciseType } from 'src/features/exercise/enums/exercise-types.enum';
 
 export function CreateExerciseSetForm({
     isHidden,
@@ -52,10 +53,10 @@ export function CreateExerciseSetForm({
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
                     <option value="">Select type</option>
-                    <option value="mcq">Multiple Choice</option>
-                    <option value="trueFalse">True False</option>
-                    <option value="short">Short Answer</option>
-                    <option value="openEnded">Open Ended</option>
+                    <option value={ExerciseType.MCQ}>Multiple Choice</option>
+                    <option value={ExerciseType.TRUE_FALSE}>True False</option>
+                    <option value={ExerciseType.OPEN_ENDED}>Open Ended</option>
+                    <option value={ExerciseType.SHORT}>Short Answer</option>
                 </select>
             </div>
             <div className="flex justify-start items-center gap-2">

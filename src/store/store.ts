@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { tabsReducer } from '../features/workspace/store/tabsSlice';
+import { tabsReducer } from '../features/workspace/features/tabs/store/tabsSlice';
 import { sidebarReducer } from '../features/workspace/store/sidebarSlice';
 import { layoutDimensionsReducer } from '../features/workspace/store/layoutDimensionsSlice';
 

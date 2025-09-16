@@ -2,8 +2,11 @@ import type { ProcessedSource } from '../types/processed-source.interface';
 import { ClaretButton } from '../../../shared/components/buttons/ClaretButton';
 import { processedSourceService } from '../services/processed-source.service';
 import type React from 'react';
-import { Sections } from '../../workspace/enums/sections.enum';
-import { tabsActions, type TabsStateElement } from '../../workspace/store/tabsSlice';
+import { Section } from '../../workspace/enums/sections.enum';
+import {
+    tabsActions,
+    type TabsStateElement,
+} from '../../workspace/features/tabs/store/tabsSlice';
 import { useAppDispatch } from '../../../store/hooks';
 
 export function ProcessedSourceCard({
@@ -24,11 +27,15 @@ export function ProcessedSourceCard({
     }
 
     function openTab(event: React.MouseEvent<HTMLDivElement>) {
-        const section = Sections.PROCESSED_SOURCE;
+        const section = Section.PROCESSED_SOURCE;
         const datasetElement = event.currentTarget.dataset.element;
         if (datasetElement) {
             const element = JSON.parse(datasetElement) as TabsStateElement;
-            dispatch(tabsActions.addByIndex({ element: { section, id: element.id, title: element.title } }));
+            dispatch(
+                tabsActions.addByIndex({
+                    element: { section, id: element.id, title: element.title },
+                })
+            );
         } else if (!datasetElement) {
             dispatch(tabsActions.addByIndex({ element: { section } }));
         }
@@ -37,18 +44,31 @@ export function ProcessedSourceCard({
     return (
         <div
             onClick={openTab}
-            data-element={JSON.stringify({ id: processedSource._id, title: processedSource.title})}
+            data-element={JSON.stringify({
+                id: processedSource._id,
+                title: processedSource.title,
+            })}
             className="w-[250px] h-[150px] border cursor-pointer rounded-[10px]
             flex flex-col justify-center items-center
             hover:bg-gray-100"
         >
-            <div className="w-full h-[40px] p-2 
+            <div
+                className="w-full h-[40px] p-2 
                 flex justify-center items-center gap-1"
             >
-                <p className='px-2 truncate'>{processedSource.title ? processedSource.title : processedSource._id}</p>
-                <ClaretButton onClick={event => { event.stopPropagation(); deleteProcessedSource(event); }}>Delete</ClaretButton>
+                <p className="px-2 truncate">
+                    {processedSource.title ? processedSource.title : processedSource._id}
+                </p>
+                <ClaretButton
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        deleteProcessedSource(event);
+                    }}
+                >
+                    Delete
+                </ClaretButton>
             </div>
-            <span className='w-full border-t'></span>
+            <span className="w-full border-t"></span>
             <div className="flex-1 overflow-y-scroll">
                 <p>{processedSource.processedText}</p>
             </div>

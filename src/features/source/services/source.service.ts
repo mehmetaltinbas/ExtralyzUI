@@ -18,12 +18,16 @@ async function readAll(): Promise<ReadAllSourcesResponse> {
 }
 
 async function readById(id: string): Promise<ReadSingleSourceResponse> {
-    const response = (await axios.get(`${baseUrl}/read-by-id/${id}`, { withCredentials: true })).data;
+    const response = (
+        await axios.get(`${baseUrl}/read-by-id/${id}`, { withCredentials: true })
+    ).data;
     return response;
 }
 
 async function readAllByUserId(): Promise<ReadAllSourcesResponse> {
-    const response = (await axios.get(`${baseUrl}/read-all-by-user-id`, { withCredentials: true })).data;
+    const response = (
+        await axios.get(`${baseUrl}/read-all-by-user-id`, { withCredentials: true })
+    ).data;
     return response;
 }
 

@@ -11,8 +11,14 @@ async function readAll(): Promise<ReadAllExercisesResponse> {
 
 async function readById() {}
 
-async function readAllByExerciseSetId(exerciseSetId: string): Promise<ReadAllExercisesResponse> {
-    const response = (await axios.get(`${baseUrl}/read-all-by-exercise-set-id/${exerciseSetId}`, { withCredentials: true })).data;
+async function readAllByExerciseSetId(
+    exerciseSetId: string
+): Promise<ReadAllExercisesResponse> {
+    const response = (
+        await axios.get(`${baseUrl}/read-all-by-exercise-set-id/${exerciseSetId}`, {
+            withCredentials: true,
+        })
+    ).data;
     return response;
 }
 
