@@ -47,7 +47,7 @@ export function Tab({
             onClick={(event) => displayTab(event)}
             className={`max-w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} cursor-pointer p-2
             flex-shrink-0 flex justify-center items-center gap-[10px]
-            hover:bg-gray-100`}
+            hover:bg-white`}
         >
             <div className="max-w-[150px] flex justify-center items-center">
                 <p className="truncate" title={tab.tabTitle}>{tab.tabTitle}</p>

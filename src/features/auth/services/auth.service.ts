@@ -1,19 +1,19 @@
-import axios from 'axios';
+import { axiosInstance } from 'src/shared/api/axiosInstance'; 
 import type { SignInDto } from '../types/auth-dtos';
 import type { ResponseBase } from '../../../shared/types/response-base';
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/auth`;
+const baseUrl = `/auth`;
 
 async function signIn(signInDto: SignInDto): Promise<ResponseBase> {
     const signInResponse: ResponseBase = (
-        await axios.post(`${baseUrl}/sign-in`, signInDto, { withCredentials: true })
+        await axiosInstance.post(`${baseUrl}/sign-in`, signInDto)
     ).data;
     return signInResponse;
 }
 
 async function authorize() {
     const authorizeResponse: ResponseBase = (
-        await axios.get(`${baseUrl}/authorize`, { withCredentials: true })
+        await axiosInstance.get(`${baseUrl}/authorize`)
     ).data;
     return authorizeResponse;
 }

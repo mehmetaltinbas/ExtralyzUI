@@ -38,7 +38,7 @@ export function Sidebar() {
 
     return (
         <div
-            className={`w-[${sidebar.width}px] h-full sticky p-4 bg-gray-300
+            className={`w-[${sidebar.width}px] h-full sticky p-4 bg-[#F5F5F5]
             flex-shrink-0 flex flex-col justify-start items-center gap-4`}
         >
             <div className="w-full flex justify-end">

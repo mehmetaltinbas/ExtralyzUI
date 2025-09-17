@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from 'src/shared/api/axiosInstance';
 import type { ResponseBase } from '../../../shared/types/response-base';
 import type { CreateExerciseSetDto } from '../types/dto/create-exercise-set.dto';
 import type { ReadAllExerciseSetsResponse } from '../types/response/read-all-exercise-sets.response';
@@ -7,48 +7,42 @@ import type { ReadSingleExerciseSetResponse } from '../types/response/read-singl
 import type { EvaluateAnswersDto } from 'src/features/exercise-set/types/dto/evaluate-answers.dto';
 import type { EvaluateAnswersResponse } from 'src/features/exercise-set/types/response/evaluate-answers.response';
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/exercise-set`;
+const baseUrl = `/exercise-set`;
 
 async function create(
     sourceId: string,
     createExerciseSetDto: CreateExerciseSetDto
 ): Promise<ResponseBase> {
     const response = (
-        await axios.post(`${baseUrl}/create/${sourceId}`, createExerciseSetDto, {
-            withCredentials: true,
-        })
+        await axiosInstance.post(`${baseUrl}/create/${sourceId}`, createExerciseSetDto)
     ).data;
     return response;
 }
 
 async function readById(id: string): Promise<ReadSingleExerciseSetResponse> {
     const response = (
-        await axios.get(`${baseUrl}/read-by-id/${id}`, { withCredentials: true })
+        await axiosInstance.get(`${baseUrl}/read-by-id/${id}`)
     ).data;
     return response;
 }
 
 async function readAllByUserId(): Promise<ReadAllExerciseSetsResponse> {
     const response = (
-        await axios.get(`${baseUrl}/read-all-by-user-id`, { withCredentials: true })
+        await axiosInstance.get(`${baseUrl}/read-all-by-user-id`)
     ).data;
     return response;
 }
 
 async function readAllByUserIdGroupedBySources(): Promise<ReadAllExerciseSetsGroupedBySources> {
     const response = (
-        await axios.get(`${baseUrl}/read-all-by-user-id-grouped-by-sources`, {
-            withCredentials: true,
-        })
+        await axiosInstance.get(`${baseUrl}/read-all-by-user-id-grouped-by-sources`)
     ).data;
     return response;
 }
 
 async function evaluateAnswers(evaluateAnswersDto: EvaluateAnswersDto): Promise<EvaluateAnswersResponse> {
     const response = (
-        await axios.post(`${baseUrl}/evaluate-answers`, evaluateAnswersDto, {
-            withCredentials: true,
-        })
+        await axiosInstance.post(`${baseUrl}/evaluate-answers`, evaluateAnswersDto)
     ).data;
     return response;
 }
