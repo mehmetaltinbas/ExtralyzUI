@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Exercise } from "src/features/exercise/types/exercise.interface";
-import { NavyBlueButton } from "src/shared/components/buttons/NavyBlueButton";
+import { BlackButton } from "src/shared/components/buttons/BlackButton";
 
 export function MCQExercisePracticeCard({ exercise, index, recordAnswer, className }: {
     exercise: Exercise;

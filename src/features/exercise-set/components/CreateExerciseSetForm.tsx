@@ -1,5 +1,5 @@
 import type React from 'react';
-import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
+import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 import type { CreateExerciseSetDto } from '../types/dto/create-exercise-set.dto';
 import { exerciseSetService } from '../services/exercise-set.service';
 import { ExerciseType } from 'src/features/exercise/enums/exercise-types.enum';
@@ -77,7 +77,7 @@ export function CreateExerciseSetForm({
                     <option value="hard">Hard</option>
                 </select>
             </div>
-            <NavyBlueButton onClick={createExerciseSet}>Generate</NavyBlueButton>
+            <BlackButton onClick={createExerciseSet}>Generate</BlackButton>
         </div>
     );
 }

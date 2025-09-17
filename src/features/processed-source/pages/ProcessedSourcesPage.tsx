@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ProcessedSource } from '../types/processed-source.interface';
 import { processedSourceService } from '../services/processed-source.service';
-import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
+import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 import { ProcessedSourceCard } from '../components/ProcessedSourceCard';
 
 export function ProcessedSourcesPage({ className }: { className?: string }) {

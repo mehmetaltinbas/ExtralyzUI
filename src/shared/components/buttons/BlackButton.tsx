@@ -1,6 +1,6 @@
 import type React from 'react';
 
-export function NavyBlueButton({
+export function BlackButton({
     children,
     onClick,
     className,
@@ -14,9 +14,9 @@ export function NavyBlueButton({
     return (
         <button
             onClick={onClick}
-            className={`cursor-pointer px-2 py-[2px] border rounded-[10px] bg-[#0d408c] 
-                text-white text-sm 
-                hover:bg-[#0b3574]
+            className={`cursor-pointer px-2 py-[2px] border-[2px] border-black rounded-[10px]
+                bg-black text-white text-sm
+                hover:bg-white hover:text-black
                 ${className ?? ''}
             `}
             {...rest}

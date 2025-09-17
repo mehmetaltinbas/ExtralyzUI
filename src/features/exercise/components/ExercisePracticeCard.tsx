@@ -5,7 +5,7 @@ import { ShortExercisePracticeCard } from "src/features/exercise/components/stra
 import { TrueFalseExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-type/TrueFalseExercisePracticeCard";
 import { ExerciseType } from "src/features/exercise/enums/exercise-types.enum";
 import type { Exercise } from "src/features/exercise/types/exercise.interface";
-import { NavyBlueButton } from "src/shared/components/buttons/NavyBlueButton";
+import { BlackButton } from "src/shared/components/buttons/BlackButton";
 
 export function ExercisePracticeCard({ exercise, index, setActiveExerciseIndex, recordAnswer, className }: {
     exercise: Exercise;

@@ -5,7 +5,7 @@ import { Section } from 'src/features/workspace/enums/sections.enum';
 import { sourceService } from 'src/features/source/services/source.service';
 import { useAppDispatch } from 'src/store/hooks';
 import type { Source } from 'src/features/source/types/source.iterface';
-import { NavyBlueButton } from 'src/shared/components/buttons/NavyBlueButton';
+import { BlackButton } from 'src/shared/components/buttons/BlackButton';
 import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 
 export function SourceCard({
@@ -49,7 +49,7 @@ export function SourceCard({
                 <p>{source.rawText}</p>
             </div>
             <div className="w-full h-[50px] flex justify-center items-center">
-                <NavyBlueButton
+                <BlackButton
                     data-source-id={source._id}
                     onClick={(event) => {
                         event.stopPropagation();
@@ -58,7 +58,7 @@ export function SourceCard({
                     className="text-xs"
                 >
                     Generate Exercises
-                </NavyBlueButton>
+                </BlackButton>
             </div>
         </div>
     );

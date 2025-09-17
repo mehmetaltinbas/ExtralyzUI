@@ -2,7 +2,7 @@ import type { ExerciseSet } from '../types/exercise-set.interface';
 import { ExerciseCard } from '../../exercise/components/ExerciseCard';
 import type { Exercise } from '../../exercise/types/exercise.interface';
 import { useEffect, useState } from 'react';
-import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
+import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 import { ExerciseSetMode } from 'src/features/exercise-set/enums/ExerciseSetMode.enum';
 import { Section } from 'src/features/workspace/enums/sections.enum';
 import { useAppDispatch } from 'src/store/hooks';
@@ -39,10 +39,10 @@ export function ExerciseSetPage({
                 <p>Type: {exerciseSet.type}</p>
                 <p>Count: {exerciseSet.count}</p>
                 <p>Difficulty: {exerciseSet.difficulty}</p>
-                <NavyBlueButton onClick={toggleAnswerVisibility}>
+                <BlackButton onClick={toggleAnswerVisibility}>
                     {isAnswersHidden ? 'Show Answers' : 'Hide Answers'}
-                </NavyBlueButton>
-                <NavyBlueButton
+                </BlackButton>
+                <BlackButton
                     onClick={(event) => {
                         event.stopPropagation();
                         openTab(dispatch, {
@@ -55,7 +55,7 @@ export function ExerciseSetPage({
                     }
                 >
                     Start Practice
-                </NavyBlueButton>
+                </BlackButton>
             </div>
             <div
                 className="w-full h-full

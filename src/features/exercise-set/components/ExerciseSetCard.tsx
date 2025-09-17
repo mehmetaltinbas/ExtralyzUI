@@ -1,5 +1,5 @@
 import { openTab } from 'src/features/workspace/features/tabs/utilities/openTab.utility';
-import { NavyBlueButton } from 'src/shared/components/buttons/NavyBlueButton';
+import { BlackButton } from 'src/shared/components/buttons/BlackButton';
 import { Section } from 'src/features/workspace/enums/sections.enum';
 import { useAppDispatch } from 'src/store/hooks';
 import type { ExerciseSet } from 'src/features/exercise-set/types/exercise-set.interface';
@@ -32,7 +32,7 @@ export function ExerciseSetCard({
             <p>{exerciseSet.type}</p>
             <p>{exerciseSet.count}</p>
             <p>{exerciseSet.difficulty}</p>
-            <NavyBlueButton
+            <BlackButton
                 onClick={(event) => {
                     event.stopPropagation();
                     openTab(dispatch, {
@@ -45,7 +45,7 @@ export function ExerciseSetCard({
                 }
             >
                 Start Practice
-            </NavyBlueButton>
+            </BlackButton>
         </div>
     );
 }

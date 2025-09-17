@@ -1,3 +1,4 @@
+import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SignInPage } from './features/auth/pages/SignInPage';
 import { SignUpPage } from './features/auth/pages/SignUpPage';

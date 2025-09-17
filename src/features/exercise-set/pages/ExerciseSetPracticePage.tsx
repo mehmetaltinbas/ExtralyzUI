@@ -5,7 +5,7 @@ import type { ExerciseSet } from "src/features/exercise-set/types/exercise-set.i
 import type { EvaluateAnswersResponse, ExerciseAnswerEvaluationResult } from "src/features/exercise-set/types/response/evaluate-answers.response";
 import { ExercisePracticeCard } from "src/features/exercise/components/ExercisePracticeCard";
 import type { Exercise } from "src/features/exercise/types/exercise.interface";
-import { NavyBlueButton } from "src/shared/components/buttons/NavyBlueButton";
+import { BlackButton } from "src/shared/components/buttons/BlackButton";
 
 export function ExerciseSetPracticePage({
     exerciseSet,
@@ -90,11 +90,11 @@ export function ExerciseSetPracticePage({
                         <ExercisePracticeCard exercise={exercise} index={index} setActiveExerciseIndex={setActiveExerciseIndex} recordAnswer={recordAnswer} className={`${!(index === activeExerciseIndex) && 'hidden'}`}/>
                     ))}
                     <div className="flex justify-start items-center gap-2">
-                        <NavyBlueButton onClick={() => setActiveExerciseIndex(prev => prev > 0 ? prev - 1 : prev)}>Back</NavyBlueButton>
+                        <BlackButton onClick={() => setActiveExerciseIndex(prev => prev > 0 ? prev - 1 : prev)}>Back</BlackButton>
                         {!(activeExerciseIndex + 1 === exercises.length) ?
-                            <NavyBlueButton onClick={() => setActiveExerciseIndex(prev => prev + 1)}>Next</NavyBlueButton>
+                            <BlackButton onClick={() => setActiveExerciseIndex(prev => prev + 1)}>Next</BlackButton>
                             :
-                            <NavyBlueButton onClick={async () => { setActiveExerciseIndex(prev => prev + 1); await evaluateAnswers(); }}>Finish and Evaluate Answers</NavyBlueButton>
+                            <BlackButton onClick={async () => { setActiveExerciseIndex(prev => prev + 1); await evaluateAnswers(); }}>Finish and Evaluate Answers</BlackButton>
                         }
                     </div>
                 </div>

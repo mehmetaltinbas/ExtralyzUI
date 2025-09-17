@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { authService } from '../../auth/services/auth.service';
 import type { SignInDto } from '../types/auth-dtos';
 import { Navigate } from 'react-router-dom';
-import { NavyBlueButton } from '../../../shared/components/buttons/NavyBlueButton';
+import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 
 export function SignInPage() {
     const [signInDto, setSignInDto] = useState<SignInDto>({
@@ -49,7 +49,7 @@ export function SignInPage() {
                 placeholder="password..."
                 className="p-2 border rounded-full"
             />
-            <NavyBlueButton onClick={handleSignInSubmit}>sign in</NavyBlueButton>
+            <BlackButton onClick={handleSignInSubmit}>sign in</BlackButton>
         </div>
     );
 }
