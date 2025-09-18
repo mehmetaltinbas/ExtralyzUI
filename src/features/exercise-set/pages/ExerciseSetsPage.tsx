@@ -3,6 +3,7 @@ import { exerciseSetService } from '../services/exercise-set.service';
 import { ExerciseSetCard } from '../components/ExerciseSetCard';
 import type { ExtendedSource } from '../../source/types/extended-source-document.interface';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import { LoadingPage } from 'src/shared/pages/LoadingPage';
 
 export function ExerciseSetsPage({ className }: { className?: string }) {
     const dispatch = useAppDispatch();
@@ -32,7 +33,7 @@ export function ExerciseSetsPage({ className }: { className?: string }) {
                 flex flex-col justify-start items-start gap-10"
             >
                 {sources.length === 0 ? (
-                    <p>Loading...</p>
+                    <LoadingPage />
                 ) : (
                     sources.map((source) =>
                         (source.exerciseSets?.length ?? 0) > 0 ? (

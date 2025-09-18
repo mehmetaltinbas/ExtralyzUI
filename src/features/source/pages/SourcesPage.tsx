@@ -5,6 +5,7 @@ import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 import { SourceCard } from '../components/SourceCard';
 import { CreateExerciseSetForm } from '../../exercise-set/components/CreateExerciseSetForm';
 import type { CreateExerciseSetDto } from '../../exercise-set/types/dto/create-exercise-set.dto';
+import { LoadingPage } from 'src/shared/pages/LoadingPage';
 
 export function SourcesPage({ className }: { className?: string }) {
     const [sources, setSources] = useState<Source[]>([]);
@@ -97,7 +98,7 @@ export function SourcesPage({ className }: { className?: string }) {
                 </div>
             </div>
             {sources.length === 0 ? (
-                <p>Loading...</p>
+                    <LoadingPage />
             ) : (
                 sources.map((source) => (
                     <SourceCard

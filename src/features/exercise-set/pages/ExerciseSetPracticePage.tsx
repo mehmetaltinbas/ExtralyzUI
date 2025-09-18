@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ExerciseSetEvaluationPage } from "src/features/exercise-set/pages/ExerciseSetEvaluationPage";
 import { exerciseSetService } from "src/features/exercise-set/services/exercise-set.service";
 import type { EvaluateAnswersDto } from "src/features/exercise-set/types/dto/evaluate-answers.dto";
 import type { ExerciseSet } from "src/features/exercise-set/types/exercise-set.interface";
@@ -7,6 +8,7 @@ import { ExerciseEvaluationCard } from "src/features/exercise/components/Exercis
 import { ExercisePracticeCard } from "src/features/exercise/components/ExercisePracticeCard";
 import type { Exercise } from "src/features/exercise/types/exercise.interface";
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
+import { LoadingPage } from "src/shared/pages/LoadingPage";
 
 export function ExerciseSetPracticePage({
     exerciseSet,
@@ -31,7 +33,7 @@ export function ExerciseSetPracticePage({
             }
         });
         setEvaluateAnswersDto(dto);
-    }, []);
+    }, [exercises]);
 
     useEffect(() => {
         console.log(evaluateAnswersDto);
@@ -61,18 +63,9 @@ export function ExerciseSetPracticePage({
     return <div className={`${className ?? ''}`}> { exerciseSet && exercises ? (
             activeExerciseIndex === exercises.length ? (
                 evaluation ?
-                    <div className="flex flex-col justify-start items-center gap-4">
-                        <p className="font-serif font-bold text-lg">Overall Score: {evaluation?.overallScore}</p>
-                        {evaluation.exerciseAnswerEvaluationResults.map((element, index) => {
-                            const matchingExercise = exercises.find(exercise => exercise._id === element.exerciseId);
-                            if (matchingExercise) {
-                                return <ExerciseEvaluationCard exercise={matchingExercise} evaluation={element} index={index}/>;
-                            }
-                            return <div>undefined</div>;
-                        })}
-                    </div>
+                    <ExerciseSetEvaluationPage exercises={exercises} evaluation={evaluation} />
                 :
-                    <div>Loading...</div>
+                    <LoadingPage />
             ) : (<div 
                 className={`w-full h-full
                     flex justify-center items-start

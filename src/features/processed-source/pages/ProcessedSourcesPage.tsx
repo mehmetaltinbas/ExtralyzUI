@@ -3,6 +3,7 @@ import type { ProcessedSource } from '../types/processed-source.interface';
 import { processedSourceService } from '../services/processed-source.service';
 import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 import { ProcessedSourceCard } from '../components/ProcessedSourceCard';
+import { LoadingPage } from 'src/shared/pages/LoadingPage';
 
 export function ProcessedSourcesPage({ className }: { className?: string }) {
     const [processedSources, setProcessedSources] = useState<ProcessedSource[]>([]);
@@ -29,7 +30,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                 grid grid-cols-3 gap-8"
             >
                 {processedSources.length === 0 ? (
-                    <p>Loading...</p>
+                    <LoadingPage />
                 ) : (
                     processedSources.map((processedSources) => (
                         <ProcessedSourceCard
