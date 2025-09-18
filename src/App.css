@@ -5,6 +5,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Handlee';
+    src: url('assets/fonts/Handlee-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     box-sizing: border-box;
@@ -13,5 +20,5 @@
 html, body, #root {
     width: 100%;
     height: 100%;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Handlee', cursive;
 }

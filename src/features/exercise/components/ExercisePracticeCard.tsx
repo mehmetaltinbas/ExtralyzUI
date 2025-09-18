@@ -1,8 +1,8 @@
 import type React from "react";
-import { MCQExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-type/MCQExercisePracticeCard";
-import { OpenEndedExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-type/OpenEndedExercisePracticeCard";
-import { ShortExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-type/ShortExercisePracticeCard";
-import { TrueFalseExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-type/TrueFalseExercisePracticeCard";
+import { MCQExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-card/MCQExercisePracticeCard";
+import { OpenEndedExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-card/OpenEndedExercisePracticeCard";
+import { ShortExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-card/ShortExercisePracticeCard";
+import { TrueFalseExercisePracticeCard } from "src/features/exercise/components/strategy-components/exercise-practice-card/TrueFalseExercisePracticeCard";
 import { ExerciseType } from "src/features/exercise/enums/exercise-types.enum";
 import type { Exercise } from "src/features/exercise/types/exercise.interface";
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
@@ -30,11 +30,11 @@ export function ExercisePracticeCard({ exercise, index, setActiveExerciseIndex, 
     const Component = componentsMap.get(exercise.type as ExerciseType);
 
     return (
-        <div 
-            className={`w-full h-full
-                ${className ?? ''}
-            `}
+        <div className={`w-full h-full p-2
+            flex flex-col justify-center items-center gap-2
+            ${className ?? ''}`}
         >
+            <p className="border-b p-2"><span className="font-serif font-semibold">Exercise {index + 1}</span> - {exercise.prompt}</p>
             {Component && <Component exercise={exercise} index={index} recordAnswer={recordAnswer} />}
         </div>
     );

@@ -3,6 +3,7 @@ import { exerciseSetService } from "src/features/exercise-set/services/exercise-
 import type { EvaluateAnswersDto } from "src/features/exercise-set/types/dto/evaluate-answers.dto";
 import type { ExerciseSet } from "src/features/exercise-set/types/exercise-set.interface";
 import type { EvaluateAnswersResponse, ExerciseAnswerEvaluationResult } from "src/features/exercise-set/types/response/evaluate-answers.response";
+import { ExerciseEvaluationCard } from "src/features/exercise/components/ExerciseEvaluationCard";
 import { ExercisePracticeCard } from "src/features/exercise/components/ExercisePracticeCard";
 import type { Exercise } from "src/features/exercise/types/exercise.interface";
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
@@ -51,6 +52,7 @@ export function ExerciseSetPracticePage({
 
     async function evaluateAnswers() {
         const response = await exerciseSetService.evaluateAnswers(evaluateAnswersDto);
+        console.log(response);
         if (response.isSuccess) {
             setEvaluation(response);
         }
@@ -59,23 +61,18 @@ export function ExerciseSetPracticePage({
     return <div className={`${className ?? ''}`}> { exerciseSet && exercises ? (
             activeExerciseIndex === exercises.length ? (
                 evaluation ?
-                <div className="flex flex-col justify-start items-center gap-4">
-                    <p>Overall Score: {evaluation?.overallScore}</p>
-                    {evaluation.exerciseAnswerEvaluationResults.map((element, index) => {
-                        const matchingExercise = exercises.find(exercise => exercise._id === element.exerciseId);
-                        return (
-                            <div className="border flex flex-col justify-center items-center gap-1">
-                                <p>Exercise {index} - {matchingExercise?.prompt}</p>
-                                <p>Your answer: {element.userAnswer}</p>
-                                <p>Correct answer: {matchingExercise?.correctChoiceIndex ? matchingExercise?.correctChoiceIndex : matchingExercise?.solution}</p>
-                                <p>Feedback: {element.feedback}</p>
-                                <p>Sub-score: {element.score}</p>
-                            </div>
-                        );
-                    })}
-                </div>
+                    <div className="flex flex-col justify-start items-center gap-4">
+                        <p className="font-serif font-bold text-lg">Overall Score: {evaluation?.overallScore}</p>
+                        {evaluation.exerciseAnswerEvaluationResults.map((element, index) => {
+                            const matchingExercise = exercises.find(exercise => exercise._id === element.exerciseId);
+                            if (matchingExercise) {
+                                return <ExerciseEvaluationCard exercise={matchingExercise} evaluation={element} index={index}/>;
+                            }
+                            return <div>undefined</div>;
+                        })}
+                    </div>
                 :
-                <div>Loading...</div>
+                    <div>Loading...</div>
             ) : (<div 
                 className={`w-full h-full
                     flex justify-center items-start
@@ -83,7 +80,7 @@ export function ExerciseSetPracticePage({
             >
                 <div 
                     className={`w-[50%] h-[50%]
-                    flex-col justify-center items-center gap-2
+                    flex-col justify-center items-center gap-4
                 `}
                 >
                     {exercises.map((exercise, index) => (
