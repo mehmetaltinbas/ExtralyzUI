@@ -14,7 +14,11 @@ export function ClaretButton({
     return (
         <button
             onClick={onClick}
-            className={`cursor-pointer border py-[2px] px-[4px] rounded-full text-xs text-white bg-[#a62637] hover:bg-gray-200 ${className ?? ''}`}
+            className={`cursor-pointer px-2 pt-[2px] pb-[1px] border-[2px] border-[#a62637] rounded-[10px]
+                bg-[#a62637] text-white text-xs
+                hover:bg-white hover:text-[#a62637]
+                ${className ?? ''}
+            `}
             {...rest}
         >
             {children}

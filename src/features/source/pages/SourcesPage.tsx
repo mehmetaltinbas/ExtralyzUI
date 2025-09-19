@@ -3,43 +3,52 @@ import { sourceService } from '../services/source.service';
 import type { Source } from '../types/source.iterface';
 import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 import { SourceCard } from '../components/SourceCard';
-import { CreateExerciseSetForm } from '../../exercise-set/components/CreateExerciseSetForm';
-import type { CreateExerciseSetDto } from '../../exercise-set/types/dto/create-exercise-set.dto';
 import { LoadingPage } from 'src/shared/pages/LoadingPage';
+import { SourceActionMenu } from 'src/features/source/components/SourceActionMenu';
+import { CreateExerciseSetForm } from 'src/features/exercise-set/components/CreateExerciseSetForm';
+import type { CreateExerciseSetDto } from 'src/features/exercise-set/types/dto/create-exercise-set.dto';
+import { ProcessSourceForm } from 'src/features/processed-source/components/ProcessSourceForm';
 
 export function SourcesPage({ className }: { className?: string }) {
     const [sources, setSources] = useState<Source[]>([]);
     const [file, setFile] = useState<File>();
+    const [actionMenuSourceId, setActionMenuSourceId] = useState<string>('');
+    const [isSourceActionMenuHidden, setIsSourceActionMenuHidden] = useState<boolean>(true);
     const [isCreateExerciseSetFormHidden, setIsCreateExerciseSetFormHidden] =
         useState<boolean>(true);
-    const [createExerciseSetSourceId, setCreateExerciseSetSourceId] = useState<string>('');
-    const [createExerciseSetDto, setCreateExerciseSetDto] = useState<CreateExerciseSetDto>({
-        count: 5,
-        type: '',
-        difficulty: '',
-    });
+    const [isProcessSourceFormHidden, setIsProcessSourceFormHidden] =
+        useState<boolean>(true);
+
+    function toggleSourceActionMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, source: Source) {
+        event.stopPropagation();
+        const sourceActionMenu = document.getElementById('sourceActionMenu');
+        if (sourceActionMenu) {
+            const positionOfButton = event.currentTarget.getBoundingClientRect();
+            sourceActionMenu.style.top = `${positionOfButton.bottom}px`;
+            sourceActionMenu.style.left = `${positionOfButton.right}px`;
+            setActionMenuSourceId(source._id);
+            setIsSourceActionMenuHidden((prev) => !prev);
+        }
+    }
+
+    function toggleProcessSourceForm(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        const processSourceForm = document.getElementById('process-source-form');
+        if (processSourceForm !== null) {
+            const position = event.currentTarget.getBoundingClientRect();
+            processSourceForm.style.top = `${position.bottom}px`;
+            processSourceForm.style.left = `${position.right}px`;
+            setIsProcessSourceFormHidden((prev) => !prev);
+        }
+    }
 
     function toggleCreateExerciseSetForm(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) {
         const createExerciseSetForm = document.getElementById('create-exercise-set-form');
         if (createExerciseSetForm !== null) {
-            if (isCreateExerciseSetFormHidden) {
-                setCreateExerciseSetDto({
-                    count: 5,
-                    type: '',
-                    difficulty: '',
-                });
-            }
-
-            if (event.currentTarget.dataset.sourceId) {
-                setCreateExerciseSetSourceId(event.currentTarget.dataset.sourceId);
-            }
-
             const position = event.currentTarget.getBoundingClientRect();
             createExerciseSetForm.style.top = `${position.bottom}px`;
             createExerciseSetForm.style.left = `${position.right}px`;
-
             setIsCreateExerciseSetFormHidden((prev) => !prev);
         }
     }
@@ -104,16 +113,31 @@ export function SourcesPage({ className }: { className?: string }) {
                     <SourceCard
                         source={source}
                         fetchSources={fetchSources}
-                        toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
+                        toggleSourceActionMenu={toggleSourceActionMenu}
                     />
                 ))
             )}
-            <CreateExerciseSetForm
-                isHidden={isCreateExerciseSetFormHidden}
-                sourceId={createExerciseSetSourceId}
-                createExerciseSetDto={createExerciseSetDto}
-                setCreateExerciseSetDto={setCreateExerciseSetDto}
+
+            <SourceActionMenu 
+                isHidden={isSourceActionMenuHidden} 
+                setIsHidden={setIsSourceActionMenuHidden} 
+                sourceId={actionMenuSourceId} 
+                fetchSources={fetchSources}
+                toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
+                toggleProcessSourceForm={toggleProcessSourceForm}
             />
+
+            <CreateExerciseSetForm 
+                isHidden={isCreateExerciseSetFormHidden} 
+                sourceId={actionMenuSourceId}
+            />
+
+            <ProcessSourceForm 
+                isHidden={isProcessSourceFormHidden}
+                setIsHidden={setIsProcessSourceFormHidden}
+                sourceId={actionMenuSourceId}
+            />
+
         </div>
     );
 }

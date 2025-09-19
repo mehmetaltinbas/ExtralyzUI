@@ -1,12 +1,10 @@
-import type React from 'react';
+import type React from "react";
 
-export function BlackButton({
-    children,
+export function ActionMenuButton({
     onClick,
     className,
     ...rest
 }: {
-    children: React.ReactNode;
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     className?: string;
     [key: string]: unknown;
@@ -14,14 +12,13 @@ export function BlackButton({
     return (
         <button
             onClick={onClick}
-            className={`cursor-pointer px-2 pt-[2px] pb-[1px] border-[2px] border-black rounded-[10px]
-                bg-black text-white text-xs
-                hover:bg-white hover:text-black
+            className={`cursor-pointer font-serif font-bold text-lg px-2 pt-[1px] pb-[8px] rounded-full
+                hover:border hover:bg-white'
                 ${className ?? ''}
             `}
             {...rest}
         >
-            {children}
+            ...
         </button>
     );
 }

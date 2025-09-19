@@ -2,12 +2,13 @@ import { axiosInstance } from 'src/shared/api/axiosInstance';
 import type { ResponseBase } from '../../../shared/types/response-base';
 import type { ReadAllProcessedSourcesResponse } from '../types/response/read-all-processed-sources.response';
 import type { ReadSingleProcessedSourceResponse } from '../types/response/read-single-processed-source.response';
+import type { CreateProcessedSourceDto } from 'src/features/processed-source/types/dto/CreateProcessedSourceDto';
 
 const baseUrl = `/processed-source`;
 
-async function create(formData: FormData): Promise<ResponseBase> {
+async function createBySourceId(sourceId: string, createProcessedSourceDto: CreateProcessedSourceDto): Promise<ResponseBase> {
     const response = (
-        await axiosInstance.post(`${baseUrl}/create`, formData)
+        await axiosInstance.post(`${baseUrl}/create-by-source-id/${sourceId}`, createProcessedSourceDto)
     ).data;
     return response;
 }
@@ -39,7 +40,7 @@ async function deleteById(id: string): Promise<ResponseBase> {
 }
 
 export const processedSourceService = {
-    create,
+    createBySourceId,
     readAll,
     readById,
     readAllByUserId,

@@ -3,18 +3,29 @@ import { BlackButton } from '../../../shared/components/buttons/BlackButton';
 import type { CreateExerciseSetDto } from '../types/dto/create-exercise-set.dto';
 import { exerciseSetService } from '../services/exercise-set.service';
 import { ExerciseType } from 'src/features/exercise/enums/exercise-types.enum';
+import { useEffect, useState } from 'react';
 
 export function CreateExerciseSetForm({
     isHidden,
-    sourceId,
-    createExerciseSetDto,
-    setCreateExerciseSetDto,
+    sourceId
 }: {
     isHidden: boolean;
     sourceId: string;
-    createExerciseSetDto: CreateExerciseSetDto;
-    setCreateExerciseSetDto: React.Dispatch<React.SetStateAction<CreateExerciseSetDto>>;
 }) {
+    const [createExerciseSetDto, setCreateExerciseSetDto] = useState<CreateExerciseSetDto>({
+        count: 5,
+        type: '',
+        difficulty: '',
+    });
+
+    useEffect(() => {
+        setCreateExerciseSetDto({
+            count: 5,
+            type: '',
+            difficulty: '',
+        });
+    }, [sourceId]);
+
     async function createExerciseSet() {
         const response = await exerciseSetService.create(sourceId, createExerciseSetDto);
         alert(response.message);

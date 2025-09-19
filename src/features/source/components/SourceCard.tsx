@@ -7,58 +7,47 @@ import { useAppDispatch } from 'src/store/hooks';
 import type { Source } from 'src/features/source/types/source.iterface';
 import { BlackButton } from 'src/shared/components/buttons/BlackButton';
 import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
+import { SourceActionMenu } from 'src/features/source/components/SourceActionMenu';
+import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton';
 
 export function SourceCard({
     source,
     fetchSources,
-    toggleCreateExerciseSetForm,
+    toggleSourceActionMenu,
 }: {
     source: Source;
     fetchSources: () => void;
-    toggleCreateExerciseSetForm: (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    toggleSourceActionMenu: (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>, source: Source
     ) => void;
 }) {
     const dispatch = useAppDispatch();
 
-    async function deleteSource(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        const response = await sourceService.deleteById(source._id);
-        alert(response.message);
-        fetchSources();
-    }
-
     return (
         <div
             onClick={(event) => openTab(dispatch, { section: Section.SOURCE, id: source._id, title: source.title })}
-            className="w-[250px] h-[200px] border cursor-pointer rounded-[10px]
+            className="w-[300px] h-[250px] border cursor-pointer rounded-[10px]
             flex flex-col justify-center items-center
             hover:bg-gray-100"
         >
-            <div className="w-full h-[50px] flex justify-center items-center gap-1">
-                <p>{source.title}</p>
-                <ClaretButton
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        deleteSource(event);
-                    }}
+            <div className="w-full h-[60px]
+                flex justify-center items-center
+                border-b"
+            >
+                <div className='w-[250px] h-full px-2
+                    flex flex-col justify-center items-center'
                 >
-                    Delete
-                </ClaretButton>
+                    <p className='font-serif font-semibold truncate'>{source.title}</p>
+                    <p className='text-xs'>{source.type}</p>
+                </div>
+                <div className='w-[50px] h-full
+                    flex justify-center items-center'
+                >
+                    <ActionMenuButton onClick={event => toggleSourceActionMenu(event, source)}/>
+                </div>
             </div>
-            <div className="flex-1 border overflow-auto">
+            <div className="w-full h-full p-2 flex-1 overflow-y-auto">
                 <p>{source.rawText}</p>
-            </div>
-            <div className="w-full h-[50px] flex justify-center items-center">
-                <BlackButton
-                    data-source-id={source._id}
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        toggleCreateExerciseSetForm(event);
-                    }}
-                    className="text-xs"
-                >
-                    Generate Exercises
-                </BlackButton>
             </div>
         </div>
     );
