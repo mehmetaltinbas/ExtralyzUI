@@ -37,7 +37,7 @@ export function WorkspaceTabsBar() {
         <div
             onDragOver={(event) => onDragOver(event)}
             onDrop={(event) => onDrop(event)}
-            className={`w-[${widths.mainColumn}px] h-[40px] bg-[#F5F5F5]
+            className={`w-[${widths.mainColumn}px] h-[40px] bg-[#F5F5F5] z-10
             flex flex-shrink-0 justify-start items-center
             border-1 border-white overflow-x-auto`}
         >

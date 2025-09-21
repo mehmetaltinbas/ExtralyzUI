@@ -18,7 +18,7 @@ export function SourceCard({
     source: Source;
     fetchSources: () => void;
     toggleSourceActionMenu: (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>, source: Source
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>, sourceId: string
     ) => void;
 }) {
     const dispatch = useAppDispatch();
@@ -43,7 +43,7 @@ export function SourceCard({
                 <div className='w-[50px] h-full
                     flex justify-center items-center'
                 >
-                    <ActionMenuButton onClick={event => toggleSourceActionMenu(event, source)}/>
+                    <ActionMenuButton onClick={event => toggleSourceActionMenu(event, source._id)}/>
                 </div>
             </div>
             <div className="w-full h-full p-2 flex-1 overflow-y-auto">

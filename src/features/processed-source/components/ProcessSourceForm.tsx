@@ -7,10 +7,11 @@ import { ProcessedSourceTone } from "src/features/processed-source/enums/process
 import { processedSourceService } from "src/features/processed-source/services/processed-source.service";
 import type { CreateProcessedSourceDto } from "src/features/processed-source/types/dto/CreateProcessedSourceDto";
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
+import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
 
-export function ProcessSourceForm({ isHidden, setIsHidden, sourceId }: {
+export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId }: {
     isHidden: boolean;
-    setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
+    toggleProcessSourceForm: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     sourceId: string;
 }) {
     const [createProcessedSourceDto, setCreateProcessedSourceDto] = useState<CreateProcessedSourceDto>({
@@ -29,10 +30,12 @@ export function ProcessSourceForm({ isHidden, setIsHidden, sourceId }: {
 
     return (
         <div id="process-source-form"
-            className={`absolute border p-2 bg-white rounded-[10px]
-            flex flex-col justify-center items-center gap-2
-            ${isHidden && 'hidden'}`}
+            className={`${isHidden && 'hidden'} border px-2 py-4 bg-white rounded-[10px]
+            flex flex-col justify-center items-center gap-2`}
         >
+            <div className="w-full flex justify-end items-center">
+                <ClaretButton onClick={event => toggleProcessSourceForm(event)}>X</ClaretButton>
+            </div>
             <div className="flex justify-start items-center gap-2">
                 <p>title: </p>
                 <input
@@ -137,7 +140,7 @@ export function ProcessSourceForm({ isHidden, setIsHidden, sourceId }: {
                     <option value={ProcessedSourceLength.DETAILED}>Detailed</option>
                 </select>
             </div>
-            <BlackButton onClick={event => { processSource(); setIsHidden(prev => !prev); }}>Process the Source</BlackButton>
+            <BlackButton onClick={event => { processSource(); toggleProcessSourceForm(event); }}>Process the Source</BlackButton>
         </div>
     );
 }

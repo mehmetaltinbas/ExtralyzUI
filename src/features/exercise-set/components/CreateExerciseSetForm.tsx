@@ -4,13 +4,16 @@ import type { CreateExerciseSetDto } from '../types/dto/create-exercise-set.dto'
 import { exerciseSetService } from '../services/exercise-set.service';
 import { ExerciseType } from 'src/features/exercise/enums/exercise-types.enum';
 import { useEffect, useState } from 'react';
+import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 
 export function CreateExerciseSetForm({
     isHidden,
-    sourceId
+    sourceId,
+    toggleCreateExerciseSetForm
 }: {
     isHidden: boolean;
     sourceId: string;
+    toggleCreateExerciseSetForm: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) {
     const [createExerciseSetDto, setCreateExerciseSetDto] = useState<CreateExerciseSetDto>({
         count: 5,
@@ -34,9 +37,12 @@ export function CreateExerciseSetForm({
     return (
         <div
             id="create-exercise-set-form"
-            className={`${isHidden ? 'invisible' : ''} absolute p-2 border bg-white rounded-[10px]
+            className={`${isHidden ? 'hidden' : ''} border px-2 py-4 bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
+            <div className="w-full flex justify-end items-center">
+                <ClaretButton onClick={event => toggleCreateExerciseSetForm(event)}>X</ClaretButton>
+            </div>
             <div className="flex justify-start items-center gap-2">
                 <p>count: </p>
                 <input

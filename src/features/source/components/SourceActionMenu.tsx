@@ -5,8 +5,9 @@ import { sourceService } from "src/features/source/services/source.service";
 import type { Source } from "src/features/source/types/source.iterface";
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
 import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
+import { useAppSelector } from "src/store/hooks";
 
-export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources, toggleCreateExerciseSetForm, toggleProcessSourceForm }: {
+export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources, toggleCreateExerciseSetForm, toggleProcessSourceForm, toggleDeleteApproval }: {
     isHidden: boolean;
     setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
     sourceId?: string;
@@ -17,17 +18,14 @@ export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources
     toggleProcessSourceForm: (
             event: React.MouseEvent<HTMLButtonElement, MouseEvent>
         ) => void;
+    toggleDeleteApproval: (
+            event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+        ) => void;
 }) {
 
-    async function deleteSource(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        const response = await sourceService.deleteById(sourceId!);
-        alert(response.message);
-        fetchSources();
-    }
-
     return (
-        <div id="sourceActionMenu"
-            className={`absolute border p-2 bg-white rounded-[10px] shadow-md
+        <div id="source-action-menu"
+            className={`absolute border p-2 bg-white rounded-[10px] shadow-md z-10
             flex flex-col justify-center items-center gap-2
             ${isHidden && 'hidden'}`}
         >
@@ -55,7 +53,7 @@ export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources
                 <ClaretButton
                     onClick={(event) => {
                         event.stopPropagation();
-                        deleteSource(event);
+                        toggleDeleteApproval(event);
                         setIsHidden(prev => !prev);
                     }}
                 >

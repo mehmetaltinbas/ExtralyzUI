@@ -1,5 +1,5 @@
 import { Section } from 'src/features/workspace/enums/sections.enum';
-import type { PropsBuilderStrategy } from 'src/features/workspace/strategies/props-builder/props-builder-strategy.interface';
+import type { SectionBuilderStrategy } from 'src/features/workspace/strategies/section-builder/section-builder-strategy.interface';
 import { ExerciseSetPracticePropsBuilderStrategy } from './strategies/exercise-set-practice-props-builder.strategy';
 import { ExerciseSetPropsBuilderStrategy } from './strategies/exercise-set-props-builder.strategy';
 import { ExerciseSetsPropsBuilderStrategy } from './strategies/exercise-sets-props-builder.strategy';
@@ -8,7 +8,7 @@ import { ProcessedSourcesPropsBuilderStrategy } from './strategies/processed-sou
 import { SourcePropsBuilderStrategy } from './strategies/source-props-builder.strategy';
 import { SourcesPropsBuilderStrategy } from './strategies/sources-props-builder.strategy';
 
-const map: Map<string, PropsBuilderStrategy> = new Map([
+const map: Map<string, SectionBuilderStrategy> = new Map([
     [Section.SOURCES, SourcesPropsBuilderStrategy],
     [Section.SOURCE, SourcePropsBuilderStrategy],
     [Section.PROCESSED_SOURCES, ProcessedSourcesPropsBuilderStrategy],
@@ -18,7 +18,7 @@ const map: Map<string, PropsBuilderStrategy> = new Map([
     [Section.EXERCISE_SET_PRACTICE, ExerciseSetPracticePropsBuilderStrategy],
 ]);
 
-export function selectPropsBuilderStrategy(section: string): PropsBuilderStrategy | undefined {
+export function selectSectionBuilderStrategy(section: string): SectionBuilderStrategy | undefined {
     const strategy = map.get(section);
     if (!strategy) return undefined;
     return strategy;
