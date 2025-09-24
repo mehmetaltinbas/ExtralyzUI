@@ -126,15 +126,16 @@ export function SourcesPage({ className }: { className?: string }) {
             />
 
             <div // main
-                className={`absolute w-full h-auto p-5
+                className={`absolute w-full h-auto p-4
                 grid grid-cols-3 gap-8`}
             >
                 <div
-                    className="h-[100px] col-span-3
-                    flex justify-center items-center"
+                    className="w-full h-auto col-span-3
+                    flex flex-col justify-center items-center p-4 gap-2"
                 >
+                    <p className='text-2xl font-bold'>Sources</p>
                     <div
-                        className="w-[400px] h-[80px]
+                        className="w-[400px] h-auto
                         flex justify-center items-center gap-2"
                     >
                         <input
@@ -145,7 +146,7 @@ export function SourcesPage({ className }: { className?: string }) {
                             hover:bg-gray-100"
                         />
                         <BlackButton onClick={uploadSource}>Upload</BlackButton>
-                    </div>
+                </div>
                 </div>
                 {sources.length === 0 ? (
                         <LoadingPage />
@@ -168,7 +169,7 @@ export function SourcesPage({ className }: { className?: string }) {
             <div // pop-up
                 className={`${!isPopUpActive && 'hidden'} absolute z-20 w-full h-full`}
             >
-                <div className='w-full h-full flex justify-center items-center'>
+                <div className='w-full h-[75%] flex justify-center items-center'>
                     <ProcessSourceForm 
                         isHidden={isProcessSourceFormHidden}
                         toggleProcessSourceForm={toggleProcessSourceForm}

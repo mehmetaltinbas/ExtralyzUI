@@ -24,7 +24,6 @@ export function SignInPage() {
 
     async function handleSignInSubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const response = await authService.signIn(signInDto);
-        alert(response.message);
         setIsSignedIn(response.isSuccess);
     }
 

@@ -9,11 +9,12 @@ export function ProcessedSourcePage({
 }) {
     return (
         <div
-            className={`${className ?? ''} w-full h-full 
-            flex flex-col justify-center items-center gap-4 p-10`}
+            className={`${className ?? ''} w-full h-full`}
         >
-            <p>{processedSource?.title ? processedSource?.title : processedSource?._id}</p>
-            <p>{processedSource?.processedText}</p>
+            <div className='flex flex-col justify-center items-center gap-4'>
+                <p>{processedSource?.title ? processedSource?.title : processedSource?._id}</p>
+                <p>{processedSource?.processedText}</p>
+            </div>
         </div>
     );
 }

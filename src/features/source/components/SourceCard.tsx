@@ -37,7 +37,7 @@ export function SourceCard({
                 <div className='w-[250px] h-full px-2
                     flex flex-col justify-center items-center'
                 >
-                    <p className='font-serif font-semibold truncate'>{source.title}</p>
+                    <p className='font-serif font-semibold truncate'>{source.title ? source.title : source._id}</p>
                     <p className='text-xs'>{source.type}</p>
                 </div>
                 <div className='w-[50px] h-full

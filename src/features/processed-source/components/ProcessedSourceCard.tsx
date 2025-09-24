@@ -8,23 +8,20 @@ import {
     type TabsStateElement,
 } from '../../workspace/features/tabs/store/tabsSlice';
 import { useAppDispatch } from '../../../store/hooks';
+import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton';
 
 export function ProcessedSourceCard({
     processedSource,
     fetchProcessedSources,
+    toggleSourceActionMenu,
 }: {
     processedSource: ProcessedSource;
     fetchProcessedSources: () => void;
+    toggleSourceActionMenu: (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>, sourceId: string
+    ) => void;
 }) {
     const dispatch = useAppDispatch();
-
-    async function deleteProcessedSource(
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) {
-        const response = await processedSourceService.deleteById(processedSource._id);
-        alert(response.message);
-        fetchProcessedSources();
-    }
 
     function openTab(event: React.MouseEvent<HTMLDivElement>) {
         const section = Section.PROCESSED_SOURCE;
@@ -48,28 +45,26 @@ export function ProcessedSourceCard({
                 id: processedSource._id,
                 title: processedSource.title,
             })}
-            className="w-[250px] h-[150px] border cursor-pointer rounded-[10px]
+            className="w-[300px] h-[250px] border cursor-pointer rounded-[10px]
             flex flex-col justify-center items-center
             hover:bg-gray-100"
         >
-            <div
-                className="w-full h-[40px] p-2 
-                flex justify-center items-center gap-1"
+            <div className="w-full h-[60px]
+                flex justify-center items-center
+                border-b"
             >
-                <p className="px-2 truncate">
-                    {processedSource.title ? processedSource.title : processedSource._id}
-                </p>
-                <ClaretButton
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        deleteProcessedSource(event);
-                    }}
+                <div className='w-[250px] h-full px-2
+                    flex flex-col justify-center items-center'
                 >
-                    Delete
-                </ClaretButton>
+                    <p className='font-serif font-semibold truncate'>{processedSource.title ? processedSource.title : processedSource._id}</p>
+                </div>
+                <div className='w-[50px] h-full
+                    flex justify-center items-center'
+                >
+                    <ActionMenuButton onClick={event => toggleSourceActionMenu(event, processedSource._id)}/>
+                </div>
             </div>
-            <span className="w-full border-t"></span>
-            <div className="flex-1 overflow-y-scroll">
+            <div className="w-full h-full p-2 flex-1 overflow-y-auto">
                 <p>{processedSource.processedText}</p>
             </div>
         </div>

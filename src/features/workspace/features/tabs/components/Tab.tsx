@@ -53,7 +53,11 @@ export function Tab({
                 <p className="truncate" title={tab.tabTitle}>{tab.tabTitle}</p>
             </div>
             <div className="w-[24px] flex justify-center items-center">
-                <ClaretButton data-tab-index={index} onClick={deleteTab}>
+                <ClaretButton 
+                    data-tab-index={index} 
+                    onClick={deleteTab}
+                    className='border-transparent !border-[1px] bg-transparent !text-black hover:border-[#a62637] !hover:text-white'
+                >
                     x
                 </ClaretButton>
             </div>
