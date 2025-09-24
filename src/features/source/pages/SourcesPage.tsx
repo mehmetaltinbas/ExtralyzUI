@@ -9,6 +9,9 @@ import { CreateExerciseSetForm } from 'src/features/exercise-set/components/Crea
 import { ProcessSourceForm } from 'src/features/processed-source/components/ProcessSourceForm';
 import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 import { useAppSelector } from 'src/store/hooks';
+import { BodyOverlay } from 'src/shared/components/BodyOverlay';
+import { DeleteApproval } from 'src/shared/components/DeleteApproval';
+import { BodyPopUp } from 'src/shared/components/BodyPopUp';
 
 export function SourcesPage({ className }: { className?: string }) {
     const sidebar = useAppSelector(state => state.sidebar);
@@ -64,7 +67,7 @@ export function SourcesPage({ className }: { className?: string }) {
     function toggleDeleteApproval(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) {
-        const createExerciseSetForm = document.getElementById('delete-approval');
+        const createExerciseSetForm = document.getElementById('source-delete-approval');
         if (createExerciseSetForm !== null) {
             const position = event.currentTarget.getBoundingClientRect();
             createExerciseSetForm.style.top = `${position.bottom}px`;
@@ -161,43 +164,28 @@ export function SourcesPage({ className }: { className?: string }) {
                 )}
             </div>
 
-            <div // overlay
-                className={`${!isPopUpActive && 'hidden'} absolute z-10 w-full h-full backdrop-blur-xs`}
-            >
-            </div>
-
-            <div // pop-up
-                className={`${!isPopUpActive && 'hidden'} absolute z-20 w-full h-full`}
-            >
-                <div className='w-full h-[75%] flex justify-center items-center'>
+            <BodyOverlay isPopUpActive={isPopUpActive} />
+            <BodyPopUp
+                isPopUpActive={isPopUpActive}
+                components={[
                     <ProcessSourceForm 
                         isHidden={isProcessSourceFormHidden}
                         toggleProcessSourceForm={toggleProcessSourceForm}
                         sourceId={actionMenuSourceId}
-                    />
+                    />,
                     <CreateExerciseSetForm 
                         isHidden={isCreateExerciseSetFormHidden} 
                         sourceId={actionMenuSourceId}
                         toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
+                    />,
+                    <DeleteApproval
+                        id='source-delete-approval'
+                        isHidden={isDeleteApproavelHidden}
+                        toggle={toggleDeleteApproval}
+                        onDelete={deleteSource}
                     />
-                    <div
-                        id="delete-approval"
-                        className={`${isDeleteApproavelHidden ? 'hidden' : ''} border px-2 py-4 bg-white rounded-[10px]
-                        flex flex-col justify-center items-center gap-2`}
-                    >
-                        <p>Are you sure?</p>
-                        <div className="flex justify-center items-center gap-2">
-                            <BlackButton onClick={event => {
-                                toggleDeleteApproval(event);
-                            }}>Cancel</BlackButton>
-                            <ClaretButton onClick={event => { 
-                                toggleDeleteApproval(event);
-                                deleteSource(event);
-                            }}>Delete</ClaretButton>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                ]}
+            ></BodyPopUp>
 
         </div>
     );
