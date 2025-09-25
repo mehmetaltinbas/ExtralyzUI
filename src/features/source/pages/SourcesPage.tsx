@@ -146,7 +146,7 @@ export function SourcesPage({ className }: { className?: string }) {
                         onDelete={deleteSource}
                     />
                 ]}
-            ></BodyPopUp>
+            />
 
         </div>
     );

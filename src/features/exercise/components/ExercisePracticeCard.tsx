@@ -30,7 +30,7 @@ export function ExercisePracticeCard({ exercise, index, setActiveExerciseIndex, 
     const Component = componentsMap.get(exercise.type as ExerciseType);
 
     return (
-        <div className={`w-full h-full p-2
+        <div className={`w-[400px] md:w-[600px] h-auto p-2
             flex flex-col justify-center items-center gap-2
             ${className ?? ''}`}
         >

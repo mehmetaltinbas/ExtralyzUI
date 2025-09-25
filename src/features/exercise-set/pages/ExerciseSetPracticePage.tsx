@@ -60,19 +60,19 @@ export function ExerciseSetPracticePage({
         }
     }
 
-    return <div className={`${className ?? ''}`}> { exerciseSet && exercises ? (
+    return <div className={`${className ?? ''} w-full h-full`}> { exerciseSet && exercises ? (
             activeExerciseIndex === exercises.length ? (
                 evaluation ?
                     <ExerciseSetEvaluationPage exercises={exercises} evaluation={evaluation} />
                 :
                     <LoadingPage />
             ) : (<div 
-                className={`w-full h-full
-                    flex justify-center items-start
+                className={`w-full h-[50%]
+                    flex justify-center items-center
                 `}
             >
                 <div 
-                    className={`w-[50%] h-[50%]
+                    className={`w-auto h-auto
                     flex-col justify-center items-center gap-4
                 `}
                 >

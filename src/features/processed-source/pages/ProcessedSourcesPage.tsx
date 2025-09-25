@@ -47,35 +47,17 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
         }
     }
 
-    function toggleCreateExerciseSetForm(
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) {
-        const createExerciseSetForm = document.getElementById('create-exercise-set-form');
-        if (createExerciseSetForm !== null) {
-            const position = event.currentTarget.getBoundingClientRect();
-            createExerciseSetForm.style.top = `${position.bottom}px`;
-            createExerciseSetForm.style.left = `${position.right}px`;
-            setIsCreateExerciseSetFormHidden((prev) => !prev);
-            setIsPopUpActive(prev => !prev);
-        }
+    function toggleCreateExerciseSetForm() {
+        setIsCreateExerciseSetFormHidden((prev) => !prev);
+        setIsPopUpActive(prev => !prev);
     }
 
-    function toggleDeleteApproval(
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) {
-        const createExerciseSetForm = document.getElementById('processed-source-delete-approval');
-        if (createExerciseSetForm !== null) {
-            const position = event.currentTarget.getBoundingClientRect();
-            createExerciseSetForm.style.top = `${position.bottom}px`;
-            createExerciseSetForm.style.left = `${position.right}px`;
-            setIsDeleteApprovalHidden((prev) => !prev);
-            setIsPopUpActive(prev => !prev);
-        }
+    function toggleDeleteApproval() {
+        setIsDeleteApprovalHidden((prev) => !prev);
+        setIsPopUpActive(prev => !prev);
     }
 
-    async function deleteProcessedSource(
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) {
+    async function deleteProcessedSource() {
         const response = await processedSourceService.deleteById(actionMenuSourceId);
         alert(response.message);
         fetchProcessedSources();
