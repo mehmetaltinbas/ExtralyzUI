@@ -36,11 +36,10 @@ export function CreateExerciseSetForm({
 
     return (
         <div
-            id="create-exercise-set-form"
-            className={`${isHidden ? 'hidden' : ''} border px-2 py-4 bg-white rounded-[10px]
+            className={`${isHidden ? 'hidden' : ''} relative border px-2 py-4 bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
-            <div className="w-full flex justify-end items-center">
+            <div className="absolute top-1 right-1 w-full flex justify-end items-center">
                 <ClaretButton onClick={event => toggleCreateExerciseSetForm(event)}>X</ClaretButton>
             </div>
             <div className="flex justify-start items-center gap-2">

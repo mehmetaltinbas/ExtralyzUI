@@ -11,7 +11,7 @@ export function SourcePage({ source, className }: { source: Source; className?: 
             <div className='flex flex-col justify-center items-center gap-4'>
                 <p>{source?.title}</p>
                 <p>{source?.type}</p>
-                <p dangerouslySetInnerHTML={{ __html: source?.rawText}}></p>
+                <div dangerouslySetInnerHTML={{ __html: source?.rawText}}></div>
             </div>
         </div>
     );

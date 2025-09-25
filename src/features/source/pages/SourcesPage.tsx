@@ -7,17 +7,17 @@ import { LoadingPage } from 'src/shared/pages/LoadingPage';
 import { SourceActionMenu } from 'src/features/source/components/SourceActionMenu';
 import { CreateExerciseSetForm } from 'src/features/exercise-set/components/CreateExerciseSetForm';
 import { ProcessSourceForm } from 'src/features/processed-source/components/ProcessSourceForm';
-import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 import { useAppSelector } from 'src/store/hooks';
 import { BodyOverlay } from 'src/shared/components/BodyOverlay';
 import { DeleteApproval } from 'src/shared/components/DeleteApproval';
 import { BodyPopUp } from 'src/shared/components/BodyPopUp';
+import { SourceCreateForm } from 'src/features/source/components/SourceCreateForm';
 
 export function SourcesPage({ className }: { className?: string }) {
     const sidebar = useAppSelector(state => state.sidebar);
     const [sources, setSources] = useState<Source[]>([]);
-    const [file, setFile] = useState<File>();
     const [isPopUpActive, setIsPopUpActive] = useState<boolean>(false);
+    const [isSourceCreateFormHidden, setIsSourceCreateFormHidden] = useState<boolean>(true);
     const [actionMenuSourceId, setActionMenuSourceId] = useState<string>('');
     const [isSourceActionMenuHidden, setIsSourceActionMenuHidden] = useState<boolean>(true);
     const [isCreateExerciseSetFormHidden, setIsCreateExerciseSetFormHidden] =
@@ -40,41 +40,24 @@ export function SourcesPage({ className }: { className?: string }) {
         }
     }
 
-    function toggleProcessSourceForm(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        const processSourceForm = document.getElementById('process-source-form');
-        if (processSourceForm !== null) {
-            const position = event.currentTarget.getBoundingClientRect();
-            processSourceForm.style.top = `${position.bottom}px`;
-            processSourceForm.style.left = `${position.right}px`;
-            setIsProcessSourceFormHidden((prev) => !prev);
-            setIsPopUpActive(prev => !prev);
-        }
+    function toggleCreateSourceForm() {
+        setIsSourceCreateFormHidden(prev => !prev);
+        setIsPopUpActive(prev => !prev);
     }
 
-    function toggleCreateExerciseSetForm(
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) {
-        const createExerciseSetForm = document.getElementById('create-exercise-set-form');
-        if (createExerciseSetForm !== null) {
-            const position = event.currentTarget.getBoundingClientRect();
-            createExerciseSetForm.style.top = `${position.bottom}px`;
-            createExerciseSetForm.style.left = `${position.right}px`;
-            setIsCreateExerciseSetFormHidden((prev) => !prev);
-            setIsPopUpActive(prev => !prev);
-        }
+    function toggleProcessSourceForm() {
+        setIsProcessSourceFormHidden((prev) => !prev);
+        setIsPopUpActive(prev => !prev);
     }
 
-    function toggleDeleteApproval(
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) {
-        const createExerciseSetForm = document.getElementById('source-delete-approval');
-        if (createExerciseSetForm !== null) {
-            const position = event.currentTarget.getBoundingClientRect();
-            createExerciseSetForm.style.top = `${position.bottom}px`;
-            createExerciseSetForm.style.left = `${position.right}px`;
-            setIsDeleteApprovalHidden((prev) => !prev);
-            setIsPopUpActive(prev => !prev);
-        }
+    function toggleCreateExerciseSetForm() {
+        setIsCreateExerciseSetFormHidden((prev) => !prev);
+        setIsPopUpActive(prev => !prev);
+    }
+
+    function toggleDeleteApproval() {
+        setIsDeleteApprovalHidden((prev) => !prev);
+        setIsPopUpActive(prev => !prev);
     }
 
     async function fetchSources() {
@@ -90,24 +73,7 @@ export function SourcesPage({ className }: { className?: string }) {
         fetchSources();
     }, []);
 
-    function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const file = event.target.files?.[0];
-        if (file) {
-            setFile(file);
-        }
-    }
-
-    async function uploadSource(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        const formData = new FormData();
-        if (file) {
-            formData.append('file', file);
-            const response = await sourceService.create(formData);
-            alert(response.message);
-        }
-        fetchSources();
-    }
-
-    async function deleteSource(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    async function deleteSource() {
         const response = await sourceService.deleteById(actionMenuSourceId);
         alert(response.message);
         fetchSources();
@@ -130,26 +96,17 @@ export function SourcesPage({ className }: { className?: string }) {
 
             <div // main
                 className={`absolute w-full h-auto p-4
-                grid grid-cols-3 gap-8`}
+                grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8`}
             >
                 <div
-                    className="w-full h-auto col-span-3
-                    flex flex-col justify-center items-center p-4 gap-2"
+                    className="relative w-full h-auto p-4 col-span-1 sm:col-span-2 lg:col-span-3
+                    flex flex justify-center items-center gap-2"
                 >
                     <p className='text-2xl font-bold'>Sources</p>
-                    <div
-                        className="w-[400px] h-auto
-                        flex justify-center items-center gap-2"
-                    >
-                        <input
-                            onChange={(event) => handleOnChange(event)}
-                            type="file"
-                            className="w-[200px] border rounded-full p-1 cursor-pointer
-                            text-xs
-                            hover:bg-gray-100"
-                        />
-                        <BlackButton onClick={uploadSource}>Upload</BlackButton>
-                </div>
+                    <BlackButton 
+                        onClick={toggleCreateSourceForm}
+                        className='absolute right-4'
+                    >new Source</BlackButton>
                 </div>
                 {sources.length === 0 ? (
                         <LoadingPage />
@@ -168,6 +125,11 @@ export function SourcesPage({ className }: { className?: string }) {
             <BodyPopUp
                 isPopUpActive={isPopUpActive}
                 components={[
+                    <SourceCreateForm 
+                        isHidden={isSourceCreateFormHidden}
+                        toggle={toggleCreateSourceForm}
+                        fetchSources={fetchSources}
+                    />,
                     <ProcessSourceForm 
                         isHidden={isProcessSourceFormHidden}
                         toggleProcessSourceForm={toggleProcessSourceForm}
@@ -179,7 +141,6 @@ export function SourcesPage({ className }: { className?: string }) {
                         toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
                     />,
                     <DeleteApproval
-                        id='source-delete-approval'
                         isHidden={isDeleteApproavelHidden}
                         toggle={toggleDeleteApproval}
                         onDelete={deleteSource}

@@ -29,13 +29,11 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
     }
 
     return (
-        <div id="process-source-form"
-            className={`${isHidden && 'hidden'} border px-2 py-4 bg-white rounded-[10px]
+        <div
+            className={`${isHidden && 'hidden'} w-auto h-auto relative border px-2 py-4 bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
-            <div className="w-full flex justify-end items-center">
-                <ClaretButton onClick={event => toggleProcessSourceForm(event)}>X</ClaretButton>
-            </div>
+            <ClaretButton className="absolute top-1 right-1" onClick={event => toggleProcessSourceForm(event)}>X</ClaretButton>
             <div className="flex justify-start items-center gap-2">
                 <p>title: </p>
                 <input

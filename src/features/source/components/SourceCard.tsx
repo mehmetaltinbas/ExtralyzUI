@@ -37,7 +37,9 @@ export function SourceCard({
                 <div className='w-[250px] h-full px-2
                     flex flex-col justify-center items-center'
                 >
-                    <p className='font-serif font-semibold truncate'>{source.title ? source.title : source._id}</p>
+                    <p className='max-w-[200px] font-serif font-semibold truncate' title={source.title ? source.title : source._id}>
+                        {source.title ? source.title : source._id}
+                    </p>
                     <p className='text-xs'>{source.type}</p>
                 </div>
                 <div className='w-[50px] h-full
@@ -47,7 +49,7 @@ export function SourceCard({
                 </div>
             </div>
             <div className="w-full h-full p-2 flex-1 overflow-y-auto">
-                <p>{source.rawText}</p>
+                <div dangerouslySetInnerHTML={{ __html: source?.rawText}}></div>
             </div>
         </div>
     );

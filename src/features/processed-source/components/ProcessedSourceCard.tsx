@@ -56,7 +56,9 @@ export function ProcessedSourceCard({
                 <div className='w-[250px] h-full px-2
                     flex flex-col justify-center items-center'
                 >
-                    <p className='font-serif font-semibold truncate'>{processedSource.title ? processedSource.title : processedSource._id}</p>
+                    <p className='max-w-[200px] font-serif font-semibold truncate' title={processedSource.title ? processedSource.title : processedSource._id}>
+                        {processedSource.title ? processedSource.title : processedSource._id}
+                    </p>
                 </div>
                 <div className='w-[50px] h-full
                     flex justify-center items-center'
