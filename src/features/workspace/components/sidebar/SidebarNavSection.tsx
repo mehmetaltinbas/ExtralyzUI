@@ -1,6 +1,6 @@
 import type React from 'react';
 import type { Section } from '../../enums/sections.enum';
-import { useAppDispatch } from '../../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import type { Source } from '../../../source/types/source.iterface';
 import type { ProcessedSource } from '../../../processed-source/types/processed-source.interface';
 import type { ExerciseSet } from '../../../exercise-set/types/exercise-set.interface';
@@ -14,6 +14,7 @@ export function SidebarNavSection({
     items: Source[] | ProcessedSource[] | ExerciseSet[];
 }) {
     const dispatch = useAppDispatch();
+    const sidebar = useAppSelector(state => state.sidebar);
 
     function onDragStart(event: React.DragEvent<HTMLButtonElement>) {
         const datasetElement = event.currentTarget.dataset.element;
@@ -25,27 +26,31 @@ export function SidebarNavSection({
 
     return (
         <div
-            className="w-full h-auto
-            flex flex-col justify-start items-start gap-1"
+            className={`w-[${sidebar.width - 30}px] h-auto
+            flex flex-col justify-start items-start gap-1`}
         >
             <div
                 className="w-full h-auto
                 flex justify-start items-center gap-2"
             >
                 <button>⌄</button>
-                <button
-                    draggable="true"
-                    onDragStart={(event) => onDragStart(event)}
-                    data-section={section}
-                    onClick={(event) => openTab(dispatch, { section })}
-                    className="cursor-pointer"
-                >
-                    {section}
-                </button>
+                <div className='w-full h-auto flex flex-col justify-center items-start gap-1'>
+                    <button
+                        draggable="true"
+                        onDragStart={(event) => onDragStart(event)}
+                        data-section={section}
+                        onClick={(event) => openTab(dispatch, { section })}
+                        className="w-auto h-auto cursor-pointer border border-1 border-transparent px-[8px] py-[1px] rounded-full
+                            hover:border-black font-serif font-semibold"
+                    >
+                        {section}
+                    </button>
+                    <span className='w-full h-[1px] bg-black'></span>
+                </div>
             </div>
             <div
-                className="w-full h-auto pl-8
-                flex flex-col justify-start items-start gap-[2px]"
+                className={`w-full h-auto pl-8
+                flex flex-col justify-start items-start gap-[2px]`}
             >
                 {items?.map((item) => (
                     <button
@@ -55,7 +60,8 @@ export function SidebarNavSection({
                         onClick={(event) =>
                             openTab(dispatch, { section: section.slice(0, -1), id: item._id, title: item.title })
                         }
-                        className="cursor-pointer"
+                        className={`max-w-[${sidebar.width - 62}px] cursor-pointer truncate border border-1 border-transparent px-[8px] py-[1px] rounded-full
+                            hover:border-black`}
                     >
                         {item.title === '' || item.title === undefined ? item._id : item.title}
                     </button>

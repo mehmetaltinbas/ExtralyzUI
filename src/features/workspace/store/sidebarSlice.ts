@@ -1,5 +1,4 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../../../store/store';
 
 interface SidebarState {
     isOpen: boolean;
@@ -23,6 +22,20 @@ const sidebarSlice = createSlice({
             state.isOpen = false;
             state.width = 50;
         },
+        resize: (state, action: PayloadAction<number>) => {
+            const payload = action.payload;
+            if (payload > 200 && payload < 400) {
+                state.width = payload;
+            } else if (payload < 200) {
+                if (payload < state.width && payload < 150) {
+                    state.isOpen = false;
+                    state.width = 50;
+                } else if (payload > state.width && payload > 150) {
+                    state.isOpen = true;
+                    state.width = 200;
+                }
+            }
+        }
     },
 });
 
