@@ -11,8 +11,8 @@ export function TrueFalseExerciseEvaluationCard({ exercise, evaluation, index }:
 
     return (
         <div className="flex flex-col justify-center items-center gap-1">
-            <p><span className="font-serif">Your answer</span>: <span className="text-gray-300">{userAnswer}</span></p>
-            <p><span className="font-serif">Correct answer</span>: <span className="text-green-900">${correctAnswer}</span></p>
+            <p><span className="font-serif">Your answer</span>: <span className="text-gray-600">{userAnswer}</span></p>
+            <p><span className="font-serif">Correct answer</span>: <span className="text-green-900">{correctAnswer}</span></p>
             <p><span className="font-serif">Feedback</span>: {evaluation.feedback}</p>
             <p><span className="font-serif">Sub-score</span>: {evaluation.score}</p>
         </div>

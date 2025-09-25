@@ -8,9 +8,8 @@ import { SourceActionMenu } from 'src/features/source/components/SourceActionMen
 import { CreateExerciseSetForm } from 'src/features/exercise-set/components/CreateExerciseSetForm';
 import { ProcessSourceForm } from 'src/features/processed-source/components/ProcessSourceForm';
 import { useAppSelector } from 'src/store/hooks';
-import { BodyOverlay } from 'src/shared/components/BodyOverlay';
 import { DeleteApproval } from 'src/shared/components/DeleteApproval';
-import { BodyPopUp } from 'src/shared/components/BodyPopUp';
+import { BodyModal } from 'src/shared/components/BodyModal';
 import { SourceCreateForm } from 'src/features/source/components/SourceCreateForm';
 
 export function SourcesPage({ className }: { className?: string }) {
@@ -121,8 +120,7 @@ export function SourcesPage({ className }: { className?: string }) {
                 )}
             </div>
 
-            <BodyOverlay isPopUpActive={isPopUpActive} />
-            <BodyPopUp
+            <BodyModal
                 isPopUpActive={isPopUpActive}
                 components={[
                     <SourceCreateForm 

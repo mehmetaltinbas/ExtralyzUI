@@ -7,9 +7,8 @@ import { LoadingPage } from 'src/shared/pages/LoadingPage';
 import { ProcessedSourceActionMenu } from 'src/features/processed-source/components/ProcessedSourceActionMenu';
 import { CreateExerciseSetForm } from 'src/features/exercise-set/components/CreateExerciseSetForm';
 import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
-import { BodyOverlay } from 'src/shared/components/BodyOverlay';
 import { DeleteApproval } from 'src/shared/components/DeleteApproval';
-import { BodyPopUp } from 'src/shared/components/BodyPopUp';
+import { BodyModal } from 'src/shared/components/BodyModal';
 
 export function ProcessedSourcesPage({ className }: { className?: string }) {
     const [processedSources, setProcessedSources] = useState<ProcessedSource[]>([]);
@@ -99,8 +98,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                 )}
             </div>
 
-            <BodyOverlay isPopUpActive={isPopUpActive} />
-            <BodyPopUp
+            <BodyModal
                 isPopUpActive={isPopUpActive}
                 components={[
                     <CreateExerciseSetForm
@@ -114,7 +112,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                         onDelete={deleteProcessedSource}
                     />
                 ]}
-            ></BodyPopUp>
+            ></BodyModal>
 
         </div>
     );

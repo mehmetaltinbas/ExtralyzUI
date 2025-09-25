@@ -7,7 +7,7 @@ export function ExerciseSetEvaluationPage({ exercises, evaluation }: {
     evaluation: EvaluateAnswersResponse;
 }) {
     return (
-        <div className="flex flex-col justify-start items-center gap-4">
+        <div className="flex flex-col justify-start items-center gap-4 p-4">
             <p className="font-serif font-bold text-lg">Overall Score: {evaluation?.overallScore}</p>
             {evaluation.exerciseAnswerEvaluationResults.map((element, index) => {
                 const matchingExercise = exercises.find(exercise => exercise._id === element.exerciseId);
