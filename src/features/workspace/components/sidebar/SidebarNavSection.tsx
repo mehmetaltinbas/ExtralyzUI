@@ -1,10 +1,12 @@
 import type React from 'react';
-import type { Section } from '../../enums/sections.enum';
+
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import type { Source } from '../../../source/types/source.iterface';
 import type { ProcessedSource } from '../../../processed-source/types/processed-source.interface';
 import type { ExerciseSet } from '../../../exercise-set/types/exercise-set.interface';
 import { openTab } from 'src/features/workspace/features/tabs/utilities/openTab.utility';
+import type { TabsStateElement } from 'src/features/workspace/features/tabs/store/tabsSlice';
+import { Section } from 'src/features/workspace/enums/sections.enum';
 
 export function SidebarNavSection({
     section,
@@ -17,8 +19,8 @@ export function SidebarNavSection({
     const sidebar = useAppSelector(state => state.sidebar);
 
     function onDragStart(event: React.DragEvent<HTMLButtonElement>) {
-        const datasetElement = event.currentTarget.dataset.element;
-        const element = datasetElement ? JSON.parse(datasetElement) : undefined;
+        const datasetElement = event.currentTarget.dataset.tabElement;
+        const element = datasetElement ? JSON.parse(datasetElement) as TabsStateElement : undefined;
         if (element) {
             event.dataTransfer.setData('text/plain', JSON.stringify(element));
         }
@@ -38,7 +40,7 @@ export function SidebarNavSection({
                     <button
                         draggable="true"
                         onDragStart={(event) => onDragStart(event)}
-                        data-section={section}
+                        data-tab-element={JSON.stringify({ section: section,  })}
                         onClick={(event) => openTab(dispatch, { section })}
                         className="w-auto h-auto cursor-pointer border border-1 border-transparent px-[8px] py-[1px] rounded-full
                             font-serif font-semibold
@@ -58,6 +60,7 @@ export function SidebarNavSection({
                         key={item._id}
                         draggable="true"
                         onDragStart={(event) => onDragStart(event)}
+                        data-tab-element={JSON.stringify({ tabTitle: item.title === '' || item.title === undefined ? item._id : item.title, section: section.slice(0, -1), id: item._id, title: item.title })}
                         onClick={(event) =>
                             openTab(dispatch, { section: section.slice(0, -1), id: item._id, title: item.title })
                         }

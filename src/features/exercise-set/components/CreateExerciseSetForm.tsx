@@ -8,12 +8,12 @@ import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 
 export function CreateExerciseSetForm({
     isHidden,
+    toggle,
     sourceId,
-    toggleCreateExerciseSetForm
 }: {
     isHidden: boolean;
+    toggle: () => void;
     sourceId: string;
-    toggleCreateExerciseSetForm: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) {
     const [createExerciseSetDto, setCreateExerciseSetDto] = useState<CreateExerciseSetDto>({
         count: 5,
@@ -27,7 +27,7 @@ export function CreateExerciseSetForm({
             type: '',
             difficulty: '',
         });
-    }, [sourceId]);
+    }, [isHidden]);
 
     async function createExerciseSet() {
         const response = await exerciseSetService.create(sourceId, createExerciseSetDto);
@@ -40,7 +40,7 @@ export function CreateExerciseSetForm({
             flex flex-col justify-center items-center gap-2`}
         >
             <div className="absolute top-1 right-1 w-full flex justify-end items-center">
-                <ClaretButton onClick={event => toggleCreateExerciseSetForm(event)}>X</ClaretButton>
+                <ClaretButton onClick={event => toggle()}>X</ClaretButton>
             </div>
             <div className="flex justify-start items-center gap-2">
                 <p>count: </p>
@@ -68,7 +68,7 @@ export function CreateExerciseSetForm({
                     }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
-                    <option value="">Select type</option>
+                    <option value="">select</option>
                     <option value={ExerciseType.MCQ}>Multiple Choice</option>
                     <option value={ExerciseType.TRUE_FALSE}>True False</option>
                     <option value={ExerciseType.OPEN_ENDED}>Open Ended</option>
@@ -87,13 +87,16 @@ export function CreateExerciseSetForm({
                     }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
-                    <option value="">Select difficulty</option>
+                    <option value="">select</option>
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
             </div>
-            <BlackButton onClick={createExerciseSet}>Generate</BlackButton>
+            <BlackButton onClick={async (event) => { 
+                await createExerciseSet(); 
+                toggle(); 
+            }}>Generate</BlackButton>
         </div>
     );
 }

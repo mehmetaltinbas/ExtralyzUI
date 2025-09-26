@@ -106,7 +106,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                     <CreateExerciseSetForm
                         isHidden={isCreateExerciseSetFormHidden} 
                         sourceId={actionMenuSourceId}
-                        toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
+                        toggle={toggleCreateExerciseSetForm}
                     />,
                     <DeleteApproval 
                         isHidden={isDeleteApproavelHidden}

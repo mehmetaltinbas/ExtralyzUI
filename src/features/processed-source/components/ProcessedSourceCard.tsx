@@ -29,12 +29,12 @@ export function ProcessedSourceCard({
         if (datasetElement) {
             const element = JSON.parse(datasetElement) as TabsStateElement;
             dispatch(
-                tabsActions.addByIndex({
+                tabsActions.add({
                     element: { section, id: element.id, title: element.title },
                 })
             );
         } else if (!datasetElement) {
-            dispatch(tabsActions.addByIndex({ element: { section } }));
+            dispatch(tabsActions.add({ element: { section } }));
         }
     }
 

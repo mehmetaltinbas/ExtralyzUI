@@ -132,13 +132,13 @@ export function SourcesPage({ className }: { className?: string }) {
                     />,
                     <ProcessSourceForm 
                         isHidden={isProcessSourceFormHidden}
-                        toggleProcessSourceForm={toggleProcessSourceForm}
+                        toggle={toggleProcessSourceForm}
                         sourceId={actionMenuSourceId}
                     />,
                     <CreateExerciseSetForm 
                         isHidden={isCreateExerciseSetFormHidden} 
+                        toggle={toggleCreateExerciseSetForm}
                         sourceId={actionMenuSourceId}
-                        toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
                     />,
                     <DeleteApproval
                         isHidden={isDeleteApproavelHidden}

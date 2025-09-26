@@ -77,17 +77,17 @@ export function WorkspaceBody() {
             className={`relative z-0 w-[${layoutDimensions.mainColumn.width}px] h-[${layoutDimensions.mainColumn.height ? `${layoutDimensions.mainColumn.height * 0.9}px` : '90%'}] overflow-y-auto p-4
             flex-1 flex justify-center items-center`}
         >
-            {tabs.elements?.map((element, index) => {
+            {tabs.elements?.map((element) => {
                 const Component = componentsMap.get(element.section);
                 let builtProps;
                 let isActiveComponent: boolean = false;
-                if (index === tabs.activeTabIndex) isActiveComponent = true;
+                if (element.index === tabs.activeTabIndex) isActiveComponent = true;
                 if (element.tabTitle) builtProps = builtPropsRecord[element.tabTitle];
                 builtProps = {
                     ...builtProps,
                     className: `${isActiveComponent ? 'block' : 'hidden'}`,
                 };
-                return Component ? <Component key={index} {...builtProps} /> : null;
+                return Component ? <Component key={element.tabTitle} {...builtProps} /> : null;
             })}
         </div>
     );

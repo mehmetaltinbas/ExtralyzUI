@@ -1,26 +1,15 @@
 import type React from "react";
-import { useState } from "react";
-import type { CreateExerciseSetDto } from "src/features/exercise-set/types/dto/create-exercise-set.dto";
-import { sourceService } from "src/features/source/services/source.service";
-import type { Source } from "src/features/source/types/source.iterface";
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
 import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
-import { useAppSelector } from "src/store/hooks";
 
 export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources, toggleCreateExerciseSetForm, toggleProcessSourceForm, toggleDeleteApproval }: {
     isHidden: boolean;
     setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
     sourceId?: string;
     fetchSources: () => void;
-    toggleCreateExerciseSetForm: (
-            event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-        ) => void;
-    toggleProcessSourceForm: (
-            event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-        ) => void;
-    toggleDeleteApproval: (
-            event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-        ) => void;
+    toggleCreateExerciseSetForm: () => void;
+    toggleProcessSourceForm: () => void;
+    toggleDeleteApproval: () => void;
 }) {
 
     return (
@@ -34,7 +23,7 @@ export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources
                 <BlackButton
                     onClick={event => {
                         event.stopPropagation();
-                        toggleProcessSourceForm(event);
+                        toggleProcessSourceForm();
                         setIsHidden(prev => !prev);
                     }}
                 >
@@ -43,7 +32,7 @@ export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources
                 <BlackButton
                     onClick={(event) => {
                         event.stopPropagation();
-                        toggleCreateExerciseSetForm(event);
+                        toggleCreateExerciseSetForm();
                         setIsHidden(prev => !prev);
                     }}
                     className="text-xs"
@@ -53,7 +42,7 @@ export function SourceActionMenu({ isHidden, setIsHidden, sourceId, fetchSources
                 <ClaretButton
                     onClick={(event) => {
                         event.stopPropagation();
-                        toggleDeleteApproval(event);
+                        toggleDeleteApproval();
                         setIsHidden(prev => !prev);
                     }}
                 >

@@ -6,7 +6,7 @@ import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
 
 export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
     isHidden: boolean;
-    toggle: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    toggle: () => void;
     fetchSources: () => Promise<void>;
 }) {
     const [uploadedFile, setUploadedFile] = useState<File>();
@@ -51,7 +51,7 @@ export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
             className={`${isHidden && 'hidden'} w-[400px] h-auto relative border px-2 py-4 bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
-            <ClaretButton className="absolute top-1 right-1" onClick={event => toggle(event)}>X</ClaretButton>
+            <ClaretButton className="absolute top-1 right-1" onClick={event => toggle()}>X</ClaretButton>
             <div className="flex justify-start items-center gap-2">
                 <p>file: </p>
                 <input
@@ -79,9 +79,9 @@ export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
                     className="px-2 py-[2px] border rounded-full"
                 />
             </div>
-            <BlackButton onClick={event => {
-                createSource();
-                toggle(event);
+            <BlackButton onClick={async (event) => {
+                await createSource();
+                toggle();
             }
             }>Create</BlackButton>
         </div>

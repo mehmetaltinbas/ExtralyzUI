@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export interface TabsStateElement {
+    index?: number;
     tabTitle?: string;
     section: string;
     id?: string;
@@ -22,59 +23,73 @@ const tabsSlice = createSlice({
     name: 'tabs',
     initialState,
     reducers: {
-        addByIndex: (
+        add: (
             state,
-            action: PayloadAction<{ element: TabsStateElement; index?: number }>
+            action: PayloadAction<{ element: TabsStateElement; newIndex?: number }>
         ) => {
-            const payload = action.payload;
-            payload.element.tabTitle = payload.element.mode && payload.element.mode.length > 0 ? `${payload.element.mode}: ` : '';
-            payload.element.tabTitle +=
-                (payload.element.title && payload.element.title.length > 0) ||
-                (payload.element.id && payload.element.id.length > 0)
-                    ? (payload.element.title && payload.element.title.length > 0
-                        ? payload.element.title
-                        : payload.element.id)
-                    : payload.element.section;
+            const payload = { element: { ...action.payload.element }, newIndex: action.payload.newIndex};
+
+            if (!payload.element.tabTitle || payload.element.tabTitle.length === 0) { // giving a tabTitle if not existed in payload
+                payload.element.tabTitle = payload.element.mode && payload.element.mode.length > 0 ? `${payload.element.mode}: ` : '';
+                payload.element.tabTitle +=
+                    (payload.element.title && payload.element.title.length > 0) ||
+                    (payload.element.id && payload.element.id.length > 0)
+                        ? (payload.element.title && payload.element.title.length > 0
+                            ? payload.element.title
+                            : payload.element.id)
+                        : payload.element.section;
+            }
+
             if (
                 !state.elements.some(
                     (element) => element.tabTitle === payload.element.tabTitle
                 )
             ) {
-                // if tabTitle exists
-                if (payload.index) {
-                    // if index is given
-                    state.elements.splice(payload.index, 0, payload.element);
-                    state.activeTabIndex = payload.index;
+                // if tabTitle doesn't match in one of state.elements array's elements'
+                if (payload.newIndex || payload.newIndex === 0) {
+                    // if newIndex is given
+                    payload.element.index = payload.newIndex;
+                    state.elements.splice(payload.newIndex, 0, payload.element);
+                    for (let i = payload.newIndex + 1; i < state.elements.length; i++) {
+                        state.elements[i].index!++;
+                    }
+                    state.activeTabIndex = payload.newIndex;
                 } else {
-                    // if index isn't given
+                    // if newIndex isn't given
+                    payload.element.index = state.elements.length;
                     state.elements.push(payload.element);
                     state.activeTabIndex = state.elements.length - 1;
                 }
-            } else {
-                // if tabTitle doesn't exist
-                if (payload.index || payload.index === 0) {
-                    // if index is given
-                    const prevIndex = state.elements.findIndex(
-                        (element) => element.tabTitle === payload.element.tabTitle
-                    );
-                    if (prevIndex !== payload.index) {
-                        const temporaryElement = state.elements[prevIndex];
+            } else if (state.elements.some((element) => element.tabTitle === payload.element.tabTitle)) {
+                // if tabTitle match in one of state.elements array's elements'
+                if (payload.newIndex || payload.newIndex === 0) {
+                    // if newIndex is given
+                    const prevIndex = payload.element.index!;
+                    if (prevIndex !== payload.newIndex) {
                         state.elements.splice(prevIndex, 1);
-                        state.elements.splice(payload.index, 0, temporaryElement);
+                        for (let i = prevIndex; i < state.elements.length; i++) {
+                            state.elements[i].index!--;
+                        }
+                        payload.element.index = payload.newIndex;
+                        state.elements.splice(payload.newIndex, 0, payload.element);
+                        for (let i = payload.newIndex + 1; i < state.elements.length; i++) {
+                            state.elements[i].index!++;
+                        }
                     }
-                    state.activeTabIndex = payload.index;
+                    state.activeTabIndex = payload.newIndex;
                 } else {
-                    // if index isn't given
-                    const currentIndex = state.elements.findIndex(
-                        (element) => element.tabTitle === payload.element.tabTitle
-                    );
-                    state.activeTabIndex = currentIndex;
+                    // if newIndex isn't given
+                    const currentElement = state.elements.find((element) => element.tabTitle === payload.element.tabTitle)!;
+                    state.activeTabIndex = currentElement.index!;
                 }
             }
         },
         subtract: (state, action: PayloadAction<number>) => {
-            const payload = action.payload;
-            state.elements = state.elements.filter((element, index) => index !== payload);
+            const deletedIndex = action.payload;
+            state.elements = state.elements.filter((element, index) => index !== deletedIndex);
+            for (let i = deletedIndex; i < state.elements.length; i++) {
+                state.elements[i].index!--;
+            }
         },
         changePosition: (state, action: PayloadAction<number>) => {},
         setActiveTabIndex: (state, action: PayloadAction<number>) => {

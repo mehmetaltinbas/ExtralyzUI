@@ -1,11 +1,10 @@
-import type React from "react";
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
 import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
 
 export function DeleteApproval({ isHidden, toggle, onDelete }: {
     isHidden: boolean;
-    toggle: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    onDelete: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    toggle: () => void;
+    onDelete: () => Promise<void>;
 }) {
     return (
         <div
@@ -16,15 +15,15 @@ export function DeleteApproval({ isHidden, toggle, onDelete }: {
             <div className="flex justify-center items-center gap-2">
                 <BlackButton 
                     onClick={event => {
-                        toggle(event);
+                        toggle();
                     }}
                 >
                     Cancel
                 </BlackButton>
                 <ClaretButton 
-                    onClick={event => { 
-                        toggle(event);
-                        onDelete(event);
+                    onClick={async (event) => { 
+                        await onDelete();
+                        toggle();
                 }}
                 >
                     Delete

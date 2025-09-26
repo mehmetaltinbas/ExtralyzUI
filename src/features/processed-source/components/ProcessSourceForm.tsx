@@ -9,9 +9,9 @@ import type { CreateProcessedSourceDto } from "src/features/processed-source/typ
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
 import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
 
-export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId }: {
+export function ProcessSourceForm({ isHidden, toggle, sourceId }: {
     isHidden: boolean;
-    toggleProcessSourceForm: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    toggle: () => void;
     sourceId: string;
 }) {
     const [createProcessedSourceDto, setCreateProcessedSourceDto] = useState<CreateProcessedSourceDto>({
@@ -23,6 +23,17 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
         length: 'medium',
     });
 
+    useEffect(() => {
+        setCreateProcessedSourceDto({
+        title: '',
+        tone: 'formal',
+        style: 'narrative',
+        perspective: 'firstPerson',
+        comprehensionLevel: 'intermediate',
+        length: 'medium',
+    });
+    }, [isHidden]);
+
     async function processSource() {
         const response = await processedSourceService.createBySourceId(sourceId, createProcessedSourceDto);
         alert(response.message);
@@ -33,7 +44,7 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
             className={`${isHidden && 'hidden'} w-auto h-auto relative border px-2 py-4 bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
-            <ClaretButton className="absolute top-1 right-1" onClick={event => toggleProcessSourceForm(event)}>X</ClaretButton>
+            <ClaretButton className="absolute top-1 right-1" onClick={event => toggle()}>X</ClaretButton>
             <div className="flex justify-start items-center gap-2">
                 <p>title: </p>
                 <input
@@ -62,6 +73,7 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
                     }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
+                    <option value="">select</option>
                     <option value={ProcessedSourceTone.FORMAL}>Formal</option>
                     <option value={ProcessedSourceTone.CASUAL}>Casual</option>
                     <option value={ProcessedSourceTone.FRIENDLY}>Friendly</option>
@@ -72,7 +84,7 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
             <div className="flex justify-start items-center gap-2">
                 <p>style: </p>
                 <select
-                    value={createProcessedSourceDto?.tone}
+                    value={createProcessedSourceDto?.style}
                     onChange={(e) =>
                         setCreateProcessedSourceDto({
                             ...createProcessedSourceDto,
@@ -81,6 +93,7 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
                     }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
+                    <option value="">select</option>
                     <option value={ProcessedSourceStyle.NARRATIVE}>Narrative</option>
                     <option value={ProcessedSourceStyle.TECHNICAL}>Technical</option>
                     <option value={ProcessedSourceStyle.EXPLANATORY}>Explanatory</option>
@@ -90,15 +103,17 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
             <div className="flex justify-start items-center gap-2">
                 <p>perspective: </p>
                 <select
-                    value={createProcessedSourceDto?.tone}
-                    onChange={(e) =>
+                    value={createProcessedSourceDto?.perspective}
+                    onChange={(e) => {
                         setCreateProcessedSourceDto({
                             ...createProcessedSourceDto,
                             perspective: e.target.value,
-                        })
+                        });
+                    }
                     }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
+                    <option value="">select</option>
                     <option value={ProcessedSourcePerspective.FIRST_PERSON}>First person</option>
                     <option value={ProcessedSourcePerspective.SECOND_PERSON}>Second person</option>
                     <option value={ProcessedSourcePerspective.THIRD_PERSON}>Third person</option>
@@ -107,7 +122,7 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
             <div className="flex justify-start items-center gap-2">
                 <p>comprehensionLevel: </p>
                 <select
-                    value={createProcessedSourceDto?.tone}
+                    value={createProcessedSourceDto?.comprehensionLevel}
                     onChange={(e) =>
                         setCreateProcessedSourceDto({
                             ...createProcessedSourceDto,
@@ -116,6 +131,7 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
                     }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
+                    <option value="">select</option>
                     <option value={ProcessedSourceComprehensionLevel.BASIC}>Basic</option>
                     <option value={ProcessedSourceComprehensionLevel.INTERMEDIATE}>Intermediate</option>
                     <option value={ProcessedSourceComprehensionLevel.ADVANCED}>Advanced</option>
@@ -124,7 +140,7 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
             <div className="flex justify-start items-center gap-2">
                 <p>length: </p>
                 <select
-                    value={createProcessedSourceDto?.tone}
+                    value={createProcessedSourceDto?.length}
                     onChange={(e) =>
                         setCreateProcessedSourceDto({
                             ...createProcessedSourceDto,
@@ -133,12 +149,16 @@ export function ProcessSourceForm({ isHidden, toggleProcessSourceForm, sourceId 
                     }
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
+                    <option value="">select</option>
                     <option value={ProcessedSourceLength.CONCISE}>Concise</option>
                     <option value={ProcessedSourceLength.MEDIUM}>Medium</option>
                     <option value={ProcessedSourceLength.DETAILED}>Detailed</option>
                 </select>
             </div>
-            <BlackButton onClick={event => { processSource(); toggleProcessSourceForm(event); }}>Process the Source</BlackButton>
+            <BlackButton onClick={async (event) => { 
+                await processSource(); 
+                toggle(); 
+            }}>Process the Source</BlackButton>
         </div>
     );
 }

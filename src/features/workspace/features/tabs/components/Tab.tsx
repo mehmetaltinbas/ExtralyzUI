@@ -5,12 +5,10 @@ import { tabsActions, type TabsStateElement } from '../store/tabsSlice';
 
 export function Tab({
     tab,
-    index,
     onDragOver,
     onDrop,
 }: {
     tab: TabsStateElement;
-    index: number;
     onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
     onDrop: (event: React.DragEvent<HTMLDivElement>) => void;
 }) {
@@ -18,21 +16,19 @@ export function Tab({
     const tabs = useAppSelector((state) => state.tabs);
 
     function onDragStart(event: React.DragEvent<HTMLDivElement>) {
-        const datasetElement = event.currentTarget.dataset.element;
+        const datasetElement = event.currentTarget.dataset.tabElement;
         const element = datasetElement ? JSON.parse(datasetElement) : undefined;
         if (element) {
             event.dataTransfer.setData('text/plain', JSON.stringify(element));
         }
     }
 
-    function displayTab(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        const index = Number(event.currentTarget.dataset.tabIndex);
-        dispatch(tabsActions.setActiveTabIndex(index));
+    function displayTab() {
+        dispatch(tabsActions.setActiveTabIndex(tab.index!));
     }
 
-    function deleteTab(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        const index = Number(event.currentTarget.dataset.tabIndex);
-        dispatch(tabsActions.subtract(index));
+    function deleteTab() {
+        dispatch(tabsActions.subtract(tab.index!));
     }
 
     return (
@@ -41,11 +37,9 @@ export function Tab({
             onDragStart={(event) => onDragStart(event)}
             onDragOver={(event) => onDragOver(event)}
             onDrop={(event) => onDrop(event)}
-            data-section={tab.section}
-            data-element={JSON.stringify(tab)}
-            data-tab-index={index}
-            onClick={(event) => displayTab(event)}
-            className={`max-w-[200px] h-full ${index === tabs.activeTabIndex ? 'bg-white' : ''} cursor-pointer p-2
+            data-tab-element={JSON.stringify(tab)}
+            onClick={displayTab}
+            className={`max-w-[200px] h-full ${tab.index === tabs.activeTabIndex ? 'bg-white' : ''} cursor-pointer p-2
             flex-shrink-0 flex justify-center items-center gap-[10px]
             hover:bg-white`}
         >
@@ -54,7 +48,6 @@ export function Tab({
             </div>
             <div className="w-[24px] flex justify-center items-center">
                 <ClaretButton 
-                    data-tab-index={index} 
                     onClick={deleteTab}
                     className='border-transparent !border-[1px] bg-transparent !text-black hover:border-[#a62637] !hover:text-white'
                 >

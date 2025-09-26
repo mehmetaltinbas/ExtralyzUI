@@ -8,10 +8,6 @@ export function TrueFalseExerciseCard({
     exercise: Exercise;
     isAnswersHidden: boolean;
 }) {
-    useEffect(() => {
-        console.log(exercise.choices);
-        console.log(exercise.correctChoiceIndex);
-    }, []);
 
     return (
         <div className="w-full h-full flex flex-col gap-2">
