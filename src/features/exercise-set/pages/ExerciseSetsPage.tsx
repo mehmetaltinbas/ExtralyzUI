@@ -65,7 +65,6 @@ export function ExerciseSetsPage({ className }: { className?: string }) {
         <div id='exercise-sets-page-container'
             className={`relative w-full h-full ${className ?? ''}`}
         >
-
             <ExerciseSetActionMenu
                 isHidden={isExerciseSetActionMenuHidden}
                 setIsHidden={setIsExerciseSetActionMenuHidden}

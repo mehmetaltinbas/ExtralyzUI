@@ -11,17 +11,6 @@ export function SignInPage() {
     });
     const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
 
-    function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const key = event.target.dataset.key as keyof SignInDto | undefined;
-        const value = event.target.value;
-        if (key) {
-            setSignInDto((prev) => ({
-                ...prev,
-                [key]: value,
-            }));
-        }
-    }
-
     async function handleSignInSubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const response = await authService.signIn(signInDto);
         setIsSignedIn(response.isSuccess);
@@ -31,24 +20,32 @@ export function SignInPage() {
         <Navigate to="/workspace" />
     ) : (
         <div className="h-[75%] flex flex-col justify-center items-center gap-2">
-            <p className="font-bold text-lg">Sign In</p>
+            <p className=" text-lg">Sign In</p>
             <input
-                data-key="userName"
-                onChange={(event) => handleOnChange(event)}
+                onChange={(event) => setSignInDto({
+                    ...signInDto,
+                    userName: event.target.value
+                })}
                 type="text"
                 value={signInDto.userName}
                 placeholder="username..."
                 className="p-2 border rounded-full"
             />
             <input
-                data-key="password"
-                onChange={(event) => handleOnChange(event)}
+                onChange={(event) => setSignInDto({
+                    ...signInDto,
+                    password: event.target.value
+                })}
                 value={signInDto.password}
                 type="password"
                 placeholder="password..."
                 className="p-2 border rounded-full"
             />
             <BlackButton onClick={handleSignInSubmit}>sign in</BlackButton>
+            <p>or</p>
+            <BlackButton
+                onClick={event => window.location.href = '/sign-up'}
+            >sign up</BlackButton>
         </div>
     );
 }

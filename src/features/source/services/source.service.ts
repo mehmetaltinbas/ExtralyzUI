@@ -12,11 +12,6 @@ async function create(formData: FormData): Promise<ResponseBase> {
     return response;
 }
 
-async function readAll(): Promise<ReadAllSourcesResponse> {
-    const response = (await axiosInstance.get(`${baseUrl}/read-all`)).data;
-    return response;
-}
-
 async function readById(id: string): Promise<ReadSingleSourceResponse> {
     const response = (
         await axiosInstance.get(`${baseUrl}/read-by-id/${id}`)
@@ -40,7 +35,6 @@ async function deleteById(id: string): Promise<ResponseBase> {
 
 export const sourceService = {
     create,
-    readAll,
     readById,
     readAllByUserId,
     deleteById,

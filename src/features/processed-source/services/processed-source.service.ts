@@ -13,11 +13,6 @@ async function createBySourceId(sourceId: string, createProcessedSourceDto: Crea
     return response;
 }
 
-async function readAll(): Promise<ReadAllProcessedSourcesResponse> {
-    const response = (await axiosInstance.get(`${baseUrl}/read-all`)).data;
-    return response;
-}
-
 async function readById(id: string): Promise<ReadSingleProcessedSourceResponse> {
     const response = (
         await axiosInstance.get(`${baseUrl}/read-by-id/${id}`)
@@ -41,7 +36,6 @@ async function deleteById(id: string): Promise<ResponseBase> {
 
 export const processedSourceService = {
     createBySourceId,
-    readAll,
     readById,
     readAllByUserId,
     deleteById,

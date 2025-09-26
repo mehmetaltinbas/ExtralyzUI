@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import rough from 'roughjs';
 import type { RoughCanvas } from 'roughjs/bin/canvas';
 
@@ -6,9 +6,11 @@ export function LoadingPage({ message }: {
     message?: string;
 }) {
     const roughCanvas = useRef<RoughCanvas>(null);
+    const canvasElement = useRef<HTMLCanvasElement>(null);
+    const [dotCount, setDotCount] = useState<number>(1);
 
     useEffect(() => {
-        const canvas = document.getElementById('loadingPageCanvas') as HTMLCanvasElement;
+        const canvas = canvasElement.current as HTMLCanvasElement;
         const ctx = canvas.getContext("2d");
         if (canvas) {
             roughCanvas.current = rough.canvas(canvas);
@@ -16,23 +18,26 @@ export function LoadingPage({ message }: {
         let interval: ReturnType<typeof setInterval>;
         if (roughCanvas.current) {
             let startAngle = 0;
-            let endAngle = Math.PI * 0.75;
+            const arcSize = Math.PI * 0.75;
             interval = setInterval(() => {
                 ctx!.clearRect(0, 0, canvas.width, canvas.height);
-                roughCanvas.current!.arc(25, 25, 35, 35, startAngle, endAngle, false);
+                const endAngle = startAngle + arcSize;
+                roughCanvas.current!.arc(25, 25, 30, 30, startAngle, endAngle, false);
                 startAngle += 0.2;
-                endAngle += 0.2;
-                console.log(`startAngle: ${startAngle}, endAngle: ${endAngle}`);
                 if (startAngle >= 2 * Math.PI) {
-                    startAngle = 0;
-                }
-                if (startAngle === 0 && endAngle >= 2 * Math.PI) {
-                    endAngle -= 2*Math.PI;
+                    startAngle -= 2 * Math.PI;
                 }
             }, 30);
         }
 
         return () => clearInterval(interval);
+    }, [canvasElement]);
+
+    useEffect(() => {
+        const textInterval = setInterval(() => {
+            setDotCount(prev => (prev % 3) + 1);
+        }, 1000);
+        return () => clearInterval(textInterval);
     }, []);
 
     return (
@@ -42,8 +47,8 @@ export function LoadingPage({ message }: {
             <div className="w-full h-[50%]
                 flex flex-col justify-center items-center"
             >
-                <canvas id="loadingPageCanvas" width='50' height='50' className=""></canvas>
-                <p>{message ? message : 'Loading...'}</p>
+                <canvas ref={canvasElement} width='50' height='50' className=""></canvas>
+                <p>{message ? message : `Loading${'.'.repeat(dotCount)}`}</p>
             </div>
         </div>
     );

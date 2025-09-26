@@ -26,14 +26,14 @@ export function SidebarNavSection({
 
     return (
         <div
-            className={`w-[${sidebar.width - 30}px] h-auto
+            className={`w-[${sidebar.width - 30}px] h-auto overflow-y-auto
             flex flex-col justify-start items-start gap-1`}
         >
             <div
                 className="w-full h-auto
                 flex justify-start items-center gap-2"
             >
-                <button>⌄</button>
+                {/* <button>⌄</button> */}
                 <div className='w-full h-auto flex flex-col justify-center items-start gap-1'>
                     <button
                         draggable="true"
@@ -41,7 +41,8 @@ export function SidebarNavSection({
                         data-section={section}
                         onClick={(event) => openTab(dispatch, { section })}
                         className="w-auto h-auto cursor-pointer border border-1 border-transparent px-[8px] py-[1px] rounded-full
-                            hover:border-black font-serif font-semibold"
+                            font-serif font-semibold
+                            hover:border-black hover:bg-white"
                     >
                         {section}
                     </button>
@@ -61,7 +62,7 @@ export function SidebarNavSection({
                             openTab(dispatch, { section: section.slice(0, -1), id: item._id, title: item.title })
                         }
                         className={`max-w-[${sidebar.width - 62}px] cursor-pointer truncate border border-1 border-transparent px-[8px] py-[1px] rounded-full
-                            hover:border-black`}
+                            hover:border-black hover:bg-white`}
                     >
                         {item.title === '' || item.title === undefined ? item._id : item.title}
                     </button>

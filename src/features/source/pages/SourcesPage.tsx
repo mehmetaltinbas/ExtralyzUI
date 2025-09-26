@@ -60,7 +60,7 @@ export function SourcesPage({ className }: { className?: string }) {
     }
 
     async function fetchSources() {
-        const response = await sourceService.readAll();
+        const response = await sourceService.readAllByUserId();
         if (response.isSuccess && response.sources) {
             setSources(response.sources);
         } else {
@@ -108,7 +108,9 @@ export function SourcesPage({ className }: { className?: string }) {
                     >new Source</BlackButton>
                 </div>
                 {sources.length === 0 ? (
+                    <div className='w-full h-full col-span-1 sm:col-span-2 lg:col-span-3'>
                         <LoadingPage />
+                    </div>
                 ) : (
                     sources.map((source) => (
                         <SourceCard

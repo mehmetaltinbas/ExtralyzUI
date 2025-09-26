@@ -20,7 +20,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
     const [isDeleteApproavelHidden, setIsDeleteApprovalHidden] = useState<boolean>(true);
 
     async function fetchProcessedSources() {
-        const response = await processedSourceService.readAll();
+        const response = await processedSourceService.readAllByUserId();
         if (response.isSuccess && response.processedSources) {
             setProcessedSources(response.processedSources);
         } else {
@@ -86,7 +86,9 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                     <p className='text-2xl font-bold'>Processed Sources</p>
                 </div>
                 {processedSources.length === 0 ? (
-                    <LoadingPage />
+                    <div className='col-span-1 sm:col-span-2 lg:col-span-3'>
+                        <LoadingPage />
+                    </div>
                 ) : (
                     processedSources.map((processedSources) => (
                         <ProcessedSourceCard
