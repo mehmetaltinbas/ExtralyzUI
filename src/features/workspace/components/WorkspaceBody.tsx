@@ -71,6 +71,10 @@ export function WorkspaceBody() {
         });
     }, [tabs.elements]);
 
+    useEffect(() => {
+        console.log(tabs.activeTabIndex);
+    }, [tabs.activeTabIndex]);
+
     return (
         <div
             ref={containerDiv}

@@ -2,6 +2,7 @@ import type React from 'react';
 import { ClaretButton } from '../../../../../shared/components/buttons/ClaretButton';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import { tabsActions, type TabsStateElement } from '../store/tabsSlice';
+import { useEffect } from 'react';
 
 export function Tab({
     tab,
@@ -27,7 +28,8 @@ export function Tab({
         dispatch(tabsActions.setActiveTabIndex(tab.index!));
     }
 
-    function deleteTab() {
+    function deleteTab(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        event.stopPropagation();
         dispatch(tabsActions.subtract(tab.index!));
     }
 
@@ -48,7 +50,7 @@ export function Tab({
             </div>
             <div className="w-[24px] flex justify-center items-center">
                 <ClaretButton 
-                    onClick={deleteTab}
+                    onClick={event => deleteTab(event)}
                     className='border-transparent !border-[1px] bg-transparent !text-black hover:border-[#a62637] !hover:text-white'
                 >
                     x
