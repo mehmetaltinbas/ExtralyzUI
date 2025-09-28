@@ -9,11 +9,22 @@ import type { CreateProcessedSourceDto } from "src/features/processed-source/typ
 import { BlackButton } from "src/shared/components/buttons/BlackButton";
 import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
 
-export function ProcessSourceForm({ isHidden, toggle, sourceId }: {
-    isHidden: boolean;
-    toggle: () => void;
-    sourceId: string;
-}) {
+export function ProcessSourceForm({ 
+        isHidden, 
+        setIsHidden,
+        setIsLoadingPageHidden,
+        setIsPopUpActive,
+        toggle, 
+        sourceId 
+    }: {
+        isHidden: boolean;
+        setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
+        setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
+        setIsPopUpActive: React.Dispatch<React.SetStateAction<boolean>>;
+        toggle: () => void;
+        sourceId: string;
+    }
+) {
     const [createProcessedSourceDto, setCreateProcessedSourceDto] = useState<CreateProcessedSourceDto>({
         title: '',
         tone: 'formal',
@@ -35,8 +46,12 @@ export function ProcessSourceForm({ isHidden, toggle, sourceId }: {
     }, [isHidden]);
 
     async function processSource() {
+        setIsHidden(true);
+        setIsLoadingPageHidden(false);
         const response = await processedSourceService.createBySourceId(sourceId, createProcessedSourceDto);
+        setIsLoadingPageHidden(true);
         alert(response.message);
+        setIsPopUpActive(false);
     }
 
     return (
@@ -156,8 +171,7 @@ export function ProcessSourceForm({ isHidden, toggle, sourceId }: {
                 </select>
             </div>
             <BlackButton onClick={async (event) => { 
-                await processSource(); 
-                toggle(); 
+                await processSource();
             }}>Process the Source</BlackButton>
         </div>
     );

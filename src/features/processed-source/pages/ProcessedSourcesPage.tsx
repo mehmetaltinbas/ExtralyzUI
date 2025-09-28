@@ -18,6 +18,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
     const [isCreateExerciseSetFormHidden, setIsCreateExerciseSetFormHidden] =
         useState<boolean>(true);
     const [isDeleteApproavelHidden, setIsDeleteApprovalHidden] = useState<boolean>(true);
+    const [isLoadingPageHidden, setIsLoadingPageHidden] = useState<boolean>(true);
 
     async function fetchProcessedSources() {
         const response = await processedSourceService.readAllByUserId();
@@ -56,10 +57,10 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
         setIsPopUpActive(prev => !prev);
     }
 
-    async function deleteProcessedSource() {
+    async function deleteProcessedSource(): Promise<string> {
         const response = await processedSourceService.deleteById(actionMenuSourceId);
-        alert(response.message);
         fetchProcessedSources();
+        return response.message;
     }
 
     return (
@@ -105,13 +106,22 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                 components={[
                     <CreateExerciseSetForm
                         isHidden={isCreateExerciseSetFormHidden} 
+                        setIsHidden={setIsCreateExerciseSetFormHidden}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
+                        setIsPopUpActive={setIsPopUpActive}
                         sourceId={actionMenuSourceId}
                         toggle={toggleCreateExerciseSetForm}
                     />,
                     <DeleteApproval 
                         isHidden={isDeleteApproavelHidden}
+                        setIsHidden={setIsDeleteApprovalHidden}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
+                        setIsPopUpActive={setIsPopUpActive}
                         toggle={toggleDeleteApproval}
                         onDelete={deleteProcessedSource}
+                    />,
+                    <LoadingPage
+                        isHidden={isLoadingPageHidden}
                     />
                 ]}
             ></BodyModal>

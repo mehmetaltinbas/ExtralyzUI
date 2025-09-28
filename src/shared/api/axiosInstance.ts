@@ -12,7 +12,6 @@ instance.interceptors.response.use(function (response) {
 }, function (error: AxiosError) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    alert(error.message);
     if (error.status === 401) {
         window.location.href = '/sign-in';
     } else if (error.status === 403) {

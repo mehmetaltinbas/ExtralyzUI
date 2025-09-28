@@ -8,12 +8,19 @@ import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 
 export function CreateExerciseSetForm({
     isHidden,
+    setIsHidden,
+    setIsPopUpActive,
     toggle,
     sourceId,
+    setIsLoadingPageHidden,
 }: {
     isHidden: boolean;
+    setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsPopUpActive: React.Dispatch<React.SetStateAction<boolean>>;
     toggle: () => void;
     sourceId: string;
+    setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
+
 }) {
     const [createExerciseSetDto, setCreateExerciseSetDto] = useState<CreateExerciseSetDto>({
         count: 5,
@@ -30,8 +37,12 @@ export function CreateExerciseSetForm({
     }, [isHidden]);
 
     async function createExerciseSet() {
+        setIsHidden(true);
+        setIsLoadingPageHidden(false);
         const response = await exerciseSetService.create(sourceId, createExerciseSetDto);
+        setIsLoadingPageHidden(true);
         alert(response.message);
+        setIsPopUpActive(false);
     }
 
     return (
@@ -94,8 +105,7 @@ export function CreateExerciseSetForm({
                 </select>
             </div>
             <BlackButton onClick={async (event) => { 
-                await createExerciseSet(); 
-                toggle(); 
+                await createExerciseSet();
             }}>Generate</BlackButton>
         </div>
     );

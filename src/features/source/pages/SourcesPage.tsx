@@ -24,6 +24,7 @@ export function SourcesPage({ className }: { className?: string }) {
     const [isProcessSourceFormHidden, setIsProcessSourceFormHidden] =
         useState<boolean>(true);
     const [isDeleteApproavelHidden, setIsDeleteApprovalHidden] = useState<boolean>(true);
+    const [isLoadingPageHidden, setIsLoadingPageHidden] = useState<boolean>(true);
 
     function toggleSourceActionMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, sourceId: string) {
         event.stopPropagation();
@@ -72,10 +73,10 @@ export function SourcesPage({ className }: { className?: string }) {
         fetchSources();
     }, []);
 
-    async function deleteSource() {
+    async function deleteSource(): Promise<string> {
         const response = await sourceService.deleteById(actionMenuSourceId);
-        alert(response.message);
         fetchSources();
+        return response.message;
     }
 
     return (
@@ -132,18 +133,30 @@ export function SourcesPage({ className }: { className?: string }) {
                     />,
                     <ProcessSourceForm 
                         isHidden={isProcessSourceFormHidden}
+                        setIsHidden={setIsProcessSourceFormHidden}
+                        setIsPopUpActive={setIsPopUpActive}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
                         toggle={toggleProcessSourceForm}
                         sourceId={actionMenuSourceId}
                     />,
                     <CreateExerciseSetForm 
                         isHidden={isCreateExerciseSetFormHidden} 
+                        setIsHidden={setIsCreateExerciseSetFormHidden}
+                        setIsPopUpActive={setIsPopUpActive}
                         toggle={toggleCreateExerciseSetForm}
                         sourceId={actionMenuSourceId}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
                     />,
                     <DeleteApproval
                         isHidden={isDeleteApproavelHidden}
+                        setIsHidden={setIsDeleteApprovalHidden}
+                        setIsPopUpActive={setIsPopUpActive}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
                         toggle={toggleDeleteApproval}
                         onDelete={deleteSource}
+                    />,
+                    <LoadingPage
+                        isHidden={isLoadingPageHidden}
                     />
                 ]}
             />
