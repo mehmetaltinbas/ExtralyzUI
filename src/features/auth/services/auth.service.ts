@@ -1,4 +1,4 @@
-import { axiosInstance } from 'src/shared/api/axiosInstance'; 
+import { axiosInstance } from 'src/shared/api/axiosInstance';
 import type { SignInDto } from '../types/auth-dtos';
 import type { ResponseBase } from '../../../shared/types/response-base';
 
@@ -12,9 +12,8 @@ async function signIn(signInDto: SignInDto): Promise<ResponseBase> {
 }
 
 async function authorize() {
-    const authorizeResponse: ResponseBase = (
-        await axiosInstance.get(`${baseUrl}/authorize`)
-    ).data;
+    const authorizeResponse: ResponseBase = (await axiosInstance.get(`${baseUrl}/authorize`))
+        .data;
     return authorizeResponse;
 }
 

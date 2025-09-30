@@ -23,20 +23,24 @@ export function SignInPage() {
         <div className="h-[75%] flex flex-col justify-center items-center gap-2">
             <p className=" text-lg">Sign In</p>
             <input
-                onChange={(event) => setSignInDto({
-                    ...signInDto,
-                    userName: event.target.value
-                })}
+                onChange={(event) =>
+                    setSignInDto({
+                        ...signInDto,
+                        userName: event.target.value,
+                    })
+                }
                 type="text"
                 value={signInDto.userName}
                 placeholder="username..."
                 className="p-2 border rounded-full"
             />
             <input
-                onChange={(event) => setSignInDto({
-                    ...signInDto,
-                    password: event.target.value
-                })}
+                onChange={(event) =>
+                    setSignInDto({
+                        ...signInDto,
+                        password: event.target.value,
+                    })
+                }
                 value={signInDto.password}
                 type="password"
                 placeholder="password..."
@@ -44,9 +48,9 @@ export function SignInPage() {
             />
             <BlackButton onClick={handleSignInSubmit}>sign in</BlackButton>
             <p>or</p>
-            <BlackButton
-                onClick={event => window.location.href = '/sign-up'}
-            >sign up</BlackButton>
+            <BlackButton onClick={(event) => (window.location.href = '/sign-up')}>
+                sign up
+            </BlackButton>
         </div>
     );
 }

@@ -1,4 +1,4 @@
 export enum ExerciseSetMode {
     OVERVIEW = 'Overview',
-    PRACTICE = 'Practice'
+    PRACTICE = 'Practice',
 }

@@ -1,7 +1,7 @@
 import type React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import type { Source } from '../../../source/types/source.iterface';
+import type { Source } from '../../../source/types/source.interface';
 import type { ProcessedSource } from '../../../processed-source/types/processed-source.interface';
 import type { ExerciseSet } from '../../../exercise-set/types/exercise-set.interface';
 import { openTab } from 'src/features/workspace/features/tabs/utilities/openTab.utility';
@@ -16,11 +16,13 @@ export function SidebarNavSection({
     items: Source[] | ProcessedSource[] | ExerciseSet[];
 }) {
     const dispatch = useAppDispatch();
-    const sidebar = useAppSelector(state => state.sidebar);
+    const sidebar = useAppSelector((state) => state.sidebar);
 
     function onDragStart(event: React.DragEvent<HTMLButtonElement>) {
         const datasetElement = event.currentTarget.dataset.tabElement;
-        const element = datasetElement ? JSON.parse(datasetElement) as TabsStateElement : undefined;
+        const element = datasetElement
+            ? (JSON.parse(datasetElement) as TabsStateElement)
+            : undefined;
         if (element) {
             event.dataTransfer.setData('text/plain', JSON.stringify(element));
         }
@@ -36,11 +38,11 @@ export function SidebarNavSection({
                 flex justify-start items-center gap-2"
             >
                 {/* <button>⌄</button> */}
-                <div className='w-full h-auto flex flex-col justify-center items-start gap-1'>
+                <div className="w-full h-auto flex flex-col justify-center items-start gap-1">
                     <button
                         draggable="true"
                         onDragStart={(event) => onDragStart(event)}
-                        data-tab-element={JSON.stringify({ section: section,  })}
+                        data-tab-element={JSON.stringify({ section: section })}
                         onClick={(event) => openTab(dispatch, { section })}
                         className="w-auto h-auto cursor-pointer border border-1 border-transparent px-[8px] py-[1px] rounded-full
                             font-serif font-semibold
@@ -48,7 +50,7 @@ export function SidebarNavSection({
                     >
                         {section}
                     </button>
-                    <span className='w-full h-[1px] bg-black'></span>
+                    <span className="w-full h-[1px] bg-black"></span>
                 </div>
             </div>
             <div
@@ -60,9 +62,21 @@ export function SidebarNavSection({
                         key={item._id}
                         draggable="true"
                         onDragStart={(event) => onDragStart(event)}
-                        data-tab-element={JSON.stringify({ tabTitle: item.title === '' || item.title === undefined ? item._id : item.title, section: section.slice(0, -1), id: item._id, title: item.title })}
+                        data-tab-element={JSON.stringify({
+                            tabTitle:
+                                item.title === '' || item.title === undefined
+                                    ? item._id
+                                    : item.title,
+                            section: section.slice(0, -1),
+                            id: item._id,
+                            title: item.title,
+                        })}
                         onClick={(event) =>
-                            openTab(dispatch, { section: section.slice(0, -1), id: item._id, title: item.title })
+                            openTab(dispatch, {
+                                section: section.slice(0, -1),
+                                id: item._id,
+                                title: item.title,
+                            })
                         }
                         className={`max-w-[${sidebar.width - 62}px] cursor-pointer truncate border border-1 border-transparent px-[8px] py-[1px] rounded-full
                             hover:border-black hover:bg-white`}

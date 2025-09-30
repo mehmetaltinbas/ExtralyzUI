@@ -35,7 +35,7 @@ const sidebarSlice = createSlice({
                     state.width = 200;
                 }
             }
-        }
+        },
     },
 });
 

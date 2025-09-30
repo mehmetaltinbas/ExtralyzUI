@@ -3,7 +3,7 @@ import { Sidebar } from '../components/sidebar/Sidebar';
 import { WorkspaceBody } from '../components/WorkspaceBody';
 import { WorkspaceTabsBar } from '../features/tabs/components/WorkspaceTabsBar';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { layoutDimensionsActions } from '../store/layoutDimensionsSlice';
+import { layoutDimensionsActions } from '../store/layout-dimensions.slice';
 
 export function WorkspacePage() {
     const dispatch = useAppDispatch();

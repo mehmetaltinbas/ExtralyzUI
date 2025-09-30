@@ -1,54 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { ProcessedSourceComprehensionLevel } from "src/features/processed-source/enums/processed-source-comprehension-level.enum";
-import { ProcessedSourceLength } from "src/features/processed-source/enums/processed-source-length.enum";
-import { ProcessedSourcePerspective } from "src/features/processed-source/enums/processed-source-perspective.enum";
-import { ProcessedSourceStyle } from "src/features/processed-source/enums/processed-source-style.enum";
-import { ProcessedSourceTone } from "src/features/processed-source/enums/processed-source-tone.enum";
-import { processedSourceService } from "src/features/processed-source/services/processed-source.service";
-import type { CreateProcessedSourceDto } from "src/features/processed-source/types/dto/CreateProcessedSourceDto";
-import { BlackButton } from "src/shared/components/buttons/BlackButton";
-import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
+import React, { useEffect, useState } from 'react';
+import { ProcessedSourceComprehensionLevel } from 'src/features/processed-source/enums/processed-source-comprehension-level.enum';
+import { ProcessedSourceLength } from 'src/features/processed-source/enums/processed-source-length.enum';
+import { ProcessedSourcePerspective } from 'src/features/processed-source/enums/processed-source-perspective.enum';
+import { ProcessedSourceStyle } from 'src/features/processed-source/enums/processed-source-style.enum';
+import { ProcessedSourceTone } from 'src/features/processed-source/enums/processed-source-tone.enum';
+import { processedSourceService } from 'src/features/processed-source/services/processed-source.service';
+import { processedSourcesActions } from 'src/features/processed-source/store/processed-sources.slice';
+import type { CreateProcessedSourceDto } from 'src/features/processed-source/types/dto/CreateProcessedSourceDto';
+import { BlackButton } from 'src/shared/components/buttons/BlackButton';
+import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
+import { useAppDispatch } from 'src/store/hooks';
 
-export function ProcessSourceForm({ 
-        isHidden, 
-        setIsHidden,
-        setIsLoadingPageHidden,
-        setIsPopUpActive,
-        toggle, 
-        sourceId 
-    }: {
-        isHidden: boolean;
-        setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
-        setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
-        setIsPopUpActive: React.Dispatch<React.SetStateAction<boolean>>;
-        toggle: () => void;
-        sourceId: string;
-    }
-) {
-    const [createProcessedSourceDto, setCreateProcessedSourceDto] = useState<CreateProcessedSourceDto>({
-        title: '',
-        tone: 'formal',
-        style: 'narrative',
-        perspective: 'firstPerson',
-        comprehensionLevel: 'intermediate',
-        length: 'medium',
-    });
+export function ProcessSourceForm({
+    isHidden,
+    setIsHidden,
+    setIsLoadingPageHidden,
+    setIsPopUpActive,
+    toggle,
+    sourceId,
+}: {
+    isHidden: boolean;
+    setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsPopUpActive: React.Dispatch<React.SetStateAction<boolean>>;
+    toggle: () => void;
+    sourceId: string;
+}) {
+    const dispatch = useAppDispatch();
+    const [createProcessedSourceDto, setCreateProcessedSourceDto] =
+        useState<CreateProcessedSourceDto>({
+            title: '',
+            tone: 'formal',
+            style: 'narrative',
+            perspective: 'firstPerson',
+            comprehensionLevel: 'intermediate',
+            length: 'medium',
+        });
 
     useEffect(() => {
         setCreateProcessedSourceDto({
-        title: '',
-        tone: 'formal',
-        style: 'narrative',
-        perspective: 'firstPerson',
-        comprehensionLevel: 'intermediate',
-        length: 'medium',
-    });
+            title: '',
+            tone: 'formal',
+            style: 'narrative',
+            perspective: 'firstPerson',
+            comprehensionLevel: 'intermediate',
+            length: 'medium',
+        });
     }, [isHidden]);
 
     async function processSource() {
         setIsHidden(true);
         setIsLoadingPageHidden(false);
-        const response = await processedSourceService.createBySourceId(sourceId, createProcessedSourceDto);
+        const response = await processedSourceService.createBySourceId(
+            sourceId,
+            createProcessedSourceDto
+        );
+        dispatch(processedSourcesActions.fetchData());
         setIsLoadingPageHidden(true);
         alert(response.message);
         setIsPopUpActive(false);
@@ -59,15 +66,17 @@ export function ProcessSourceForm({
             className={`${isHidden && 'hidden'} w-auto h-auto relative border px-2 py-4 bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
-            <ClaretButton className="absolute top-1 right-1" onClick={event => toggle()}>X</ClaretButton>
+            <ClaretButton className="absolute top-1 right-1" onClick={(event) => toggle()}>
+                X
+            </ClaretButton>
             <div className="flex justify-start items-center gap-2">
                 <p>title: </p>
                 <input
                     data-key="userName"
-                    onChange={(event) => 
+                    onChange={(event) =>
                         setCreateProcessedSourceDto({
                             ...createProcessedSourceDto,
-                            title: event.target.value
+                            title: event.target.value,
                         })
                     }
                     type="text"
@@ -124,14 +133,19 @@ export function ProcessSourceForm({
                             ...createProcessedSourceDto,
                             perspective: e.target.value,
                         });
-                    }
-                    }
+                    }}
                     className="py-[2px] px-2 border rounded-[10px]"
                 >
                     <option value="">select</option>
-                    <option value={ProcessedSourcePerspective.FIRST_PERSON}>First person</option>
-                    <option value={ProcessedSourcePerspective.SECOND_PERSON}>Second person</option>
-                    <option value={ProcessedSourcePerspective.THIRD_PERSON}>Third person</option>
+                    <option value={ProcessedSourcePerspective.FIRST_PERSON}>
+                        First person
+                    </option>
+                    <option value={ProcessedSourcePerspective.SECOND_PERSON}>
+                        Second person
+                    </option>
+                    <option value={ProcessedSourcePerspective.THIRD_PERSON}>
+                        Third person
+                    </option>
                 </select>
             </div>
             <div className="flex justify-start items-center gap-2">
@@ -148,8 +162,12 @@ export function ProcessSourceForm({
                 >
                     <option value="">select</option>
                     <option value={ProcessedSourceComprehensionLevel.BASIC}>Basic</option>
-                    <option value={ProcessedSourceComprehensionLevel.INTERMEDIATE}>Intermediate</option>
-                    <option value={ProcessedSourceComprehensionLevel.ADVANCED}>Advanced</option>
+                    <option value={ProcessedSourceComprehensionLevel.INTERMEDIATE}>
+                        Intermediate
+                    </option>
+                    <option value={ProcessedSourceComprehensionLevel.ADVANCED}>
+                        Advanced
+                    </option>
                 </select>
             </div>
             <div className="flex justify-start items-center gap-2">
@@ -170,9 +188,13 @@ export function ProcessSourceForm({
                     <option value={ProcessedSourceLength.DETAILED}>Detailed</option>
                 </select>
             </div>
-            <BlackButton onClick={async (event) => { 
-                await processSource();
-            }}>Process the Source</BlackButton>
+            <BlackButton
+                onClick={async (event) => {
+                    await processSource();
+                }}
+            >
+                Process the Source
+            </BlackButton>
         </div>
     );
 }

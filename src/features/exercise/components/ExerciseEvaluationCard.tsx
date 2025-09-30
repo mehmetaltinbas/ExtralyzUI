@@ -1,20 +1,24 @@
-import type React from "react";
-import type { ExerciseAnswerEvaluationResult } from "src/features/exercise-set/types/response/evaluate-answers.response";
-import { MCQExerciseEvaluationCard } from "src/features/exercise/components/strategy-components/exercise-evaluation-card/MCQExerciseEvaluationCard";
-import { OpenEndedExerciseEvaluationCard } from "src/features/exercise/components/strategy-components/exercise-evaluation-card/OpenEndedExerciseEvaluationCard";
-import { ShortExerciseEvaluationCard } from "src/features/exercise/components/strategy-components/exercise-evaluation-card/ShortExerciseEvaluationCard";
-import { TrueFalseExerciseEvaluationCard } from "src/features/exercise/components/strategy-components/exercise-evaluation-card/TrueFalseExerciseEvaluationCard";
-import { ExerciseType } from "src/features/exercise/enums/exercise-types.enum";
-import type { Exercise } from "src/features/exercise/types/exercise.interface";
+import type React from 'react';
+import type { ExerciseAnswerEvaluationResult } from 'src/features/exercise-set/types/response/evaluate-answers.response';
+import { MCQExerciseEvaluationCard } from 'src/features/exercise/components/strategy-components/exercise-evaluation-card/MCQExerciseEvaluationCard';
+import { OpenEndedExerciseEvaluationCard } from 'src/features/exercise/components/strategy-components/exercise-evaluation-card/OpenEndedExerciseEvaluationCard';
+import { ShortExerciseEvaluationCard } from 'src/features/exercise/components/strategy-components/exercise-evaluation-card/ShortExerciseEvaluationCard';
+import { TrueFalseExerciseEvaluationCard } from 'src/features/exercise/components/strategy-components/exercise-evaluation-card/TrueFalseExerciseEvaluationCard';
+import { ExerciseType } from 'src/features/exercise/enums/exercise-types.enum';
+import type { Exercise } from 'src/features/exercise/types/exercise.interface';
 
-export function ExerciseEvaluationCard({ exercise, evaluation, index }: {
+export function ExerciseEvaluationCard({
+    exercise,
+    evaluation,
+    index,
+}: {
     exercise: Exercise;
     evaluation: ExerciseAnswerEvaluationResult;
     index: number;
 }) {
     const componentsMap: Map<
         ExerciseType,
-        React.ComponentType<{ 
+        React.ComponentType<{
             exercise: Exercise;
             evaluation: ExerciseAnswerEvaluationResult;
             index: number;
@@ -28,11 +32,17 @@ export function ExerciseEvaluationCard({ exercise, evaluation, index }: {
     const Component = componentsMap.get(exercise.type as ExerciseType);
 
     return (
-        <div className="w-full h-auto px-10 py-2 border-t border-b
+        <div
+            className="w-full h-auto px-10 py-2 border-t border-b
             flex flex-col justify-center items-center gap-2"
         >
-            <p className="p-2"><span className="font-serif font-semibold">Exercise {index + 1}</span> - {exercise.prompt}</p>
-            {Component && <Component exercise={exercise} evaluation={evaluation} index={index} />}
+            <p className="p-2">
+                <span className="font-serif font-semibold">Exercise {index + 1}</span> -{' '}
+                {exercise.prompt}
+            </p>
+            {Component && (
+                <Component exercise={exercise} evaluation={evaluation} index={index} />
+            )}
         </div>
     );
 }

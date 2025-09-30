@@ -1,25 +1,22 @@
-import type React from "react";
-import { BlackButton } from "src/shared/components/buttons/BlackButton";
-import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
+import type React from 'react';
+import { BlackButton } from 'src/shared/components/buttons/BlackButton';
+import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 
-export function DeleteApproval(
-    { 
-        isHidden, 
-        setIsHidden,
-        setIsPopUpActive,
-        setIsLoadingPageHidden,
-        toggle, 
-        onDelete 
-    }: {
-        isHidden: boolean;
-        setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
-        setIsPopUpActive: React.Dispatch<React.SetStateAction<boolean>>;
-        setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
-        toggle: () => void;
-        onDelete: () => Promise<string>;
-    }
-) {
-
+export function DeleteApproval({
+    isHidden,
+    setIsHidden,
+    setIsPopUpActive,
+    setIsLoadingPageHidden,
+    toggle,
+    onDelete,
+}: {
+    isHidden: boolean;
+    setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsPopUpActive: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
+    toggle: () => void;
+    onDelete: () => Promise<string>;
+}) {
     async function handleOnclick() {
         setIsHidden(true);
         setIsLoadingPageHidden(false);
@@ -36,17 +33,17 @@ export function DeleteApproval(
         >
             <p>Are you sure?</p>
             <div className="flex justify-center items-center gap-2">
-                <BlackButton 
-                    onClick={event => {
+                <BlackButton
+                    onClick={(event) => {
                         toggle();
                     }}
                 >
                     Cancel
                 </BlackButton>
-                <ClaretButton 
-                    onClick={async (event) => { 
+                <ClaretButton
+                    onClick={async (event) => {
                         await handleOnclick();
-                }}
+                    }}
                 >
                     Delete
                 </ClaretButton>

@@ -9,6 +9,6 @@ export const ExerciseSetPracticePropsBuilderStrategy: SectionBuilderStrategy = {
         return {
             exerciseSet: exerciseSetResponse.exerciseSet,
             exercises: exercisesResponse.exercises!,
-        };;
+        };
     },
 };

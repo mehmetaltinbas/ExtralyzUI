@@ -1,11 +1,16 @@
-import type React from "react";
-import { useState } from "react";
-import type { Exercise } from "src/features/exercise/types/exercise.interface";
+import type React from 'react';
+import { useState } from 'react';
+import type { Exercise } from 'src/features/exercise/types/exercise.interface';
 
-export function ShortExercisePracticeCard({ exercise, index, recordAnswer, className }: {
+export function ShortExercisePracticeCard({
+    exercise,
+    index,
+    recordAnswer,
+    className,
+}: {
     exercise: Exercise;
     index: number;
-    recordAnswer: (exerciseId: string, answer: string | number) => void; 
+    recordAnswer: (exerciseId: string, answer: string | number) => void;
     className?: string;
 }) {
     const [answer, setAnswer] = useState<string>('');
@@ -18,7 +23,7 @@ export function ShortExercisePracticeCard({ exercise, index, recordAnswer, class
     return (
         <>
             <textarea
-                onChange={event => onChange(event)}
+                onChange={(event) => onChange(event)}
                 value={answer}
                 placeholder="answer..."
                 className="w-full p-2 border rounded"

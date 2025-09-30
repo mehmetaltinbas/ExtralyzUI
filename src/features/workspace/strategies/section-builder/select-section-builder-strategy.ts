@@ -18,7 +18,9 @@ const map: Map<string, SectionBuilderStrategy> = new Map([
     [Section.EXERCISE_SET_PRACTICE, ExerciseSetPracticePropsBuilderStrategy],
 ]);
 
-export function selectSectionBuilderStrategy(section: string): SectionBuilderStrategy | undefined {
+export function selectSectionBuilderStrategy(
+    section: string
+): SectionBuilderStrategy | undefined {
     const strategy = map.get(section);
     if (!strategy) return undefined;
     return strategy;

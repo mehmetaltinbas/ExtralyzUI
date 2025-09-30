@@ -5,6 +5,8 @@ import { exerciseSetService } from '../services/exercise-set.service';
 import { ExerciseType } from 'src/features/exercise/enums/exercise-types.enum';
 import { useEffect, useState } from 'react';
 import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
+import { useAppDispatch } from 'src/store/hooks';
+import { extendedSourcesActions } from 'src/features/source/store/extended-sources.slice';
 
 export function CreateExerciseSetForm({
     isHidden,
@@ -20,8 +22,8 @@ export function CreateExerciseSetForm({
     toggle: () => void;
     sourceId: string;
     setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
-
 }) {
+    const dispatch = useAppDispatch();
     const [createExerciseSetDto, setCreateExerciseSetDto] = useState<CreateExerciseSetDto>({
         count: 5,
         type: '',
@@ -40,6 +42,7 @@ export function CreateExerciseSetForm({
         setIsHidden(true);
         setIsLoadingPageHidden(false);
         const response = await exerciseSetService.create(sourceId, createExerciseSetDto);
+        dispatch(extendedSourcesActions.fetchData());
         setIsLoadingPageHidden(true);
         alert(response.message);
         setIsPopUpActive(false);
@@ -51,7 +54,7 @@ export function CreateExerciseSetForm({
             flex flex-col justify-center items-center gap-2`}
         >
             <div className="absolute top-1 right-1 w-full flex justify-end items-center">
-                <ClaretButton onClick={event => toggle()}>X</ClaretButton>
+                <ClaretButton onClick={(event) => toggle()}>X</ClaretButton>
             </div>
             <div className="flex justify-start items-center gap-2">
                 <p>count: </p>
@@ -104,9 +107,13 @@ export function CreateExerciseSetForm({
                     <option value="hard">Hard</option>
                 </select>
             </div>
-            <BlackButton onClick={async (event) => { 
-                await createExerciseSet();
-            }}>Generate</BlackButton>
+            <BlackButton
+                onClick={async (event) => {
+                    await createExerciseSet();
+                }}
+            >
+                Generate
+            </BlackButton>
         </div>
     );
 }

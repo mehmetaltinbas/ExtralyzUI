@@ -8,7 +8,6 @@ export function TrueFalseExerciseCard({
     exercise: Exercise;
     isAnswersHidden: boolean;
 }) {
-
     return (
         <div className="w-full h-full flex flex-col gap-2">
             <p>{exercise.prompt}</p>

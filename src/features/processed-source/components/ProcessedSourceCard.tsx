@@ -18,7 +18,8 @@ export function ProcessedSourceCard({
     processedSource: ProcessedSource;
     fetchProcessedSources: () => void;
     toggleSourceActionMenu: (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>, sourceId: string
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        sourceId: string
     ) => void;
 }) {
     const dispatch = useAppDispatch();
@@ -49,21 +50,31 @@ export function ProcessedSourceCard({
             flex flex-col justify-center items-center
             hover:bg-gray-100"
         >
-            <div className="w-full h-[60px]
+            <div
+                className="w-full h-[60px]
                 flex justify-center items-center
                 border-b"
             >
-                <div className='w-[250px] h-full px-2
-                    flex flex-col justify-center items-center'
+                <div
+                    className="w-[250px] h-full px-2
+                    flex flex-col justify-center items-center"
                 >
-                    <p className='max-w-[200px] font-serif font-semibold truncate' title={processedSource.title ? processedSource.title : processedSource._id}>
+                    <p
+                        className="max-w-[200px] font-serif font-semibold truncate"
+                        title={
+                            processedSource.title ? processedSource.title : processedSource._id
+                        }
+                    >
                         {processedSource.title ? processedSource.title : processedSource._id}
                     </p>
                 </div>
-                <div className='w-[50px] h-full
-                    flex justify-center items-center'
+                <div
+                    className="w-[50px] h-full
+                    flex justify-center items-center"
                 >
-                    <ActionMenuButton onClick={event => toggleSourceActionMenu(event, processedSource._id)}/>
+                    <ActionMenuButton
+                        onClick={(event) => toggleSourceActionMenu(event, processedSource._id)}
+                    />
                 </div>
             </div>
             <div className="w-full h-full p-2 flex-1 overflow-y-auto">

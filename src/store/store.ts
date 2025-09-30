@@ -1,13 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { tabsReducer } from '../features/workspace/features/tabs/store/tabsSlice';
-import { sidebarReducer } from '../features/workspace/store/sidebarSlice';
-import { layoutDimensionsReducer } from '../features/workspace/store/layoutDimensionsSlice';
+import { sidebarReducer } from '../features/workspace/store/sidebar.slice';
+import { layoutDimensionsReducer } from '../features/workspace/store/layout-dimensions.slice';
+import { sourcesReducer } from 'src/features/source/store/sources.slice';
+import { extendedSourcesReducer } from 'src/features/source/store/extended-sources.slice';
+import { processedSourcesReducer } from 'src/features/processed-source/store/processed-sources.slice';
 
-const store = configureStore({
+export const store = configureStore({
     reducer: {
         tabs: tabsReducer,
         sidebar: sidebarReducer,
         layoutDimensions: layoutDimensionsReducer,
+        sources: sourcesReducer,
+        extendedSources: extendedSourcesReducer,
+        processedSources: processedSourcesReducer
     },
 });
 

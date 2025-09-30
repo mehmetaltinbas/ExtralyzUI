@@ -2,17 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import rough from 'roughjs';
 import type { RoughCanvas } from 'roughjs/bin/canvas';
 
-export function LoadingPage({ isHidden ,message }: {
-    isHidden?: boolean;
-    message?: string;
-}) {
+export function LoadingPage({ isHidden, message }: { isHidden?: boolean; message?: string }) {
     const roughCanvas = useRef<RoughCanvas>(null);
     const canvasElement = useRef<HTMLCanvasElement>(null);
     const [dotCount, setDotCount] = useState<number>(1);
 
     useEffect(() => {
         const canvas = canvasElement.current as HTMLCanvasElement;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext('2d');
         if (canvas) {
             roughCanvas.current = rough.canvas(canvas);
         }
@@ -35,21 +32,22 @@ export function LoadingPage({ isHidden ,message }: {
     }, [canvasElement]);
 
     useEffect(() => {
-        console.log(`isHidden?: ${isHidden && 'hidden'}`);
         const textInterval = setInterval(() => {
-            setDotCount(prev => (prev % 3) + 1);
+            setDotCount((prev) => (prev % 3) + 1);
         }, 1000);
         return () => clearInterval(textInterval);
     }, []);
 
     return (
-        <div className={`${isHidden ? 'hidden' : ''} w-full h-full
+        <div
+            className={`${isHidden ? 'hidden' : ''} w-full h-full
             flex justify-center items-start`}
         >
-            <div className="w-full h-[50%]
+            <div
+                className="w-full h-[50%]
                 flex flex-col justify-center items-center"
             >
-                <canvas ref={canvasElement} width='50' height='50' className=""></canvas>
+                <canvas ref={canvasElement} width="50" height="50" className=""></canvas>
                 <p>{message ? message : `Loading${'.'.repeat(dotCount)}`}</p>
             </div>
         </div>

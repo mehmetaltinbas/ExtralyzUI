@@ -17,7 +17,11 @@ export function ProtectedRoute({ element }: { element: JSX.Element }) {
             });
     }, []);
 
-    return isAuthenticated === null ? <LoadingPage /> : (
-        isAuthenticated ? element : <Navigate to='/sign-in' />
+    return isAuthenticated === null ? (
+        <LoadingPage />
+    ) : isAuthenticated ? (
+        element
+    ) : (
+        <Navigate to="/sign-in" />
     );
 }

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { Section } from '../../enums/sections.enum';
-import { sidebarActions } from '../../store/sidebarSlice';
+import { sidebarActions } from '../../store/sidebar.slice';
 import { SidebarNavSection } from './SidebarNavSection';
-import type { Source } from '../../../source/types/source.iterface';
+import type { Source } from '../../../source/types/source.interface';
 import type { ProcessedSource } from '../../../processed-source/types/processed-source.interface';
 import type { ExerciseSet } from '../../../exercise-set/types/exercise-set.interface';
 import { sourceService } from '../../../source/services/source.service';
@@ -62,10 +62,10 @@ export function Sidebar() {
     }
 
     return (
-        <div className={`w-[${sidebar.width}px] h-full sticky z-10 shadow-xl
+        <div
+            className={`w-[${sidebar.width}px] h-full sticky z-10 shadow-xl
             flex`}
         >
-
             <div
                 className={`w-[${sidebar.width - 10}px] h-full p-4 bg-[#F5F5F5] overflow-y-auto
                 flex-shrink-0 flex flex-1 flex-col justify-start items-center gap-4`}
@@ -110,17 +110,18 @@ export function Sidebar() {
                             section={Section.PROCESSED_SOURCES}
                             items={processedSources}
                         />
-                        <SidebarNavSection section={Section.EXERCISE_SETS} items={exerciseSets} />
+                        <SidebarNavSection
+                            section={Section.EXERCISE_SETS}
+                            items={exerciseSets}
+                        />
                     </>
                 )}
             </div>
 
-            <div 
-                onMouseDown={event => handleMouseDown(event)}
-                className='w-[10px] h-full bg-[#F0F0F0] cursor-col-resize'
-            >
-            </div>
-
+            <div
+                onMouseDown={(event) => handleMouseDown(event)}
+                className="w-[10px] h-full bg-[#F0F0F0] cursor-col-resize"
+            ></div>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, type JSX, type ReactNode } from 'react';
-import { selectSectionBuilderStrategy } from 'src/features/workspace/strategies/section-builder/select-section-builder-strategy'; 
+import { selectSectionBuilderStrategy } from 'src/features/workspace/strategies/section-builder/select-section-builder-strategy';
 import { ExerciseSetPracticePage } from 'src/features/exercise-set/pages/ExerciseSetPracticePage';
 import { SourcePage } from 'src/features/source/pages/SourcePage';
 import { ProcessedSourcePage } from 'src/features/processed-source/pages/ProcessedSourcePage';
@@ -9,14 +9,16 @@ import { ProcessedSourcesPage } from 'src/features/processed-source/pages/Proces
 import { ExerciseSetsPage } from 'src/features/exercise-set/pages/ExerciseSetsPage';
 import { ExerciseSetPage } from 'src/features/exercise-set/pages/ExerciseSetPage';
 import { Section } from 'src/features/workspace/enums/sections.enum';
-import { layoutDimensionsActions } from 'src/features/workspace/store/layoutDimensionsSlice';
+import { layoutDimensionsActions } from 'src/features/workspace/store/layout-dimensions.slice';
 import type { TabsStateElement } from 'src/features/workspace/features/tabs/store/tabsSlice';
 
 export function WorkspaceBody() {
     const dispatch = useAppDispatch();
     const tabs = useAppSelector((state) => state.tabs);
     const layoutDimensions = useAppSelector((state) => state.layoutDimensions);
-    const [builtPropsRecord, setBuiltPropsRecord] = useState<Record<string, object | undefined>>({});
+    const [builtPropsRecord, setBuiltPropsRecord] = useState<
+        Record<string, object | undefined>
+    >({});
     // const [isPopUpActive, setIsPopUpActive] = useState<boolean>(false);
     const containerDiv = useRef<HTMLDivElement | null>(null);
     const componentsMap: Map<string, React.ComponentType<any>> = new Map([
@@ -70,10 +72,6 @@ export function WorkspaceBody() {
             }));
         });
     }, [tabs.elements]);
-
-    useEffect(() => {
-        console.log(tabs.activeTabIndex);
-    }, [tabs.activeTabIndex]);
 
     return (
         <div

@@ -1,6 +1,6 @@
-import type { SignUpUserDto } from "src/features/user/types/dto/sign-up-user.dto";
-import { axiosInstance } from "src/shared/api/axiosInstance";
-import type { ResponseBase } from "src/shared/types/response-base";
+import type { SignUpUserDto } from 'src/features/user/types/dto/sign-up-user.dto';
+import { axiosInstance } from 'src/shared/api/axiosInstance';
+import type { ResponseBase } from 'src/shared/types/response-base';
 
 const baseUrl = `/user`;
 

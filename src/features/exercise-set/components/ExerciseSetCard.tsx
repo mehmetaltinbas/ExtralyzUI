@@ -7,16 +7,14 @@ import { ExerciseSetMode } from 'src/features/exercise-set/enums/ExerciseSetMode
 import type React from 'react';
 import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton';
 
-
 export function ExerciseSetCard({
     exerciseSet,
-    fetchExerciseSets,
-    toggleExerciseSetActionMenu
+    toggleExerciseSetActionMenu,
 }: {
     exerciseSet: ExerciseSet;
-    fetchExerciseSets: () => void;
     toggleExerciseSetActionMenu: (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>, exerciseSet: ExerciseSet
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        exerciseSet: ExerciseSet
     ) => void;
 }) {
     const dispatch = useAppDispatch();
@@ -35,14 +33,19 @@ export function ExerciseSetCard({
             border p-1
             hover:bg-gray-100"
         >
-            <div className='w-[250px] h-auto border-b-1
-                flex justify-center items-center'
+            <div
+                className="w-[250px] h-auto border-b-1
+                flex justify-center items-center"
             >
-                <div className='w-[200px] h-auto flex justify-center items-center'>
-                    <p className='max-w-[200px] px-2 font-serif font-semibold truncate '>{exerciseSet.title ? exerciseSet.title : exerciseSet._id}</p>
+                <div className="w-[200px] h-auto flex justify-center items-center">
+                    <p className="max-w-[200px] px-2 font-serif font-semibold truncate ">
+                        {exerciseSet.title ? exerciseSet.title : exerciseSet._id}
+                    </p>
                 </div>
-                <div className='w-[50px] h-auto'>
-                    <ActionMenuButton onClick={event => toggleExerciseSetActionMenu(event, exerciseSet)} />
+                <div className="w-[50px] h-auto">
+                    <ActionMenuButton
+                        onClick={(event) => toggleExerciseSetActionMenu(event, exerciseSet)}
+                    />
                 </div>
             </div>
             <p>{exerciseSet.type}</p>

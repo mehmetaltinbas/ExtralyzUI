@@ -10,11 +10,14 @@ import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton
 export function ExerciseCard({
     exercise,
     isAnswersHidden,
-    toggleExerciseActionMenu
+    toggleExerciseActionMenu,
 }: {
     exercise: Exercise;
     isAnswersHidden: boolean;
-    toggleExerciseActionMenu: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, exerciseId: string) => void;
+    toggleExerciseActionMenu: (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        exerciseId: string
+    ) => void;
 }) {
     const componentsMap: Map<
         ExerciseType,
@@ -31,8 +34,10 @@ export function ExerciseCard({
         <div
             className={`relative w-[250px] h-[250px] border rounded-[10px] px-4 py-2 overflow-y-auto`}
         >
-            <div className='absolute top-1 right-1'>
-                <ActionMenuButton onClick={event => toggleExerciseActionMenu(event, exercise._id)} />
+            <div className="absolute top-1 right-1">
+                <ActionMenuButton
+                    onClick={(event) => toggleExerciseActionMenu(event, exercise._id)}
+                />
             </div>
             {Component && <Component exercise={exercise} isAnswersHidden={isAnswersHidden} />}
         </div>

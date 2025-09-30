@@ -1,4 +1,4 @@
-import type { ResponseBase } from "src/shared/types/response-base";
+import type { ResponseBase } from 'src/shared/types/response-base';
 
 export interface ExerciseAnswerEvaluationResult {
     exerciseId: string;

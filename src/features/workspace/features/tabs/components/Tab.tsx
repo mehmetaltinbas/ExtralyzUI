@@ -46,12 +46,14 @@ export function Tab({
             hover:bg-white`}
         >
             <div className="max-w-[150px] flex justify-center items-center">
-                <p className="truncate" title={tab.tabTitle}>{tab.tabTitle}</p>
+                <p className="truncate" title={tab.tabTitle}>
+                    {tab.tabTitle}
+                </p>
             </div>
             <div className="w-[24px] flex justify-center items-center">
-                <ClaretButton 
-                    onClick={event => deleteTab(event)}
-                    className='border-transparent !border-[1px] bg-transparent !text-black hover:border-[#a62637] !hover:text-white'
+                <ClaretButton
+                    onClick={(event) => deleteTab(event)}
+                    className="border-transparent !border-[1px] bg-transparent !text-black hover:border-[#a62637] !hover:text-white"
                 >
                     x
                 </ClaretButton>

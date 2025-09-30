@@ -1,11 +1,16 @@
-import type React from "react";
-import type { Exercise } from "src/features/exercise/types/exercise.interface";
-import { BlackButton } from "src/shared/components/buttons/BlackButton";
+import type React from 'react';
+import type { Exercise } from 'src/features/exercise/types/exercise.interface';
+import { BlackButton } from 'src/shared/components/buttons/BlackButton';
 
-export function MCQExercisePracticeCard({ exercise, index, recordAnswer, className }: {
+export function MCQExercisePracticeCard({
+    exercise,
+    index,
+    recordAnswer,
+    className,
+}: {
     exercise: Exercise;
     index: number;
-    recordAnswer: (exerciseId: string, answer: string | number) => void; 
+    recordAnswer: (exerciseId: string, answer: string | number) => void;
     className?: string;
 }) {
     const optionLattersMap: Map<number, string> = new Map([
@@ -19,8 +24,8 @@ export function MCQExercisePracticeCard({ exercise, index, recordAnswer, classNa
     return (
         <div className="flex flex-col justify-center items-center gap-1">
             {exercise.choices.map((choice, index) => (
-                <button 
-                    onClick={event => recordAnswer(exercise._id, index)}
+                <button
+                    onClick={(event) => recordAnswer(exercise._id, index)}
                     className="text-sm px-2 py-1 cursor-pointer 
                     border-1 border-white rounded-full
                     hover:border-black"

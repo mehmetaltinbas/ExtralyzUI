@@ -9,9 +9,12 @@ import { CreateExerciseSetForm } from 'src/features/exercise-set/components/Crea
 import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
 import { DeleteApproval } from 'src/shared/components/DeleteApproval';
 import { BodyModal } from 'src/shared/components/BodyModal';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import { processedSourcesActions } from 'src/features/processed-source/store/processed-sources.slice';
 
 export function ProcessedSourcesPage({ className }: { className?: string }) {
-    const [processedSources, setProcessedSources] = useState<ProcessedSource[]>([]);
+    const dispatch = useAppDispatch();
+    const processedSources = useAppSelector(state => state.processedSources);
     const [actionMenuSourceId, setActionMenuSourceId] = useState<string>('');
     const [isPopUpActive, setIsPopUpActive] = useState<boolean>(false);
     const [isSourceActionMenuHidden, setIsSourceActionMenuHidden] = useState<boolean>(true);
@@ -21,19 +24,17 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
     const [isLoadingPageHidden, setIsLoadingPageHidden] = useState<boolean>(true);
 
     async function fetchProcessedSources() {
-        const response = await processedSourceService.readAllByUserId();
-        if (response.isSuccess && response.processedSources) {
-            setProcessedSources(response.processedSources);
-        } else {
-            alert(response.message);
-        }
+        dispatch(processedSourcesActions.fetchData());
     }
 
     useEffect(() => {
         fetchProcessedSources();
     }, []);
 
-    function toggleProcessedSourceActionMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, sourceId: string) {
+    function toggleProcessedSourceActionMenu(
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        sourceId: string
+    ) {
         event.stopPropagation();
         const sourceActionMenu = document.getElementById('processed-source-action-menu');
         const container = document.getElementById('processed-sources-page-container');
@@ -49,12 +50,12 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
 
     function toggleCreateExerciseSetForm() {
         setIsCreateExerciseSetFormHidden((prev) => !prev);
-        setIsPopUpActive(prev => !prev);
+        setIsPopUpActive((prev) => !prev);
     }
 
     function toggleDeleteApproval() {
         setIsDeleteApprovalHidden((prev) => !prev);
-        setIsPopUpActive(prev => !prev);
+        setIsPopUpActive((prev) => !prev);
     }
 
     async function deleteProcessedSource(): Promise<string> {
@@ -64,7 +65,8 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
     }
 
     return (
-        <div id='processed-sources-page-container'
+        <div
+            id="processed-sources-page-container"
             className={`w-full h-full flex flex-col justify-start items-center ${className ?? ''}`}
         >
             <ProcessedSourceActionMenu
@@ -84,10 +86,10 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                     className="w-full h-auto col-span-3
                     flex flex-col justify-center items-center p-4"
                 >
-                    <p className='text-2xl font-bold'>Processed Sources</p>
+                    <p className="text-2xl font-bold">Processed Sources</p>
                 </div>
                 {processedSources.length === 0 ? (
-                    <div className='col-span-1 sm:col-span-2 lg:col-span-3'>
+                    <div className="col-span-1 sm:col-span-2 lg:col-span-3">
                         <LoadingPage />
                     </div>
                 ) : (
@@ -105,14 +107,14 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                 isPopUpActive={isPopUpActive}
                 components={[
                     <CreateExerciseSetForm
-                        isHidden={isCreateExerciseSetFormHidden} 
+                        isHidden={isCreateExerciseSetFormHidden}
                         setIsHidden={setIsCreateExerciseSetFormHidden}
                         setIsLoadingPageHidden={setIsLoadingPageHidden}
                         setIsPopUpActive={setIsPopUpActive}
                         sourceId={actionMenuSourceId}
                         toggle={toggleCreateExerciseSetForm}
                     />,
-                    <DeleteApproval 
+                    <DeleteApproval
                         isHidden={isDeleteApproavelHidden}
                         setIsHidden={setIsDeleteApprovalHidden}
                         setIsLoadingPageHidden={setIsLoadingPageHidden}
@@ -120,12 +122,9 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                         toggle={toggleDeleteApproval}
                         onDelete={deleteProcessedSource}
                     />,
-                    <LoadingPage
-                        isHidden={isLoadingPageHidden}
-                    />
+                    <LoadingPage isHidden={isLoadingPageHidden} />,
                 ]}
             ></BodyModal>
-
         </div>
     );
 }

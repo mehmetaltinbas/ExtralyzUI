@@ -20,16 +20,12 @@ async function create(
 }
 
 async function readById(id: string): Promise<ReadSingleExerciseSetResponse> {
-    const response = (
-        await axiosInstance.get(`${baseUrl}/read-by-id/${id}`)
-    ).data;
+    const response = (await axiosInstance.get(`${baseUrl}/read-by-id/${id}`)).data;
     return response;
 }
 
 async function readAllByUserId(): Promise<ReadAllExerciseSetsResponse> {
-    const response = (
-        await axiosInstance.get(`${baseUrl}/read-all-by-user-id`)
-    ).data;
+    const response = (await axiosInstance.get(`${baseUrl}/read-all-by-user-id`)).data;
     return response;
 }
 
@@ -45,7 +41,9 @@ async function deleteById(id: string): Promise<ResponseBase> {
     return response;
 }
 
-async function evaluateAnswers(evaluateAnswersDto: EvaluateAnswersDto): Promise<EvaluateAnswersResponse> {
+async function evaluateAnswers(
+    evaluateAnswersDto: EvaluateAnswersDto
+): Promise<EvaluateAnswersResponse> {
     const response = (
         await axiosInstance.post(`${baseUrl}/evaluate-answers`, evaluateAnswersDto)
     ).data;
@@ -58,5 +56,5 @@ export const exerciseSetService = {
     readAllByUserId,
     readAllByUserIdGroupedBySources,
     deleteById,
-    evaluateAnswers
+    evaluateAnswers,
 };

@@ -25,15 +25,21 @@ export function ExerciseSetPage({
     className?: string;
 }) {
     const dispatch = useAppDispatch();
-    const tabs = useAppSelector(state => state.tabs);
+    const tabs = useAppSelector((state) => state.tabs);
     const [isAnswersHidden, setIsAnswersHidden] = useState<boolean>(true);
     const [actionMenuExerciseId, setActionMenuExerciseId] = useState<string>('');
-    const [isExerciseActionMenuHidden, setIsExerciseActionMenuHidden] = useState<boolean>(true);
+    const [isExerciseActionMenuHidden, setIsExerciseActionMenuHidden] =
+        useState<boolean>(true);
     const [isPopUpActive, setIsPopUpActive] = useState<boolean>(false);
-    const [isExerciseSetDeleteApprovalHidden, setIsExerciseSetDeleteApprovalHidden] = useState<boolean>(true);
-    const [isExerciseDeleteApprovalHidden, setIsExerciseDeleteApprovalHidden] = useState<boolean>(true);
+    const [isExerciseSetDeleteApprovalHidden, setIsExerciseSetDeleteApprovalHidden] =
+        useState<boolean>(true);
+    const [isExerciseDeleteApprovalHidden, setIsExerciseDeleteApprovalHidden] =
+        useState<boolean>(true);
 
-    function toggleExerciseActionMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, exerciseId: string) {
+    function toggleExerciseActionMenu(
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        exerciseId: string
+    ) {
         event.stopPropagation();
         const exerciseActionMenu = document.getElementById('exercise-action-menu');
         const container = document.getElementById('exercise-set-page-container');
@@ -52,13 +58,13 @@ export function ExerciseSetPage({
     }
 
     function toggleExerciseSetDeleteApproval() {
-        setIsPopUpActive(prev => !prev);
-        setIsExerciseSetDeleteApprovalHidden(prev => !prev);
+        setIsPopUpActive((prev) => !prev);
+        setIsExerciseSetDeleteApprovalHidden((prev) => !prev);
     }
-    
+
     function toggleExerciseDeleteApproval() {
-        setIsPopUpActive(prev => !prev);
-        setIsExerciseDeleteApprovalHidden(prev => !prev);
+        setIsPopUpActive((prev) => !prev);
+        setIsExerciseDeleteApprovalHidden((prev) => !prev);
     }
 
     async function deleteExerciseSet() {
@@ -73,10 +79,10 @@ export function ExerciseSetPage({
     }
 
     return exerciseSet && exercises ? (
-        <div id='exercise-set-page-container'
+        <div
+            id="exercise-set-page-container"
             className={`relative w-full h-full ${className ?? ''}`}
         >
-
             <ExerciseActionMenu
                 isHidden={isExerciseActionMenuHidden}
                 setIsHidden={setIsExerciseActionMenuHidden}
@@ -106,16 +112,13 @@ export function ExerciseSetPage({
                                 section: Section.EXERCISE_SET_PRACTICE,
                                 id: exerciseSet._id,
                                 title: exerciseSet.title,
-                                mode: ExerciseSetMode.PRACTICE
+                                mode: ExerciseSetMode.PRACTICE,
                             });
-                        }
-                        }
+                        }}
                     >
                         Start Practice
                     </BlackButton>
-                    <ClaretButton
-                        onClick={toggleExerciseSetDeleteApproval}
-                    >
+                    <ClaretButton onClick={toggleExerciseSetDeleteApproval}>
                         Delete Exercise Set
                     </ClaretButton>
                 </div>
@@ -124,16 +127,16 @@ export function ExerciseSetPage({
                     grid grid-cols-3 gap-4"
                 >
                     {exercises.map((exercise) => (
-                        <ExerciseCard 
-                            exercise={exercise} 
-                            isAnswersHidden={isAnswersHidden} 
+                        <ExerciseCard
+                            exercise={exercise}
+                            isAnswersHidden={isAnswersHidden}
                             toggleExerciseActionMenu={toggleExerciseActionMenu}
                         />
                     ))}
                 </div>
             </div>
 
-            <BodyModal 
+            <BodyModal
                 isPopUpActive={isPopUpActive}
                 components={[
                     <DeleteApproval
@@ -145,10 +148,11 @@ export function ExerciseSetPage({
                         isHidden={isExerciseDeleteApprovalHidden}
                         toggle={toggleExerciseDeleteApproval}
                         onDelete={deleteExercise}
-                    />
+                    />,
                 ]}
             />
-
         </div>
-    ) : <div className={`${className ?? ''}`}>undefined</div>;
+    ) : (
+        <div className={`${className ?? ''}`}>undefined</div>
+    );
 }

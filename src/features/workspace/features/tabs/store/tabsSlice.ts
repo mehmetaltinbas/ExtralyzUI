@@ -27,16 +27,23 @@ const tabsSlice = createSlice({
             state,
             action: PayloadAction<{ element: TabsStateElement; newIndex?: number }>
         ) => {
-            const payload = { element: { ...action.payload.element }, newIndex: action.payload.newIndex};
+            const payload = {
+                element: { ...action.payload.element },
+                newIndex: action.payload.newIndex,
+            };
 
-            if (!payload.element.tabTitle || payload.element.tabTitle.length === 0) { // giving a tabTitle if not existed in payload
-                payload.element.tabTitle = payload.element.mode && payload.element.mode.length > 0 ? `${payload.element.mode}: ` : '';
+            if (!payload.element.tabTitle || payload.element.tabTitle.length === 0) {
+                // giving a tabTitle if not existed in payload
+                payload.element.tabTitle =
+                    payload.element.mode && payload.element.mode.length > 0
+                        ? `${payload.element.mode}: `
+                        : '';
                 payload.element.tabTitle +=
                     (payload.element.title && payload.element.title.length > 0) ||
                     (payload.element.id && payload.element.id.length > 0)
-                        ? (payload.element.title && payload.element.title.length > 0
+                        ? payload.element.title && payload.element.title.length > 0
                             ? payload.element.title
-                            : payload.element.id)
+                            : payload.element.id
                         : payload.element.section;
             }
 
@@ -60,7 +67,9 @@ const tabsSlice = createSlice({
                     state.elements.push(payload.element);
                     state.activeTabIndex = state.elements.length - 1;
                 }
-            } else if (state.elements.some((element) => element.tabTitle === payload.element.tabTitle)) {
+            } else if (
+                state.elements.some((element) => element.tabTitle === payload.element.tabTitle)
+            ) {
                 // if tabTitle match in one of state.elements array's elements'
                 if (payload.newIndex || payload.newIndex === 0) {
                     // if newIndex is given
@@ -79,18 +88,24 @@ const tabsSlice = createSlice({
                     state.activeTabIndex = payload.newIndex;
                 } else {
                     // if newIndex isn't given
-                    const currentElement = state.elements.find((element) => element.tabTitle === payload.element.tabTitle)!;
+                    const currentElement = state.elements.find(
+                        (element) => element.tabTitle === payload.element.tabTitle
+                    )!;
                     state.activeTabIndex = currentElement.index!;
                 }
             }
         },
         subtract: (state, action: PayloadAction<number>) => {
             const indexToDelete = action.payload;
-            state.elements = state.elements.filter((element, index) => index !== indexToDelete);
+            state.elements = state.elements.filter(
+                (element, index) => index !== indexToDelete
+            );
             for (let i = indexToDelete; i < state.elements.length; i++) {
                 state.elements[i].index!--;
             }
-            const activeTab = state.elements.find(element => element.index! + 1 === state.activeTabIndex);
+            const activeTab = state.elements.find(
+                (element) => element.index! + 1 === state.activeTabIndex
+            );
             if (activeTab && activeTab.index !== undefined) {
                 if (indexToDelete < activeTab.index) {
                     state.activeTabIndex--;

@@ -1,4 +1,4 @@
-import type { Source } from './source.iterface';
+import type { Source } from './source.interface';
 import type { ExerciseSet } from '../../exercise-set/types/exercise-set.interface';
 import type { ExtendedProcessedSource } from '../../processed-source/types/extended-processed-source.interface';
 

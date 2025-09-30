@@ -1,13 +1,24 @@
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
-import { sourceService } from "src/features/source/services/source.service";
-import { BlackButton } from "src/shared/components/buttons/BlackButton";
-import { ClaretButton } from "src/shared/components/buttons/ClaretButton";
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { sourceService } from 'src/features/source/services/source.service';
+import { BlackButton } from 'src/shared/components/buttons/BlackButton';
+import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
+import type { ResponseBase } from 'src/shared/types/response-base';
 
-export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
+export function SourceCreateForm({
+    isHidden,
+    setIsHidden,
+    setIsPopUpActive,
+    setIsLoadingPageHidden,
+    toggle,
+    updateSources,
+}: {
     isHidden: boolean;
+    setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsPopUpActive: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsLoadingPageHidden: React.Dispatch<React.SetStateAction<boolean>>;
     toggle: () => void;
-    fetchSources: () => Promise<void>;
+    updateSources: () => Promise<void>;
 }) {
     const [uploadedFile, setUploadedFile] = useState<File>();
     const [createSourceDto, setCreateSourceDto] = useState({
@@ -20,23 +31,28 @@ export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
         setCreateSourceDto({
             title: '',
         });
-        setFileInputKey(prev => prev + 1);  
+        setFileInputKey((prev) => prev + 1);
     }, [isHidden]);
 
     async function createSource() {
+        setIsHidden(true);
+        setIsLoadingPageHidden(false);
+        let message: string = 'internal error';
         const formData = new FormData();
         if (uploadedFile) {
             formData.append('file', uploadedFile);
-            Object.keys(createSourceDto).forEach(key => {
+            Object.keys(createSourceDto).forEach((key) => {
                 const value = createSourceDto[key as keyof typeof createSourceDto];
                 if (value !== undefined && value !== null) {
                     formData.append(key, value);
                 }
             });
-            const response = await sourceService.create(formData);
-            alert(response.message);
+            message = (await sourceService.create(formData)).message;
         }
-        fetchSources();
+        updateSources();
+        setIsLoadingPageHidden(true);
+        alert(message);
+        setIsPopUpActive(false);
     }
 
     function handleFileOnChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -51,7 +67,9 @@ export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
             className={`${isHidden && 'hidden'} w-[400px] h-auto relative border px-2 py-4 bg-white rounded-[10px]
             flex flex-col justify-center items-center gap-2`}
         >
-            <ClaretButton className="absolute top-1 right-1" onClick={event => toggle()}>X</ClaretButton>
+            <ClaretButton className="absolute top-1 right-1" onClick={(event) => toggle()}>
+                X
+            </ClaretButton>
             <div className="flex justify-start items-center gap-2">
                 <p>file: </p>
                 <input
@@ -67,10 +85,10 @@ export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
                 <p>title: </p>
                 <input
                     data-key="title"
-                    onChange={(event) => 
+                    onChange={(event) =>
                         setCreateSourceDto({
                             ...createSourceDto,
-                            title: event.target.value
+                            title: event.target.value,
                         })
                     }
                     type="text"
@@ -79,11 +97,13 @@ export function SourceCreateForm({ isHidden, toggle, fetchSources }: {
                     className="px-2 py-[2px] border rounded-full"
                 />
             </div>
-            <BlackButton onClick={async (event) => {
-                await createSource();
-                toggle();
-            }
-            }>Create</BlackButton>
+            <BlackButton
+                onClick={async (event) => {
+                    await createSource();
+                }}
+            >
+                Create
+            </BlackButton>
         </div>
     );
 }
