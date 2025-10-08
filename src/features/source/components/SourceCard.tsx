@@ -1,14 +1,12 @@
-import { useState, type HTMLAttributes, type HtmlHTMLAttributes } from 'react';
+import { useEffect, useState, type HTMLAttributes, type HtmlHTMLAttributes } from 'react';
 import type React from 'react';
 import { openTab } from 'src/features/workspace/features/tabs/utilities/openTab.utility';
 import { Section } from 'src/features/workspace/enums/sections.enum';
-import { sourceService } from 'src/features/source/services/source.service';
 import { useAppDispatch } from 'src/store/hooks';
 import type { Source } from 'src/features/source/types/source.interface';
-import { BlackButton } from 'src/shared/components/buttons/BlackButton';
-import { ClaretButton } from 'src/shared/components/buttons/ClaretButton';
-import { SourceActionMenu } from 'src/features/source/components/SourceActionMenu';
 import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton';
+import type { DocumentNode } from 'src/features/source/types/document-node.interface';
+import { convertHTMLFromJSON } from 'src/shared/utilities/convert-html-from-json.utility';
 
 export function SourceCard({
     source,
@@ -21,6 +19,13 @@ export function SourceCard({
     ) => void;
 }) {
     const dispatch = useAppDispatch();
+    const [renderedHTML, setRenderedHTML] = useState<string>();
+
+    useEffect(() => {
+        if (source.rawText) {
+            setRenderedHTML(convertHTMLFromJSON(JSON.parse(source.rawText) as DocumentNode));
+        }
+    }, []);
 
     return (
         <div
@@ -62,7 +67,7 @@ export function SourceCard({
                 </div>
             </div>
             <div className="w-full h-full p-2 flex-1 overflow-y-auto">
-                <div dangerouslySetInnerHTML={{ __html: source?.rawText }}></div>
+                <div dangerouslySetInnerHTML={{ __html: renderedHTML ? renderedHTML : ''  }} className='text-gray-500'></div>
             </div>
         </div>
     );

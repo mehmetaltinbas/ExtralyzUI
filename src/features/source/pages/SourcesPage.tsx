@@ -105,7 +105,7 @@ export function SourcesPage({ className }: { className?: string }) {
                     className="relative w-full h-auto p-4 col-span-1 sm:col-span-2 lg:col-span-3
                     flex flex justify-center items-center gap-2"
                 >
-                    <p className="text-2xl font-bold">Sources</p>
+                    <p className="text-2xl">Sources</p>
                     <BlackButton onClick={toggleCreateSourceForm} className="absolute right-4">
                         new Source
                     </BlackButton>

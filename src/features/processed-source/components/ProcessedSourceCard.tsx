@@ -9,6 +9,9 @@ import {
 } from '../../workspace/features/tabs/store/tabsSlice';
 import { useAppDispatch } from '../../../store/hooks';
 import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton';
+import { useEffect, useState } from 'react';
+import { convertHTMLFromJSON } from 'src/shared/utilities/convert-html-from-json.utility';
+import type { DocumentNode } from 'src/features/source/types/document-node.interface';
 
 export function ProcessedSourceCard({
     processedSource,
@@ -23,6 +26,13 @@ export function ProcessedSourceCard({
     ) => void;
 }) {
     const dispatch = useAppDispatch();
+    const [renderedHTML, setRenderedHTML] = useState<string>();
+
+    useEffect(() => {
+        if (processedSource?.processedText) {
+            setRenderedHTML(convertHTMLFromJSON(JSON.parse(processedSource?.processedText) as DocumentNode));
+        }
+    }, []);
 
     function openTab(event: React.MouseEvent<HTMLDivElement>) {
         const section = Section.PROCESSED_SOURCE;
@@ -78,7 +88,7 @@ export function ProcessedSourceCard({
                 </div>
             </div>
             <div className="w-full h-full p-2 flex-1 overflow-y-auto">
-                <p>{processedSource.processedText}</p>
+                <div dangerouslySetInnerHTML={{ __html: renderedHTML ? renderedHTML : '' }} className='text-gray-500'></div>
             </div>
         </div>
     );
