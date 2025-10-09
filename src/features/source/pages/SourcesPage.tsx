@@ -116,10 +116,12 @@ export function SourcesPage({ className }: { className?: string }) {
                     </div>
                 ) : (
                     sources.map((source) => (
-                        <SourceCard
-                            source={source}
-                            toggleSourceActionMenu={toggleSourceActionMenu}
-                        />
+                        <div className='flex justify-center items-center'>
+                            <SourceCard
+                                source={source}
+                                toggleSourceActionMenu={toggleSourceActionMenu}
+                            />
+                        </div>
                     ))
                 )}
             </div>
