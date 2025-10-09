@@ -6,7 +6,6 @@ import { useAppDispatch } from 'src/store/hooks';
 import type { Source } from 'src/features/source/types/source.interface';
 import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton';
 import type { DocumentNode } from 'src/features/source/types/document-node.interface';
-import { convertHTMLFromJSON } from 'src/shared/utilities/convert-html-from-json.utility';
 
 export function SourceCard({
     source,
@@ -19,13 +18,6 @@ export function SourceCard({
     ) => void;
 }) {
     const dispatch = useAppDispatch();
-    const [renderedHTML, setRenderedHTML] = useState<string>();
-
-    useEffect(() => {
-        if (source.rawText) {
-            setRenderedHTML(convertHTMLFromJSON(JSON.parse(source.rawText) as DocumentNode));
-        }
-    }, []);
 
     return (
         <div
@@ -67,7 +59,7 @@ export function SourceCard({
                 </div>
             </div>
             <div className="w-full h-full p-2 flex-1 overflow-y-auto">
-                <div dangerouslySetInnerHTML={{ __html: renderedHTML ? renderedHTML : ''  }} className='text-gray-500'></div>
+                <div className='text-gray-500'>{source.rawText}</div>
             </div>
         </div>
     );
