@@ -1,5 +1,5 @@
 export interface Styles {
     bold: boolean;
     italic: boolean;
-    fontSize: number;  // px
+    fontSize: number; // px
 }

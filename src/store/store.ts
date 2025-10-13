@@ -5,6 +5,7 @@ import { layoutDimensionsReducer } from '../features/workspace/store/layout-dime
 import { sourcesReducer } from 'src/features/source/store/sources.slice';
 import { extendedSourcesReducer } from 'src/features/source/store/extended-sources.slice';
 import { processedSourcesReducer } from 'src/features/processed-source/store/processed-sources.slice';
+import { exerciseSetsReducer } from 'src/features/exercise-set/store/exercise-sets.slice';
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
         layoutDimensions: layoutDimensionsReducer,
         sources: sourcesReducer,
         extendedSources: extendedSourcesReducer,
-        processedSources: processedSourcesReducer
+        processedSources: processedSourcesReducer,
+        exerciseSets: exerciseSetsReducer,
     },
 });
 

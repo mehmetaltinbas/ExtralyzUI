@@ -14,7 +14,7 @@ import { processedSourcesActions } from 'src/features/processed-source/store/pro
 
 export function ProcessedSourcesPage({ className }: { className?: string }) {
     const dispatch = useAppDispatch();
-    const processedSources = useAppSelector(state => state.processedSources);
+    const processedSources = useAppSelector((state) => state.processedSources);
     const [actionMenuSourceId, setActionMenuSourceId] = useState<string>('');
     const [isPopUpActive, setIsPopUpActive] = useState<boolean>(false);
     const [isSourceActionMenuHidden, setIsSourceActionMenuHidden] = useState<boolean>(true);
@@ -23,12 +23,12 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
     const [isDeleteApproavelHidden, setIsDeleteApprovalHidden] = useState<boolean>(true);
     const [isLoadingPageHidden, setIsLoadingPageHidden] = useState<boolean>(true);
 
-    async function fetchProcessedSources() {
+    async function updateProcessedSources() {
         dispatch(processedSourcesActions.fetchData());
     }
 
     useEffect(() => {
-        fetchProcessedSources();
+        updateProcessedSources();
     }, []);
 
     function toggleProcessedSourceActionMenu(
@@ -60,7 +60,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
 
     async function deleteProcessedSource(): Promise<string> {
         const response = await processedSourceService.deleteById(actionMenuSourceId);
-        fetchProcessedSources();
+        updateProcessedSources();
         return response.message;
     }
 
@@ -73,7 +73,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                 isHidden={isSourceActionMenuHidden}
                 setIsHidden={setIsSourceActionMenuHidden}
                 processedSourceId={actionMenuSourceId}
-                fetchProcessedSources={fetchProcessedSources}
+                fetchProcessedSources={updateProcessedSources}
                 toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
                 toggleDeleteApproval={toggleDeleteApproval}
             />
@@ -96,7 +96,7 @@ export function ProcessedSourcesPage({ className }: { className?: string }) {
                     processedSources.map((processedSources) => (
                         <ProcessedSourceCard
                             processedSource={processedSources}
-                            fetchProcessedSources={fetchProcessedSources}
+                            fetchProcessedSources={updateProcessedSources}
                             toggleSourceActionMenu={toggleProcessedSourceActionMenu}
                         />
                     ))

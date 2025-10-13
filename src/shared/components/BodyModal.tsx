@@ -15,11 +15,11 @@ export function BodyModal({
     return (
         <>
             <div // overlay
-                className={`${!isPopUpActive && 'hidden'} absolute z-10 w-full h-full backdrop-blur-xs`}
+                className={`${!isPopUpActive ? 'hidden' : ''} absolute z-10 w-full h-full backdrop-blur-xs`}
             ></div>
 
             <div // pop up
-                className={`${!isPopUpActive && 'hidden'} absolute z-20 w-full h-full`}
+                className={`${!isPopUpActive ? 'hidden' : ''} absolute z-20 w-full h-full`}
             >
                 <div className="w-full h-[75%] flex justify-center items-center">
                     {components}

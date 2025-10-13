@@ -9,22 +9,23 @@ import type { ExerciseSet } from '../../../exercise-set/types/exercise-set.inter
 import { sourceService } from '../../../source/services/source.service';
 import { processedSourceService } from '../../../processed-source/services/processed-source.service';
 import { exerciseSetService } from '../../../exercise-set/services/exercise-set.service';
+import { sourcesActions } from 'src/features/source/store/sources.slice';
+import { processedSourcesActions } from 'src/features/processed-source/store/processed-sources.slice';
+import { exerciseSetsActions } from 'src/features/exercise-set/store/exercise-sets.slice';
 
 export function Sidebar() {
     const dispatch = useAppDispatch();
     const sidebar = useAppSelector((state) => state.sidebar);
-    const [sources, setSources] = useState<Source[]>([]);
-    const [processedSources, setProcessedSources] = useState<ProcessedSource[]>([]);
-    const [exerciseSets, setExerciseSets] = useState<ExerciseSet[]>([]);
+    const sources = useAppSelector((state) => state.sources);
+    const processedSources = useAppSelector((state) => state.processedSources);
+    const exerciseSets = useAppSelector((state) => state.exerciseSets);
     const isResizing = useRef(false);
 
     useEffect(() => {
         async function fetchItems() {
-            setSources((await sourceService.readAllByUserId()).sources!);
-            setProcessedSources(
-                (await processedSourceService.readAllByUserId()).processedSources!
-            );
-            setExerciseSets((await exerciseSetService.readAllByUserId()).exerciseSets!);
+            dispatch(sourcesActions.fetchData());
+            dispatch(processedSourcesActions.fetchData());
+            dispatch(exerciseSetsActions.fetchData());
         }
         fetchItems();
         window.addEventListener('mousemove', handleMouseMove);

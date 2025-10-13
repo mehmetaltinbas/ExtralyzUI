@@ -1,18 +1,145 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Source } from '../types/source.interface';
 import type { DocumentNode } from 'src/features/source/types/document-node.interface';
-import { DocumentRenderer } from 'src/shared/components/DocumentRenderer';
+import { DocumentRenderer } from 'src/shared/components/document-render/DocumentRenderer';
+import { SourceActionMenu } from 'src/features/source/components/SourceActionMenu';
+import { BodyModal } from 'src/shared/components/BodyModal';
+import { ProcessSourceForm } from 'src/features/processed-source/components/ProcessSourceForm';
+import { CreateExerciseSetForm } from 'src/features/exercise-set/components/CreateExerciseSetForm';
+import { DeleteApproval } from 'src/shared/components/DeleteApproval';
+import { LoadingPage } from 'src/shared/pages/LoadingPage';
+import { useAppDispatch } from 'src/store/hooks';
+import { sourcesActions } from 'src/features/source/store/sources.slice';
+import { sourceService } from 'src/features/source/services/source.service';
+import { ActionMenuButton } from 'src/shared/components/buttons/ActionMenuButton';
+import { BlackButton } from 'src/shared/components/buttons/BlackButton';
 
 export function SourcePage({ source, className }: { source: Source; className?: string }) {
+    const [mode, setMode] = useState<'view' | 'edit'>('view');
+    const dispatch = useAppDispatch();
+    const [isActionMenuHidden, setIsActionMenuHidden] = useState<boolean>(true);
+    const [isPopUpActive, setIsPopUpActive] = useState<boolean>(false);
+    const [isCreateExerciseSetFormHidden, setIsCreateExerciseSetFormHidden] =
+        useState<boolean>(true);
+    const [isProcessSourceFormHidden, setIsProcessSourceFormHidden] = useState<boolean>(true);
+    const [isDeleteApproavelHidden, setIsDeleteApprovalHidden] = useState<boolean>(true);
+    const [isLoadingPageHidden, setIsLoadingPageHidden] = useState<boolean>(true);
+    const mainDivRef = useRef<HTMLDivElement>(null);
 
-    return ( source ? (
-        <div className={`${className ?? ''} w-full h-full gap-2 overflow-y-auto p-2`}>
-            <div className='w-full h-auto flex flex-col justify-start items-center gap-4'>
+    useEffect(() => {}, []);
+
+    async function changeMode() {
+        setIsPopUpActive(true);
+        setIsLoadingPageHidden(false);
+        setMode((prev) => (prev === 'view' ? 'edit' : 'view'));
+        setIsLoadingPageHidden(true);
+        setIsPopUpActive(false);
+    }
+
+    function toggleSourceActionMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        event.stopPropagation();
+        const sourceActionMenu = document.getElementById('source-action-menu');
+        const container = document.getElementById('source-page-container');
+        if (sourceActionMenu && container) {
+            const containerRect = container?.getBoundingClientRect();
+            const positionOfButton = event.currentTarget.getBoundingClientRect();
+            sourceActionMenu.style.top = `${positionOfButton.bottom - containerRect?.top}px`;
+            sourceActionMenu.style.left = `${positionOfButton.right - containerRect?.left}px`;
+            setIsActionMenuHidden((prev) => !prev);
+        }
+    }
+
+    async function updateSourcesState() {
+        dispatch(sourcesActions.fetchData());
+    }
+
+    function toggleProcessSourceForm() {
+        setIsProcessSourceFormHidden((prev) => !prev);
+        setIsPopUpActive((prev) => !prev);
+    }
+
+    function toggleCreateExerciseSetForm() {
+        setIsCreateExerciseSetFormHidden((prev) => !prev);
+        setIsPopUpActive((prev) => !prev);
+    }
+
+    function toggleDeleteApproval() {
+        setIsDeleteApprovalHidden((prev) => !prev);
+        setIsPopUpActive((prev) => !prev);
+    }
+
+    async function deleteSource(): Promise<string> {
+        const response = await sourceService.deleteById(source._id);
+        await updateSourcesState();
+        return response.message;
+    }
+
+    return source ? (
+        <div
+            id="source-page-container"
+            className={`${className ?? ''} w-full h-full relative p-2`}
+        >
+            <SourceActionMenu
+                isHidden={isActionMenuHidden}
+                setIsHidden={setIsActionMenuHidden}
+                sourceId={source._id}
+                toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
+                toggleProcessSourceForm={toggleProcessSourceForm}
+                toggleDeleteApproval={toggleDeleteApproval}
+            />
+
+            <div // main
+                ref={mainDivRef}
+                className="w-full h-auto absolute
+                flex flex-col justify-start items-center gap-4"
+            >
+                <div className="absolute top-0 right-0 flex flex-col">
+                    <ActionMenuButton onClick={(event) => toggleSourceActionMenu(event)} />
+                    <BlackButton onClick={async () => await changeMode()}>
+                        change mode to: "{mode === 'view' ? 'edit' : 'view'}"
+                    </BlackButton>
+                </div>
                 <p>{source.title}</p>
                 <p>{source.type}</p>
-                <DocumentRenderer documentNode={JSON.parse(source.rawText) as DocumentNode}/>
+                <DocumentRenderer
+                    mode={mode}
+                    docNode={JSON.parse(source.rawText) as DocumentNode}
+                    mainDiv={mainDivRef.current!}
+                />
             </div>
+
+            <BodyModal
+                isPopUpActive={isPopUpActive}
+                components={[
+                    <ProcessSourceForm
+                        isHidden={isProcessSourceFormHidden}
+                        setIsHidden={setIsProcessSourceFormHidden}
+                        setIsPopUpActive={setIsPopUpActive}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
+                        toggle={toggleProcessSourceForm}
+                        sourceId={source._id}
+                    />,
+                    <CreateExerciseSetForm
+                        isHidden={isCreateExerciseSetFormHidden}
+                        setIsHidden={setIsCreateExerciseSetFormHidden}
+                        setIsPopUpActive={setIsPopUpActive}
+                        toggle={toggleCreateExerciseSetForm}
+                        sourceId={source._id}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
+                    />,
+                    <DeleteApproval
+                        isHidden={isDeleteApproavelHidden}
+                        setIsHidden={setIsDeleteApprovalHidden}
+                        setIsPopUpActive={setIsPopUpActive}
+                        setIsLoadingPageHidden={setIsLoadingPageHidden}
+                        toggle={toggleDeleteApproval}
+                        onDelete={deleteSource}
+                    />,
+                    <LoadingPage isHidden={isLoadingPageHidden} />,
+                ]}
+            />
         </div>
-        ) : <></>
+    ) : (
+        <></>
     );
 }

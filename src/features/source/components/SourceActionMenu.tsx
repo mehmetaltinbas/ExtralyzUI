@@ -6,7 +6,6 @@ export function SourceActionMenu({
     isHidden,
     setIsHidden,
     sourceId,
-    fetchSources,
     toggleCreateExerciseSetForm,
     toggleProcessSourceForm,
     toggleDeleteApproval,
@@ -14,7 +13,6 @@ export function SourceActionMenu({
     isHidden: boolean;
     setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
     sourceId?: string;
-    fetchSources: () => void;
     toggleCreateExerciseSetForm: () => void;
     toggleProcessSourceForm: () => void;
     toggleDeleteApproval: () => void;

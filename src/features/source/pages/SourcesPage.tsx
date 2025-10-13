@@ -29,15 +29,11 @@ export function SourcesPage({ className }: { className?: string }) {
 
     async function updateSourcesState() {
         dispatch(sourcesActions.fetchData());
-    };
+    }
 
     useEffect(() => {
         updateSourcesState();
     }, []);
-
-    async function updateSources() {
-        await updateSourcesState();
-    }
 
     function toggleSourceActionMenu(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -78,7 +74,7 @@ export function SourcesPage({ className }: { className?: string }) {
 
     async function deleteSource(): Promise<string> {
         const response = await sourceService.deleteById(actionMenuSourceId);
-        updateSources();
+        await updateSourcesState();
         return response.message;
     }
 
@@ -91,7 +87,6 @@ export function SourcesPage({ className }: { className?: string }) {
                 isHidden={isSourceActionMenuHidden}
                 setIsHidden={setIsSourceActionMenuHidden}
                 sourceId={actionMenuSourceId}
-                fetchSources={updateSources}
                 toggleCreateExerciseSetForm={toggleCreateExerciseSetForm}
                 toggleProcessSourceForm={toggleProcessSourceForm}
                 toggleDeleteApproval={toggleDeleteApproval}
@@ -116,7 +111,7 @@ export function SourcesPage({ className }: { className?: string }) {
                     </div>
                 ) : (
                     sources.map((source) => (
-                        <div className='flex justify-center items-center'>
+                        <div className="flex justify-center items-center">
                             <SourceCard
                                 source={source}
                                 toggleSourceActionMenu={toggleSourceActionMenu}
@@ -135,7 +130,7 @@ export function SourcesPage({ className }: { className?: string }) {
                         setIsPopUpActive={setIsPopUpActive}
                         setIsLoadingPageHidden={setIsLoadingPageHidden}
                         toggle={toggleCreateSourceForm}
-                        updateSources={updateSources}
+                        updateSources={updateSourcesState}
                     />,
                     <ProcessSourceForm
                         isHidden={isProcessSourceFormHidden}

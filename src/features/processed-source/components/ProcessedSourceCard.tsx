@@ -79,7 +79,7 @@ export function ProcessedSourceCard({
                 </div>
             </div>
             <div className="w-full h-full p-2 flex-1 overflow-y-auto">
-                <div className='text-gray-500'>{processedSource.processedText}</div>
+                <div className="text-gray-500">{processedSource.processedText}</div>
             </div>
         </div>
     );

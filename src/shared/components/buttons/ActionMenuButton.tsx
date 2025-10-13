@@ -12,7 +12,7 @@ export function ActionMenuButton({
     return (
         <button
             onClick={onClick}
-            className={`cursor-pointer font-serif font-bold text-lg px-2 pt-[1px] pb-[8px] rounded-full
+            className={`w-[50px] h-[50px] cursor-pointer font-bold text-xl px-2 pt-[1px] pb-[8px] rounded-full
                 hover:border hover:bg-white'
                 ${className ?? ''}
             `}
