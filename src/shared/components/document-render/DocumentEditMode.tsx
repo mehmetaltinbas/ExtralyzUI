@@ -3,6 +3,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Styles } from 'src/features/source/types/styles.interface';
 import { Toolbar } from 'src/shared/components/document-render/Toolbar';
 import type { PaginatedDocument } from 'src/shared/types/paginated-document.interface';
+import { type SelectedInlineNodeIndices } from 'src/shared/types/selected-inline-node-indices.interface';
+import type { TextareaStyles } from 'src/shared/types/textarea-styles.interface';
 
 export function DocumentEditMode({
     paginatedDocument,
@@ -33,27 +35,27 @@ export function DocumentEditMode({
     const [isTextareaHidden, setIsTextareaHidden] = useState<boolean>(true);
     const [textAreaConstructionTrigger, setTextAreaConstructionTrigger] = useState<'enter' | 'click'>();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const [selectedIndices, setSelectedIndices] = useState({
+    const [selectedInlineNodeIndices, setSelectedInlineNodeIndices] = useState<SelectedInlineNodeIndices>({
         pageIndex: 0,
         blockNodeIndex: 0,
         inlineNodeIndex: 0,
     });
     const [selectedText, setSelectedText] = useState<string>('');
-    const [textareaStyles, setTextareaStyles] = useState({
-        fontSize: '12px',
-        fontWeight: '400',
+    const [textareaStyles, setTextareaStyles] = useState<TextareaStyles>({
+        fontSize: 9,
+        fontWeight: 400,
         fontStyle: 'normal',
     });
 
-    function triggerTextAreaConstruction(selectedIndices: { pageIndex: number; blockNodeIndex: number; inlineNodeIndex: number; }, trigger: 'click' | 'enter') { // text construction triggerer function
-        setSelectedIndices(selectedIndices);
+    function triggerTextAreaConstruction(selectedIndices: SelectedInlineNodeIndices, trigger: 'click' | 'enter') { // text construction triggerer function
+        setSelectedInlineNodeIndices(selectedIndices);
         setTextAreaConstructionTrigger(trigger);
         setIsNextRender(true);
     }
 
-    useEffect(() => { // text construction triggerer useEffect 
+    useEffect(() => { // textarea construction triggerer useEffect 
         if (isNextRender) {
-            const selectedHtmlSpanElement = document.querySelector(`[data-page-index="${selectedIndices.pageIndex}"][data-block-index="${selectedIndices.blockNodeIndex}"][data-inline-index="${selectedIndices.inlineNodeIndex}"]`) as HTMLSpanElement;
+            const selectedHtmlSpanElement = document.querySelector(`[data-page-index="${selectedInlineNodeIndices.pageIndex}"][data-block-index="${selectedInlineNodeIndices.blockNodeIndex}"][data-inline-index="${selectedInlineNodeIndices.inlineNodeIndex}"]`) as HTMLSpanElement;
             if (selectedHtmlSpanElement) {
                 const selectedInlineNode = paginatedDocument.pages[Number(selectedHtmlSpanElement.dataset.pageIndex)].blockNodes[Number(selectedHtmlSpanElement.dataset.blockIndex)].content[Number(selectedHtmlSpanElement.dataset.inlineIndex)];
                 setSelectedText(selectedInlineNode.text);
@@ -65,7 +67,7 @@ export function DocumentEditMode({
                 }
             }
         }
-    }, [isNextRender, selectedText]);
+    }, [isNextRender, selectedText, isSelectedTextSet]);
 
     function constructTextArea(htmlSpanElement: HTMLSpanElement, trigger: 'enter' | 'click') {
         if (textareaRef.current) {
@@ -77,15 +79,15 @@ export function DocumentEditMode({
             textareaRef.current.style.width = `${rect.width}px`;
             const selectedInlineNode = paginatedDocument.pages[Number(htmlSpanElement.dataset.pageIndex)].blockNodes[Number(htmlSpanElement.dataset.blockIndex)].content[Number(htmlSpanElement.dataset.inlineIndex)];
             setTextareaStyles({
-                fontSize: `${Math.floor((selectedInlineNode.styles.fontSize * import.meta.env.VITE_DPI) / 72)}px`,
-                fontWeight: selectedInlineNode.styles.bold ? '700' : '400',
+                fontSize: Math.floor((selectedInlineNode.styles.fontSize * import.meta.env.VITE_DPI) / 72),
+                fontWeight: selectedInlineNode.styles.bold ? 700 : 400,
                 fontStyle: selectedInlineNode.styles.italic ? 'italic' : 'normal',
             });
             if (selectedText !== selectedInlineNode.text) {
                 setSelectedText(selectedInlineNode.text);
             }
-            if (selectedIndices.pageIndex !== Number(htmlSpanElement.dataset.pageIndex) || selectedIndices.blockNodeIndex !== Number(htmlSpanElement.dataset.blockIndex) || selectedIndices.inlineNodeIndex !== Number(htmlSpanElement.dataset.inlineIndex)) {
-                setSelectedIndices({
+            if (selectedInlineNodeIndices.pageIndex !== Number(htmlSpanElement.dataset.pageIndex) || selectedInlineNodeIndices.blockNodeIndex !== Number(htmlSpanElement.dataset.blockIndex) || selectedInlineNodeIndices.inlineNodeIndex !== Number(htmlSpanElement.dataset.inlineIndex)) {
+                setSelectedInlineNodeIndices({
                     pageIndex: Number(htmlSpanElement.dataset.pageIndex),
                     blockNodeIndex: Number(htmlSpanElement.dataset.blockIndex),
                     inlineNodeIndex: Number(htmlSpanElement.dataset.inlineIndex),
@@ -115,14 +117,14 @@ export function DocumentEditMode({
         setSelectedText(eventValue);
         setPaginatedDocument(prev => {
             const newPages = [ ...prev!.pages ];
-            newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex] = {
+            newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex] = {
                 content: [
-                    ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(0, selectedIndices.inlineNodeIndex),
+                    ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex].content.slice(0, selectedInlineNodeIndices.inlineNodeIndex),
                     {
-                        ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content[selectedIndices.inlineNodeIndex],
+                        ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex].content[selectedInlineNodeIndices.inlineNodeIndex],
                         text: eventValue,
                     },
-                    ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(selectedIndices.inlineNodeIndex + 1),
+                    ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex].content.slice(selectedInlineNodeIndices.inlineNodeIndex + 1),
                 ]
             };
             return { pages: newPages };
@@ -136,14 +138,14 @@ export function DocumentEditMode({
             const secondPart = selectedText.slice(caretPosition);
             setPaginatedDocument(prev => {
                 const newPages = structuredClone([ ...prev!.pages ]);
-                const tailInlineNodes = [ ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(selectedIndices.inlineNodeIndex + 1) ];
-                newPages[selectedIndices.pageIndex].blockNodes = [
-                    ...newPages[selectedIndices.pageIndex].blockNodes.slice(0, selectedIndices.blockNodeIndex),
+                const tailInlineNodes = [ ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex].content.slice(selectedInlineNodeIndices.inlineNodeIndex + 1) ];
+                newPages[selectedInlineNodeIndices.pageIndex].blockNodes = [
+                    ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes.slice(0, selectedInlineNodeIndices.blockNodeIndex),
                     {
                         content: [
-                            ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(0, selectedIndices.inlineNodeIndex),
+                            ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex].content.slice(0, selectedInlineNodeIndices.inlineNodeIndex),
                             {
-                                ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content[selectedIndices.inlineNodeIndex],
+                                ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex].content[selectedInlineNodeIndices.inlineNodeIndex],
                                 text: firstPart,
                             }
                         ]
@@ -164,18 +166,18 @@ export function DocumentEditMode({
                         content: [
                             {
                                 text: secondPart,
-                                styles: newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content[selectedIndices.inlineNodeIndex].styles,
+                                styles: newPages[selectedInlineNodeIndices.pageIndex].blockNodes[selectedInlineNodeIndices.blockNodeIndex].content[selectedInlineNodeIndices.inlineNodeIndex].styles,
                             },
                             ...tailInlineNodes
                         ],
                     },
-                    ...newPages[selectedIndices.pageIndex].blockNodes.slice(selectedIndices.blockNodeIndex + 1),
+                    ...newPages[selectedInlineNodeIndices.pageIndex].blockNodes.slice(selectedInlineNodeIndices.blockNodeIndex + 1),
                 ];
                 return { pages: newPages };
             });
             triggerTextAreaConstruction({
-                pageIndex: selectedIndices.pageIndex,
-                blockNodeIndex: selectedIndices.blockNodeIndex + 2,
+                pageIndex: selectedInlineNodeIndices.pageIndex,
+                blockNodeIndex: selectedInlineNodeIndices.blockNodeIndex + 2,
                 inlineNodeIndex: 0
             }, 'enter');
             setIsPaginatedDocumentFlowChanged(true);
@@ -190,14 +192,20 @@ export function DocumentEditMode({
                 ref={textareaRef}
                 className={`absolute border-none outline-none resize-none`}
                 style={{
-                    fontSize: textareaStyles.fontSize,
+                    fontSize: `${textareaStyles.fontSize}px`,
                     fontWeight: textareaStyles.fontWeight,
                     fontStyle: textareaStyles.fontStyle,
                 }}
                 value={selectedText}
                 onChange={(event) => handleTextAreaOnChange(event)}
             ></textarea>
-            <Toolbar paginatedDocument={paginatedDocument} />
+            <Toolbar 
+                paginatedDocument={paginatedDocument} 
+                setPaginatedDocument={setPaginatedDocument}
+                selectedInlineNodeIndices={selectedInlineNodeIndices}
+                setIsPaginatedDocumentFlowChanged={setIsPaginatedDocumentFlowChanged}
+                triggerTextAreaConstruction={triggerTextAreaConstruction}
+            />
             <div className="flex flex-col justify-start items-center gap-4">
                 {paginatedDocument.pages.map((page, pageIndex) => (
                     <div
@@ -214,7 +222,7 @@ export function DocumentEditMode({
                                 }}
                                 data-page-index={pageIndex}
                                 data-block-node-index={blockNodeIndex}
-                                className="w-full flex gap-0 whitespace-pre "
+                                className="w-full flex justify-start items-center gap-0 whitespace-pre "
                             >
                                 {blockNode.content.map((inlineNode, inlineNodeIndex) => (
                                     <span
