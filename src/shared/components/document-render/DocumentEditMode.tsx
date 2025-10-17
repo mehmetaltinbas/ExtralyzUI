@@ -1,8 +1,5 @@
 import type React from 'react';
-import { useRef, useState } from 'react';
-import type { BlockNode } from 'src/features/source/types/block-node.interface';
-import type { DocumentNode } from 'src/features/source/types/document-node.interface';
-import type { InlineNode } from 'src/features/source/types/inline-node.interface';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Styles } from 'src/features/source/types/styles.interface';
 import { Toolbar } from 'src/shared/components/document-render/Toolbar';
 import type { PaginatedDocument } from 'src/shared/types/paginated-document.interface';
@@ -10,13 +7,18 @@ import type { PaginatedDocument } from 'src/shared/types/paginated-document.inte
 export function DocumentEditMode({
     paginatedDocument,
     setPaginatedDocument,
+    setIsPaginatedDocumentFlowChanged,
+    blockNodesRef,
     pageDimensions,
     constructTailwindClassNames,
     mainDiv,
     padding,
+    calculateGlobalBlockNodeIndex,
 }: {
     paginatedDocument: PaginatedDocument;
     setPaginatedDocument: React.Dispatch<React.SetStateAction<PaginatedDocument | undefined>>;
+    setIsPaginatedDocumentFlowChanged: React.Dispatch<React.SetStateAction<boolean>>;
+    blockNodesRef: React.RefObject<(HTMLParagraphElement | null)[]>;
     pageDimensions: {
         width: number;
         height: number;
@@ -24,8 +26,12 @@ export function DocumentEditMode({
     constructTailwindClassNames(styles: Styles): string;
     mainDiv: HTMLDivElement;
     padding: { x: number, y: number };
+    calculateGlobalBlockNodeIndex(paginatedDocument: PaginatedDocument, pageIndex: number, blockNodeIndex: number): number;
 }) {
+    const [isNextRender, setIsNextRender] = useState<boolean>(false);
+    const [isSelectedTextSet, setIsSelectedTextSet] = useState<boolean>(false);
     const [isTextareaHidden, setIsTextareaHidden] = useState<boolean>(true);
+    const [textAreaConstructionTrigger, setTextAreaConstructionTrigger] = useState<'enter' | 'click'>();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [selectedIndices, setSelectedIndices] = useState({
         pageIndex: 0,
@@ -39,69 +45,150 @@ export function DocumentEditMode({
         fontStyle: 'normal',
     });
 
-    function constructTextArea(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+    function triggerTextAreaConstruction(selectedIndices: { pageIndex: number; blockNodeIndex: number; inlineNodeIndex: number; }, trigger: 'click' | 'enter') { // text construction triggerer function
+        setSelectedIndices(selectedIndices);
+        setTextAreaConstructionTrigger(trigger);
+        setIsNextRender(true);
+    }
+
+    useEffect(() => { // text construction triggerer useEffect 
+        if (isNextRender) {
+            const selectedHtmlSpanElement = document.querySelector(`[data-page-index="${selectedIndices.pageIndex}"][data-block-index="${selectedIndices.blockNodeIndex}"][data-inline-index="${selectedIndices.inlineNodeIndex}"]`) as HTMLSpanElement;
+            if (selectedHtmlSpanElement) {
+                const selectedInlineNode = paginatedDocument.pages[Number(selectedHtmlSpanElement.dataset.pageIndex)].blockNodes[Number(selectedHtmlSpanElement.dataset.blockIndex)].content[Number(selectedHtmlSpanElement.dataset.inlineIndex)];
+                setSelectedText(selectedInlineNode.text);
+                setIsSelectedTextSet(true);
+                if (isSelectedTextSet) {
+                    constructTextArea(selectedHtmlSpanElement, textAreaConstructionTrigger!);
+                    setIsSelectedTextSet(false);
+                    setIsNextRender(false);
+                }
+            }
+        }
+    }, [isNextRender, selectedText]);
+
+    function constructTextArea(htmlSpanElement: HTMLSpanElement, trigger: 'enter' | 'click') {
         if (textareaRef.current) {
-            const eventTarget = event.currentTarget;
-            const rect = eventTarget.getBoundingClientRect();
+            const rect = htmlSpanElement.getBoundingClientRect();
             const mainDivRect = mainDiv.getBoundingClientRect();
             textareaRef.current.style.left = `${rect.left - mainDivRect.left}px`;
             textareaRef.current.style.top = `${rect.top - mainDivRect.top}px`;
             textareaRef.current.style.height = `${rect.height}px`;
             textareaRef.current.style.width = `${rect.width}px`;
-            setIsTextareaHidden(false);
-            const selectedInlineNode = paginatedDocument.pages[Number(eventTarget.dataset.pageIndex)].blockNodes[Number(eventTarget.dataset.blockIndex)].node.content[Number(eventTarget.dataset.inlineIndex)];
+            const selectedInlineNode = paginatedDocument.pages[Number(htmlSpanElement.dataset.pageIndex)].blockNodes[Number(htmlSpanElement.dataset.blockIndex)].content[Number(htmlSpanElement.dataset.inlineIndex)];
             setTextareaStyles({
                 fontSize: `${Math.floor((selectedInlineNode.styles.fontSize * import.meta.env.VITE_DPI) / 72)}px`,
                 fontWeight: selectedInlineNode.styles.bold ? '700' : '400',
                 fontStyle: selectedInlineNode.styles.italic ? 'italic' : 'normal',
             });
-            setSelectedText(selectedInlineNode.text);
-            setSelectedIndices({
-                pageIndex: Number(eventTarget.dataset.pageIndex),
-                blockNodeIndex: Number(eventTarget.dataset.blockIndex),
-                inlineNodeIndex: Number(eventTarget.dataset.inlineIndex),
-            });
-        }
-    }
-
-    function calculateGlobalBlockNodeIndex(pageIndex: number, blockNodeIndex: number): number {
-        let globalBlockNodeIndex = 0;
-        for (let i = 0; i <= pageIndex; i++) {
-            if (i === pageIndex) {
-                globalBlockNodeIndex += blockNodeIndex;
-            } else {
-                globalBlockNodeIndex += paginatedDocument.pages[i].blockNodes.length;
+            if (selectedText !== selectedInlineNode.text) {
+                setSelectedText(selectedInlineNode.text);
             }
+            if (selectedIndices.pageIndex !== Number(htmlSpanElement.dataset.pageIndex) || selectedIndices.blockNodeIndex !== Number(htmlSpanElement.dataset.blockIndex) || selectedIndices.inlineNodeIndex !== Number(htmlSpanElement.dataset.inlineIndex)) {
+                setSelectedIndices({
+                    pageIndex: Number(htmlSpanElement.dataset.pageIndex),
+                    blockNodeIndex: Number(htmlSpanElement.dataset.blockIndex),
+                    inlineNodeIndex: Number(htmlSpanElement.dataset.inlineIndex),
+                });
+            }
+            if (trigger === 'enter') {
+                textareaRef.current.setSelectionRange(0, 0);
+            } else if (trigger === 'click') {
+                const selection = window.getSelection();
+                if (selection && selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0);
+                    const clickedOffset = range.startOffset;
+                    textareaRef.current.setSelectionRange(clickedOffset, clickedOffset);
+                }
+            }
+            textareaRef.current.focus();
         }
-        return globalBlockNodeIndex;
     }
 
+    function handleSpanOnclick(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+        const htmlSpanElement = event.currentTarget;
+        triggerTextAreaConstruction({ pageIndex: Number(htmlSpanElement.dataset.pageIndex), blockNodeIndex: Number(htmlSpanElement.dataset.blockIndex), inlineNodeIndex: Number(htmlSpanElement.dataset.inlineIndex) }, 'click');
+    }
 
     function handleTextAreaOnChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
         const eventValue = event.currentTarget.value;
         setSelectedText(eventValue);
         setPaginatedDocument(prev => {
-            const newContent = [ ...prev.pages ];
-            newContent[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].node = {
+            const newPages = [ ...prev!.pages ];
+            newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex] = {
                 content: [
-                    ...newContent[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].node.content.slice(0, selectedIndices.inlineNodeIndex),
+                    ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(0, selectedIndices.inlineNodeIndex),
                     {
-                        ...newContent[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].node.content[selectedIndices.inlineNodeIndex],
+                        ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content[selectedIndices.inlineNodeIndex],
                         text: eventValue,
                     },
-                    ...newContent[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].node.content.slice(selectedIndices.inlineNodeIndex + 1),
+                    ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(selectedIndices.inlineNodeIndex + 1),
                 ]
             };
-            return { ...prev, content: newContent };
+            return { pages: newPages };
         });
+    }
+
+    function handleOnKeyUp(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if (event.key === 'Enter' && textareaRef.current?.selectionStart === textareaRef.current?.selectionEnd) {
+            const caretPosition = textareaRef.current!.selectionStart;
+            const firstPart = selectedText.slice(0, caretPosition);
+            const secondPart = selectedText.slice(caretPosition);
+            setPaginatedDocument(prev => {
+                const newPages = structuredClone([ ...prev!.pages ]);
+                const tailInlineNodes = [ ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(selectedIndices.inlineNodeIndex + 1) ];
+                newPages[selectedIndices.pageIndex].blockNodes = [
+                    ...newPages[selectedIndices.pageIndex].blockNodes.slice(0, selectedIndices.blockNodeIndex),
+                    {
+                        content: [
+                            ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content.slice(0, selectedIndices.inlineNodeIndex),
+                            {
+                                ...newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content[selectedIndices.inlineNodeIndex],
+                                text: firstPart,
+                            }
+                        ]
+                    },
+                    {
+                        content: [
+                            {
+                                text: ` `,
+                                styles: {
+                                    fontSize: 1,
+                                    bold: false,
+                                    italic: false
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        content: [
+                            {
+                                text: secondPart,
+                                styles: newPages[selectedIndices.pageIndex].blockNodes[selectedIndices.blockNodeIndex].content[selectedIndices.inlineNodeIndex].styles,
+                            },
+                            ...tailInlineNodes
+                        ],
+                    },
+                    ...newPages[selectedIndices.pageIndex].blockNodes.slice(selectedIndices.blockNodeIndex + 1),
+                ];
+                return { pages: newPages };
+            });
+            triggerTextAreaConstruction({
+                pageIndex: selectedIndices.pageIndex,
+                blockNodeIndex: selectedIndices.blockNodeIndex + 2,
+                inlineNodeIndex: 0
+            }, 'enter');
+            setIsPaginatedDocumentFlowChanged(true);
+        }
     }
 
     return (
         <>
             <textarea
+                onKeyUp={e => handleOnKeyUp(e)}
                 name="selectedText"
                 ref={textareaRef}
-                className={`${isTextareaHidden ? 'hidden' : ''} absolute border-none outline-none resize-none`}
+                className={`absolute border-none outline-none resize-none`}
                 style={{
                     fontSize: textareaStyles.fontSize,
                     fontWeight: textareaStyles.fontWeight,
@@ -120,19 +207,22 @@ export function DocumentEditMode({
                     >
                         {page.blockNodes.map((blockNode, blockNodeIndex) => (
                             <p
+                                id={`page-${pageIndex}-block-${blockNodeIndex}`}
                                 key={`page-${pageIndex}/block-node-${blockNodeIndex}`}
+                                ref={(element) => {
+                                    blockNodesRef.current[calculateGlobalBlockNodeIndex(paginatedDocument, pageIndex, blockNodeIndex)] = element;
+                                }}
                                 data-page-index={pageIndex}
-                                data-block-index={blockNodeIndex}
-                                data-global-block-index={calculateGlobalBlockNodeIndex(pageIndex, blockNodeIndex)}
-                                className="flex gap-0 whitespace-pre "
+                                data-block-node-index={blockNodeIndex}
+                                className="w-full flex gap-0 whitespace-pre "
                             >
-                                {blockNode.node.content.map((inlineNode, inlineNodeIndex) => (
+                                {blockNode.content.map((inlineNode, inlineNodeIndex) => (
                                     <span
                                         key={`page-${pageIndex}/block-node-${blockNodeIndex}/inline-node-${inlineNodeIndex}`}
                                         data-page-index={pageIndex}
                                         data-block-index={blockNodeIndex}
                                         data-inline-index={inlineNodeIndex}
-                                        onClick={(event) => constructTextArea(event)}
+                                        onClick={(event) => handleSpanOnclick(event)}
                                         className={`${constructTailwindClassNames(inlineNode.styles)}`}
                                     >
                                         {inlineNode.text}

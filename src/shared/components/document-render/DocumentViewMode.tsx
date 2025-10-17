@@ -26,9 +26,9 @@ export function DocumentViewMode({
                     {page.blockNodes.map((blockNode, blockNodeIndex) => (
                         <p
                             key={`page-${pageIndex}/block-node-${blockNodeIndex}`}
-                            className="flex gap-0 whitespace-pre "
+                            className="w-full flex gap-0 whitespace-pre "
                         >
-                            {blockNode.node.content.map((inlineNode, inlineNodeIndex) => (
+                            {blockNode.content.map((inlineNode, inlineNodeIndex) => (
                                 <span
                                     key={`page-${pageIndex}/block-node-${blockNodeIndex}/inline-node-${inlineNodeIndex}`}
                                     className={`${constructTailwindClassNames(inlineNode.styles)}`}
